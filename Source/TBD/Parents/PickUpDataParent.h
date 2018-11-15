@@ -4,17 +4,17 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "WallClimbAB.generated.h"
+#include "PickUpDataParent.generated.h"
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class TBD_API UWallClimbAB : public UActorComponent
+class TBD_API UPickUpDataParent : public UActorComponent
 {
 	GENERATED_BODY()
 
 public:	
 	// Sets default values for this component's properties
-	UWallClimbAB();
+	UPickUpDataParent();
 
 protected:
 	// Called when the game starts
@@ -23,12 +23,7 @@ protected:
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-private:
-	float ClimbTime = 0;
-	UPROPERTY(EditAnywhere)
-	float TimeYouCanClimb = 1.4;
-	UPROPERTY(EditAnywhere)
-	class USceneComponent * SceneComponent;
-	class ACharacter * Owner;
-	class APlayerController * OwnerController;
+
+		
+	
 };

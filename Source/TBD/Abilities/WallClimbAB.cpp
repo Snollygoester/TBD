@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "GameFramework/PlayerController.h"
 #include "Kismet/GameplayStatics.h"
+#include "Components/CapsuleComponent.h"
 // Sets default values for this component's properties
 UWallClimbAB::UWallClimbAB()
 {
@@ -36,17 +37,12 @@ void UWallClimbAB::TickComponent(float DeltaTime, ELevelTick TickType, FActorCom
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 	FHitResult Hit;
 	if (GetWorld()->LineTraceSingleByChannel(Hit, GetOwner()->GetActorLocation(), SceneComponent->GetComponentLocation(), ECollisionChannel::ECC_Visibility)) {
-		UE_LOG(LogTemp, Warning, TEXT("LineTrace"));
 		if (Hit.Actor->ActorHasTag("Wall")) {
-			UE_LOG(LogTemp, Warning, TEXT("HasTag"));
 		ClimbTime = OwnerController->GetInputKeyTimeDown(FKey("Spacebar"));
-		if (ClimbTime != 0)
+		if (ClimbTime >= 0.35)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("ClimbTime"))
 			if(ClimbTime  <= TimeYouCanClimb){
 				Owner->LaunchCharacter(FVector(0,0, 350), true, true);
-				FHitResult Hit;
-				Owner->Landed(Hit);
 			}
 		}
 		}
@@ -55,7 +51,6 @@ void UWallClimbAB::TickComponent(float DeltaTime, ELevelTick TickType, FActorCom
 			ClimbTime = 0;
 		}
 		}
-		
+	
 }
-
 

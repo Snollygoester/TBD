@@ -5,6 +5,7 @@
 #include "Components/InputComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
+#include "Abilities/CliffHangAB.h"
 // Sets default values
 ACharacterParent::ACharacterParent()
 {
@@ -35,7 +36,6 @@ ACharacterParent::ACharacterParent()
 void ACharacterParent::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 // Called every frame
@@ -54,7 +54,12 @@ void ACharacterParent::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 	//PlayerInputComponent->BindAction("PickUp", IE_Released, this, &ACharacterParent::PickUpObj);
-
+CliffHangABCpp = FindComponentByClass<UCliffHangAB>();
+	if (CliffHangABCpp != nullptr)
+	{
+		PlayerInputComponent->BindAction("Cliff", IE_Pressed, this, &ACharacterParent::GrabWall);
+		PlayerInputComponent->BindAction("Cliff", IE_Released, this, &ACharacterParent::letGoOffWall);
+	}
 	PlayerInputComponent->BindAxis("MoveForward", this, &ACharacterParent::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &ACharacterParent::MoveRight);
 
@@ -65,7 +70,7 @@ void ACharacterParent::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAxis("TurnRate", this, &ACharacterParent::TurnAtRate);
 	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
 	PlayerInputComponent->BindAxis("LookUpRate", this, &ACharacterParent::LookUpAtRate);
-
+	
 }
 void ACharacterParent::MoveForward(float Value)
 {
@@ -106,4 +111,14 @@ void ACharacterParent::LookUpAtRate(float Rate)
 {
 	// calculate delta for this frame from the rate information
 	AddControllerPitchInput(Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
+}
+
+void ACharacterParent::GrabWall()
+{
+	CliffHangABCpp->hang();
+}
+
+void ACharacterParent::letGoOffWall()
+{
+	CliffHangABCpp->Release();
 }

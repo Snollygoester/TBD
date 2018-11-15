@@ -36,7 +36,8 @@ public:
 protected:
 	/** Called for forwards/backward input */
 	void MoveForward(float Value);
-
+	void GrabWall();
+	void letGoOffWall();
 	/** Called for side to side input */
 	void MoveRight(float Value);
 
@@ -51,4 +52,6 @@ protected:
 	* @param Rate	This is a normalized rate, i.e. 1.0 means 100% of desired turn rate
 	*/
 	void LookUpAtRate(float Rate);
+private:
+	class	UCliffHangAB * CliffHangABCpp;
 };
