@@ -6,6 +6,9 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "Abilities/CliffHangAB.h"
+#include "PickUpParent.h"
+#include "PickUpDataParent.h"
+#include "Widgets/PickUpItemWidget.h"
 // Sets default values
 ACharacterParent::ACharacterParent()
 {
@@ -36,6 +39,10 @@ ACharacterParent::ACharacterParent()
 void ACharacterParent::BeginPlay()
 {
 	Super::BeginPlay();
+	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &ACharacterParent::OnOverlapBegin);
+	PickUpWidget = CreateWidget<UPickUpItemWidget>(GetWorld(), UserWidget);
+	PickUpWidget->AddToViewport();
+	
 }
 
 // Called every frame
@@ -54,6 +61,7 @@ void ACharacterParent::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 	//PlayerInputComponent->BindAction("PickUp", IE_Released, this, &ACharacterParent::PickUpObj);
+	PlayerInputComponent->BindAction("UsePickUp", IE_Pressed, this, &ACharacterParent::UsePickUp);
 CliffHangABCpp = FindComponentByClass<UCliffHangAB>();
 	if (CliffHangABCpp != nullptr)
 	{
@@ -121,4 +129,24 @@ void ACharacterParent::GrabWall()
 void ACharacterParent::letGoOffWall()
 {
 	CliffHangABCpp->Release();
+}
+void ACharacterParent::OnOverlapBegin(UPrimitiveComponent * OverlappedComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
+{
+	APickUpParent * PickUp = Cast<APickUpParent>(OtherActor);
+		if (PickUp != nullptr && PickUpData == nullptr)
+		{
+			UClass * PickupClass = PickUp->PickUpData;
+			PickUpData = NewObject<UPickUpDataParent>(this, PickupClass);
+			PickUpData->RegisterComponent();
+			PickUp->Destroy();
+			
+		}
+
+}
+
+void ACharacterParent::UsePickUp()
+{
+	if (PickUpData != nullptr) {
+		PickUpData->PickUpDoYourThing();
+	}
 }

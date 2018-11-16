@@ -22,9 +22,12 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+	UPROPERTY(EditAnywhere)
+		TSubclassOf<class UPickUpDataParent> PickUpData;
 private:
 	UPROPERTY(EditAnywhere)
 		float RPS = 0.5;
 	float Trun = 0;
+
 	
 };

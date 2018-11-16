@@ -15,6 +15,9 @@ class TBD_API UPickUpItemWidget : public UUserWidget
 	GENERATED_BODY()
 	
 	
-	
-	
+public:
+	UPROPERTY(meta = (BindWidget))
+	class UProgressBar * PickUpProgressBar;
+	void SetProgressBarImage(FSlateBrush Image);
+	void SetProgressBarPercent(float Percent);
 };
