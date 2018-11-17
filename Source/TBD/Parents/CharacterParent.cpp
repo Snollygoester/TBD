@@ -42,7 +42,11 @@ void ACharacterParent::BeginPlay()
 	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &ACharacterParent::OnOverlapBegin);
 	PickUpWidget = CreateWidget<UPickUpItemWidget>(GetWorld(), UserWidget);
 	PickUpWidget->AddToViewport();
-	
+	UCharacterMovementComponent * CharacterMovementComponent = Cast<UCharacterMovementComponent>(GetCharacterMovement());
+	if (CharacterMovementComponent != nullptr)
+	{
+		DefaultMovementSpeed =	CharacterMovementComponent->MaxWalkSpeed;
+	}
 }
 
 // Called every frame
@@ -133,7 +137,8 @@ void ACharacterParent::letGoOffWall()
 void ACharacterParent::OnOverlapBegin(UPrimitiveComponent * OverlappedComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
 {
 	APickUpParent * PickUp = Cast<APickUpParent>(OtherActor);
-		if (PickUp != nullptr && PickUpData == nullptr)
+
+		if (PickUp != nullptr && PickUpData == nullptr )
 		{
 			UClass * PickupClass = PickUp->PickUpData;
 			PickUpData = NewObject<UPickUpDataParent>(this, PickupClass);
@@ -141,7 +146,12 @@ void ACharacterParent::OnOverlapBegin(UPrimitiveComponent * OverlappedComp, AAct
 			PickUp->Destroy();
 			
 		}
-
+		else if (PickUp != nullptr && PickUpData->IsPendingKill()) {
+			UClass * PickupClass = PickUp->PickUpData;
+			PickUpData = NewObject<UPickUpDataParent>(this, PickupClass);
+			PickUpData->RegisterComponent();
+			PickUp->Destroy();
+		}
 }
 
 void ACharacterParent::UsePickUp()

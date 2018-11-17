@@ -36,6 +36,9 @@ public:
 		TSubclassOf< class UPickUpItemWidget > UserWidget;
 	UPROPERTY()
 		class UPickUpItemWidget * PickUpWidget;
+
+	float DefaultMovementSpeed;
+	FString PlayerUniqueTag;
 protected:
 	/** Called for forwards/backward input */
 	void MoveForward(float Value);

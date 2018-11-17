@@ -6,7 +6,6 @@
 #include "Engine/World.h"
 #include "Public/TimerManager.h"
 #include "Widgets/PickUpItemWidget.h"
-#include "UObject/ConstructorHelpers.h"
 
 void USpeedUpPickUpDataSecondParent::PickUpDoYourThing() {
 		
@@ -31,12 +30,13 @@ void USpeedUpPickUpDataSecondParent::BeginPlay()
 	PickUpItemWidget->SetProgressBarImage(Image);
 	StartSpeed = MovementComponent->MaxWalkSpeed;
 	PickUpItemWidget->SetProgressBarPercent(1);
-	UE_LOG(LogTemp, Warning, TEXT("Your message"));
+	
 }
 
 void USpeedUpPickUpDataSecondParent::DestroyComp()
 {
 	MovementComponent->MaxWalkSpeed = StartSpeed;
+	PickUpItemWidget->SetProgressBarPercent(0);
 	DestroyComponent();
 }
 
