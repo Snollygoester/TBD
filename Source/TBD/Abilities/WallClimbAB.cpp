@@ -42,7 +42,7 @@ void UWallClimbAB::TickComponent(float DeltaTime, ELevelTick TickType, FActorCom
 		if (ClimbTime >= 0.35)
 		{
 			if(ClimbTime  <= TimeYouCanClimb){
-				Owner->LaunchCharacter(FVector(0,0, 350), true, true);
+				Owner->LaunchCharacter(FVector(0,0, 350), false, true);
 			}
 		}
 		}
