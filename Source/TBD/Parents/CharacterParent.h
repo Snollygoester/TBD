@@ -63,4 +63,9 @@ protected:
 private:
 	class	UCliffHangAB * CliffHangABCpp;
 	class UPickUpDataParent * PickUpData;
+	void ThrowGrenade();
+	UPROPERTY(EditAnywhere)
+		TSubclassOf< class AGrenadeParent > GrenadeParentTSubClass;
+	UPROPERTY(EditAnywhere)
+		float ThorwSpeed = 1500;
 };

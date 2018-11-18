@@ -9,6 +9,7 @@
 #include "PickUpParent.h"
 #include "PickUpDataParent.h"
 #include "Widgets/PickUpItemWidget.h"
+#include "SpecialActors/GrenadeParent.h"
 // Sets default values
 ACharacterParent::ACharacterParent()
 {
@@ -66,6 +67,7 @@ void ACharacterParent::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 	//PlayerInputComponent->BindAction("PickUp", IE_Released, this, &ACharacterParent::PickUpObj);
 	PlayerInputComponent->BindAction("UsePickUp", IE_Pressed, this, &ACharacterParent::UsePickUp);
+	PlayerInputComponent->BindAction("Throw", IE_Pressed, this, &ACharacterParent::ThrowGrenade);
 CliffHangABCpp = FindComponentByClass<UCliffHangAB>();
 	if (CliffHangABCpp != nullptr)
 	{
@@ -158,5 +160,13 @@ void ACharacterParent::UsePickUp()
 {
 	if (PickUpData != nullptr) {
 		PickUpData->PickUpDoYourThing();
+	}
+}
+void ACharacterParent::ThrowGrenade()
+{
+	AGrenadeParent * Grenade=  GetWorld()->SpawnActor<AGrenadeParent>(GrenadeParentTSubClass, FTransform(FRotator(0, 0, 0), GetActorLocation() + GetActorForwardVector() * 60, FVector(1)));
+	if (Grenade != nullptr)
+	{
+		Grenade->Thorw(ThorwSpeed, GetActorForwardVector());
 	}
 }
