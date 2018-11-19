@@ -29,9 +29,13 @@ private:
 	void Exploded();
 	UPROPERTY(EditAnywhere)
 	float TimeEntilExplosion = 3;
+	UPROPERTY(EditAnywhere)
+		float HitDamage = 3;
 	UPROPERTY(VisibleAnywhere)
 	class UParticleSystemComponent * ParticleSystemComponent;
 	UPROPERTY(VisibleAnywhere)
 	class UStaticMeshComponent * StaticMeshComponent;
 	void TimerEndDestroy();
+	UFUNCTION()
+	void OnCompHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 };

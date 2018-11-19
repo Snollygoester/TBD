@@ -20,6 +20,7 @@ protected:
 	virtual void BeginPlay() override;
 
 public:	
+	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const & DamageEvent, class AController * EventInstigator, AActor * DamageCauser) override;
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -34,12 +35,16 @@ public:
 		float BaseLookUpRate;
 	UPROPERTY(EditAnywhere)
 		TSubclassOf< class UPickUpItemWidget > UserWidget;
-	UPROPERTY()
+	UPROPERTY(EditAnywhere)
 		class UPickUpItemWidget * PickUpWidget;
-
 	float DefaultMovementSpeed;
 	FString PlayerUniqueTag;
-protected:
+	class UHealthWidget * HealthWidget;
+	void SetHealthWidget(class UHealthWidget * HealthWidgetToSet);
+	UPROPERTY(EditAnywhere)
+		float Health = 100;
+		float CurrentHealth;
+	protected:
 	/** Called for forwards/backward input */
 	void MoveForward(float Value);
 	void GrabWall();

@@ -10,6 +10,7 @@
 #include "PickUpDataParent.h"
 #include "Widgets/PickUpItemWidget.h"
 #include "SpecialActors/GrenadeParent.h"
+#include "Widgets/HealthWidget.h"
 // Sets default values
 ACharacterParent::ACharacterParent()
 {
@@ -43,11 +44,20 @@ void ACharacterParent::BeginPlay()
 	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &ACharacterParent::OnOverlapBegin);
 	PickUpWidget = CreateWidget<UPickUpItemWidget>(GetWorld(), UserWidget);
 	PickUpWidget->AddToViewport();
+	CurrentHealth = Health;
 	UCharacterMovementComponent * CharacterMovementComponent = Cast<UCharacterMovementComponent>(GetCharacterMovement());
 	if (CharacterMovementComponent != nullptr)
 	{
 		DefaultMovementSpeed =	CharacterMovementComponent->MaxWalkSpeed;
 	}
+}
+
+float ACharacterParent::TakeDamage(float DamageAmount, FDamageEvent const & DamageEvent, AController * EventInstigator, AActor * DamageCauser)
+{
+	Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+	CurrentHealth = CurrentHealth - DamageAmount;
+	HealthWidget->SetHealthBarPercent(CurrentHealth / Health);
+	return DamageAmount;
 }
 
 // Called every frame
@@ -86,6 +96,12 @@ CliffHangABCpp = FindComponentByClass<UCliffHangAB>();
 	PlayerInputComponent->BindAxis("LookUpRate", this, &ACharacterParent::LookUpAtRate);
 	
 }
+
+void ACharacterParent::SetHealthWidget(UHealthWidget * HealthWidgetToSet)
+{
+	HealthWidget = HealthWidgetToSet;
+}
+
 void ACharacterParent::MoveForward(float Value)
 {
 

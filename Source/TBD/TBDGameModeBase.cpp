@@ -5,6 +5,7 @@
 #include "Engine/World.h"
 #include "GameFramework/PlayerStart.h"
 #include "Parents/CharacterParent.h"
+#include "Widgets/HealthWidget.h"
 void ATBDGameModeBase::BeginPlay()
 {
 	Super::BeginPlay();
@@ -21,6 +22,12 @@ void ATBDGameModeBase::BeginPlay()
 					if (chart != nullptr) {
 						chart->PlayerUniqueTag = FString::FromInt(i);
 						chart->Tags.Add(FName(*chart->PlayerUniqueTag));
+						UHealthWidget * HealthWidget = CreateWidget< UHealthWidget>(GetWorld(), HealthWidgetSubClass);
+						HealthWidget->AddToViewport();
+						HealthWidget->SetPositionInViewport(Positions[i]);
+						HealthWidget->SetHealthBarColor(Colors[i]);
+						HealthWidget->SetHealthBarPercent(1);
+						chart->SetHealthWidget(HealthWidget);
 					}
 				UGameplayStatics::GetPlayerController(GetWorld(), Index)->Possess(Pawn);
 				Players.AddUnique(Pawn);

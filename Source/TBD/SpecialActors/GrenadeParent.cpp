@@ -6,6 +6,7 @@
 #include "Public/TimerManager.h"
 #include "Particles/ParticleSystemComponent.h"
 #include "Components/StaticMeshComponent.h"
+#include "Kismet/GameplayStatics.h"
 // Sets default values
 AGrenadeParent::AGrenadeParent()
 {
@@ -26,7 +27,7 @@ void AGrenadeParent::BeginPlay()
 	Super::BeginPlay();
 	FTimerHandle TimerHandle;
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AGrenadeParent::Exploded, TimeEntilExplosion);
-	
+	StaticMeshComponent->OnComponentHit.AddDynamic(this, &AGrenadeParent::OnCompHit);
 }
 
 // Called every frame
@@ -55,6 +56,11 @@ void AGrenadeParent::Exploded()
 void AGrenadeParent::TimerEndDestroy()
 {
 	Destroy();
+}
+
+void AGrenadeParent::OnCompHit(UPrimitiveComponent * HitComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, FVector NormalImpulse, const FHitResult & Hit)
+{ 
+	UGameplayStatics::ApplyDamage(OtherActor, HitDamage, GetInstigatorController(), this, UDamageType::StaticClass());
 }
 
 
