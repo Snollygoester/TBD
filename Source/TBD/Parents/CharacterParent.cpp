@@ -180,7 +180,7 @@ void ACharacterParent::UsePickUp()
 }
 void ACharacterParent::ThrowGrenade()
 {
-	AGrenadeParent * Grenade=  GetWorld()->SpawnActor<AGrenadeParent>(GrenadeParentTSubClass, FTransform(FRotator(0, 0, 0), GetActorLocation() + GetActorForwardVector() * 60, FVector(1)));
+	AGrenadeParent * Grenade=  GetWorld()->SpawnActor<AGrenadeParent>(GrenadeParentTSubClass, FTransform(FRotator(0, 0, 0), GetActorLocation() + GetActorForwardVector() * 100, FVector(1)));
 	if (Grenade != nullptr)
 	{
 		Grenade->Thorw(ThorwSpeed, GetActorForwardVector());

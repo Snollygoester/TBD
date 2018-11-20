@@ -31,6 +31,12 @@ private:
 	float TimeEntilExplosion = 3;
 	UPROPERTY(EditAnywhere)
 		float HitDamage = 3;
+	UPROPERTY(EditAnywhere)
+		float MaxExplosionDamage = 10;
+	UPROPERTY(EditAnywhere)
+		float MinExplosionDamage = 5;
+	UPROPERTY(EditAnywhere)
+		float ExplosionRadius  = 200;
 	UPROPERTY(VisibleAnywhere)
 	class UParticleSystemComponent * ParticleSystemComponent;
 	UPROPERTY(VisibleAnywhere)

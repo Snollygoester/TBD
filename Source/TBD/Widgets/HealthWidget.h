@@ -16,8 +16,10 @@ class TBD_API UHealthWidget : public UUserWidget
 private:
 	UPROPERTY(meta = (BindWidget))
 	class UProgressBar * HealthBar;
+	UPROPERTY(meta = (BindWidget))
+	class UProgressBar * FuelBar;
 public:
 	void SetHealthBarColor(FLinearColor Color);
 	void  SetHealthBarPercent(float Percent);
-	
+	void  SetFuelBarPercent(float Percent);
 };

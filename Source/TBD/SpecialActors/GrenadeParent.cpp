@@ -45,6 +45,8 @@ void AGrenadeParent::Thorw(float Speed , FVector Direction)
 
 void AGrenadeParent::Exploded()
 {
+	TArray<AActor*> Actors;
+	UGameplayStatics::ApplyRadialDamageWithFalloff(GetWorld(), MaxExplosionDamage, MinExplosionDamage, GetActorLocation(), ExplosionRadius, ExplosionRadius * 1.5, MinExplosionDamage * 0.5, UDamageType::StaticClass(), Actors, this, GetInstigatorController());
 	ParticleSystemComponent->SetWorldLocation(StaticMeshComponent->GetComponentLocation());
 	SetRootComponent(ParticleSystemComponent);
 	ParticleSystemComponent->Activate();
