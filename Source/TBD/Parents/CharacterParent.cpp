@@ -12,6 +12,8 @@
 #include "SpecialActors/GrenadeParent.h"
 #include "Widgets/HealthWidget.h"
 #include "Public/TimerManager.h"
+#include "SpecialActors/SpawnPointParent.h"
+#include "Kismet/GameplayStatics.h"
 // Sets default values
 ACharacterParent::ACharacterParent()
 {
@@ -152,11 +154,21 @@ void ACharacterParent::Death()
 {
 	SetActorScale3D(FVector(1, 1, 0.1));
 	FTimerHandle TimerHandle;
+	bIsDead = true;
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ACharacterParent::FullDeath, RespawnTime);
 }
 
 void ACharacterParent::FullDeath()
 {
+	TArray < AActor *> AActors;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ASpawnPointParent::StaticClass(), AActors);
+	if (AActors[0] != nullptr)
+	{
+		ASpawnPointParent * SpawnPoint = Cast < ASpawnPointParent > (AActors[0]);
+		ACharacterParent * CharacterParent = 	GetWorld()->SpawnActor<ACharacterParent>(CharacterParentSub, FTransform(FRotator(0, 0, 0), SpawnPoint->FindPointToSpawn()));
+		CharacterParent->SetHealthWidget(HealthWidget);
+	}
+	
 	Destroy();
 }
 

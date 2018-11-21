@@ -36,6 +36,8 @@ public:
 	UPROPERTY(EditAnywhere)
 		TSubclassOf< class UPickUpItemWidget > UserWidget;
 	UPROPERTY(EditAnywhere)
+		TSubclassOf< class ACharacterParent > CharacterParentSub;
+	UPROPERTY(EditAnywhere)
 		class UPickUpItemWidget * PickUpWidget;
 	float DefaultMovementSpeed;
 	FString PlayerUniqueTag;
@@ -44,6 +46,7 @@ public:
 	UPROPERTY(EditAnywhere)
 		float Health = 100;
 		float CurrentHealth;
+		bool bIsDead = false;
 	protected:
 	/** Called for forwards/backward input */
 	void MoveForward(float Value);

@@ -25,9 +25,10 @@ public:
 
 	FVector FindPointToSpawn();
 private:
-	UPROPERTY(VisibleAnywhere)
-	class UBoxComponent * BoxComponent;
-
-		
-	
+	UPROPERTY(EditAnywhere, Meta = (MakeEditWidget = true))
+	TArray<	FVector> SpawnPoints;
+	UPROPERTY()
+	TArray< class ACharacterParent *> CharactersParents;
+	float Dist = 0;
+	FVector FinalSpawnPoint;
 };

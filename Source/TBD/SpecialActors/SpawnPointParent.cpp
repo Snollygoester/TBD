@@ -5,13 +5,12 @@
 #include "Engine/World.h"
 #include "Parents/CharacterParent.h"
 #include "Kismet/KismetMathLibrary.h"
-#include "Components/BoxComponent.h"
 // Sets default values
 ASpawnPointParent::ASpawnPointParent()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
-	BoxComponent = CreateDefaultSubobject<UBoxComponent>(FName("BoxComponent"));
+
 
 }
 
@@ -33,7 +32,73 @@ FVector ASpawnPointParent::FindPointToSpawn()
 {
 	TArray<AActor *> Actors;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ACharacterParent::StaticClass(), Actors);
-	BoxComponent->GetScaledBoxExtent();
+	for (AActor * Actor : Actors)
+	{
+		ACharacterParent  *  CharacterParent = Cast< ACharacterParent>(Actor);
+		if (CharacterParent != nullptr)
+		{
+			if (!CharacterParent->bIsDead)
+			{
+				CharactersParents.Add(CharacterParent);
+			}
+		}
+	}
+	switch (CharactersParents.Num())
+	{
+	case 1: {
+
+		for (FVector SpawnPoint : SpawnPoints)
+		{
+			float CurrntDist = 0;
+			CurrntDist = FVector::Dist(CharactersParents[0]->GetActorLocation(), SpawnPoint);
+			if (Dist < CurrntDist)
+			{
+				Dist = CurrntDist;
+				FinalSpawnPoint = SpawnPoint;
+			}
+			return FinalSpawnPoint;
+		}
+		break;
+	}
+	case 2: {
+		for (FVector SpawnPoint : SpawnPoints)
+		{
+			float CurrntDist = 0;
+			TArray<float > Dists;
+			Dists.Add(FVector::Dist(CharactersParents[0]->GetActorLocation(), SpawnPoint));
+			Dists.Add(FVector::Dist(CharactersParents[1]->GetActorLocation(), SpawnPoint));
+			int32 Index;
+			UKismetMathLibrary::MinOfFloatArray(Dists, Index, CurrntDist);
+			if (Dist < CurrntDist)
+			{
+				Dist = CurrntDist;
+				FinalSpawnPoint = SpawnPoint;
+			}
+			return FinalSpawnPoint;
+		}
+		break;
+	}
+	case 3: {
+		for (FVector SpawnPoint : SpawnPoints)
+		{
+			float CurrntDist = 0;
+			TArray<float > Dists;
+			Dists.Add(FVector::Dist(CharactersParents[0]->GetActorLocation(), SpawnPoint));
+			Dists.Add(FVector::Dist(CharactersParents[1]->GetActorLocation(), SpawnPoint));
+			Dists.Add(FVector::Dist(CharactersParents[2]->GetActorLocation(), SpawnPoint));
+			int32 Index;
+			UKismetMathLibrary::MinOfFloatArray(Dists, Index, CurrntDist);
+			if (Dist < CurrntDist)
+			{
+				Dist = CurrntDist;
+				FinalSpawnPoint = SpawnPoint;
+			}
+			return FinalSpawnPoint;
+			break;
+		}
+	}
+
+			return FVector();
+	}
 	return FVector();
 }
-
