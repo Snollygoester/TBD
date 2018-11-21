@@ -11,6 +11,7 @@
 #include "Widgets/PickUpItemWidget.h"
 #include "SpecialActors/GrenadeParent.h"
 #include "Widgets/HealthWidget.h"
+#include "Public/TimerManager.h"
 // Sets default values
 ACharacterParent::ACharacterParent()
 {
@@ -57,6 +58,10 @@ float ACharacterParent::TakeDamage(float DamageAmount, FDamageEvent const & Dama
 	Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 	CurrentHealth = CurrentHealth - DamageAmount;
 	HealthWidget->SetHealthBarPercent(CurrentHealth / Health);
+	if (CurrentHealth <= 0)
+	{
+		Death();
+	}
 	return DamageAmount;
 }
 
@@ -141,6 +146,18 @@ void ACharacterParent::LookUpAtRate(float Rate)
 {
 	// calculate delta for this frame from the rate information
 	AddControllerPitchInput(Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
+}
+
+void ACharacterParent::Death()
+{
+	SetActorScale3D(FVector(1, 1, 0.1));
+	FTimerHandle TimerHandle;
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ACharacterParent::FullDeath, RespawnTime);
+}
+
+void ACharacterParent::FullDeath()
+{
+	Destroy();
 }
 
 void ACharacterParent::GrabWall()

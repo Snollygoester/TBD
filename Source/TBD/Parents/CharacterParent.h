@@ -65,6 +65,10 @@ public:
 	* @param Rate	This is a normalized rate, i.e. 1.0 means 100% of desired turn rate
 	*/
 	void LookUpAtRate(float Rate);
+
+	void Death();
+
+	void FullDeath();
 private:
 	class	UCliffHangAB * CliffHangABCpp;
 	class UPickUpDataParent * PickUpData;
@@ -73,4 +77,6 @@ private:
 		TSubclassOf< class AGrenadeParent > GrenadeParentTSubClass;
 	UPROPERTY(EditAnywhere)
 		float ThorwSpeed = 1500;
+	UPROPERTY(EditAnywhere)
+		float RespawnTime = 5;
 };

@@ -48,7 +48,7 @@ void UJetPack_AB::TickComponent(float DeltaTime, ELevelTick TickType, FActorComp
 			if (Fuel > 0 )
 			{
 				Fuel = Fuel - (FuelLostPerSec * DeltaTime) ;
-				Owner->LaunchCharacter(FVector(0, 0, 17000 * DeltaTime), false, true);
+				Owner->LaunchCharacter(FVector(0, 0, 14000 * DeltaTime), false, true);
 				bCanRecharg = false;
 				return;
 			}
