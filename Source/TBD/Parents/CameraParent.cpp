@@ -38,7 +38,7 @@ void ACameraParent::Tick(float DeltaTime)
 
 void ACameraParent::SetUp()
 {
-	PlayersRef = Cast<ATBDGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()))->Players;
+	GameMode = Cast<ATBDGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
 	TArray<AActor*> PlayerControllers;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), APlayerController::StaticClass(), PlayerControllers);
 	for (AActor * PlayerController : PlayerControllers)
@@ -51,34 +51,34 @@ void ACameraParent::SetUp()
 
 void ACameraParent::UpdateCameraDist()
 {
-	switch (PlayersRef.Num())
+	switch (GameMode->Players.Num())
 	{
 	case 2:
-		SpringArm->TargetArmLength = PlayersRef[0]->GetDistanceTo(PlayersRef[1]);
+		SpringArm->TargetArmLength =  FMath::Clamp(GameMode->Players[0]->GetDistanceTo(GameMode->Players[1]), 0.f, Max);
 		break;
 	case 3: {
 		TArray<float> Distances;
 		float FarestDistance;
 		int FarestDistanceIndex;
-		Distances.Add(PlayersRef[0]->GetDistanceTo(PlayersRef[1]));
-		Distances.Add(PlayersRef[0]->GetDistanceTo(PlayersRef[2]));
-		Distances.Add(PlayersRef[1]->GetDistanceTo(PlayersRef[2]));
+		Distances.Add(GameMode->Players[0]->GetDistanceTo(GameMode->Players[1]));
+		Distances.Add(GameMode->Players[0]->GetDistanceTo(GameMode->Players[2]));
+		Distances.Add(GameMode->Players[1]->GetDistanceTo(GameMode->Players[2]));
 		UKismetMathLibrary::MaxOfFloatArray(Distances, FarestDistanceIndex, FarestDistance);
-		SpringArm->TargetArmLength = FarestDistance;
+		SpringArm->TargetArmLength = FMath::Clamp( FarestDistance, 0.f, Max);
 	}
 		break;
 	case 4: {
 		TArray<float> DistancesP4;
 		float FarestDistanceP4;
 		int FarestDistanceIndexP4;
-		DistancesP4.Add(PlayersRef[0]->GetDistanceTo(PlayersRef[1]));
-		DistancesP4.Add(PlayersRef[0]->GetDistanceTo(PlayersRef[2]));
-		DistancesP4.Add(PlayersRef[0]->GetDistanceTo(PlayersRef[3]));
-		DistancesP4.Add(PlayersRef[1]->GetDistanceTo(PlayersRef[2]));
-		DistancesP4.Add(PlayersRef[1]->GetDistanceTo(PlayersRef[3]));
-		DistancesP4.Add(PlayersRef[2]->GetDistanceTo(PlayersRef[3]));
+		DistancesP4.Add(GameMode->Players[0]->GetDistanceTo(GameMode->Players[1]));
+		DistancesP4.Add(GameMode->Players[0]->GetDistanceTo(GameMode->Players[2]));
+		DistancesP4.Add(GameMode->Players[0]->GetDistanceTo(GameMode->Players[3]));
+		DistancesP4.Add(GameMode->Players[1]->GetDistanceTo(GameMode->Players[2]));
+		DistancesP4.Add(GameMode->Players[1]->GetDistanceTo(GameMode->Players[3]));
+		DistancesP4.Add(GameMode->Players[2]->GetDistanceTo(GameMode->Players[3]));
 		UKismetMathLibrary::MaxOfFloatArray(DistancesP4, FarestDistanceIndexP4, FarestDistanceP4);
-		SpringArm->TargetArmLength = FarestDistanceP4;
+		SpringArm->TargetArmLength = SpringArm->TargetArmLength = FMath::Clamp(FarestDistanceP4, 0.f, Max);
 	}
 		break;
 

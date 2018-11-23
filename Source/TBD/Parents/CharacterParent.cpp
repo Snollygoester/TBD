@@ -14,6 +14,7 @@
 #include "Public/TimerManager.h"
 #include "SpecialActors/SpawnPointParent.h"
 #include "Kismet/GameplayStatics.h"
+#include "TBDGameModeBase.h"
 // Sets default values
 ACharacterParent::ACharacterParent()
 {
@@ -44,6 +45,7 @@ ACharacterParent::ACharacterParent()
 void ACharacterParent::BeginPlay()
 {
 	Super::BeginPlay();
+	Gamemode = Cast< ATBDGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
 	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &ACharacterParent::OnOverlapBegin);
 	PickUpWidget = CreateWidget<UPickUpItemWidget>(GetWorld(), UserWidget);
 	PickUpWidget->AddToViewport();
@@ -107,6 +109,7 @@ CliffHangABCpp = FindComponentByClass<UCliffHangAB>();
 void ACharacterParent::SetHealthWidget(UHealthWidget * HealthWidgetToSet)
 {
 	HealthWidget = HealthWidgetToSet;
+	HealthWidget->SetHealthBarPercent(1);
 }
 
 void ACharacterParent::MoveForward(float Value)
@@ -164,9 +167,17 @@ void ACharacterParent::FullDeath()
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ASpawnPointParent::StaticClass(), AActors);
 	if (AActors[0] != nullptr)
 	{
+		AController *	Controller = GetController();
+		UnPossessed();
 		ASpawnPointParent * SpawnPoint = Cast < ASpawnPointParent > (AActors[0]);
 		ACharacterParent * CharacterParent = 	GetWorld()->SpawnActor<ACharacterParent>(CharacterParentSub, FTransform(FRotator(0, 0, 0), SpawnPoint->FindPointToSpawn()));
+		Controller->Possess(CharacterParent);
+		Gamemode->Players.Remove(this);
+		Gamemode->Players.Add(CharacterParent);
+		UE_LOG(LogTemp, Warning, TEXT(" Spawn "));
 		CharacterParent->SetHealthWidget(HealthWidget);
+		HealthWidget->SetXimage();
+		
 	}
 	
 	Destroy();

@@ -22,13 +22,13 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
+	void SetUp();
 	FVector FindPointToSpawn();
 private:
 	UPROPERTY(EditAnywhere, Meta = (MakeEditWidget = true))
 	TArray<	FVector> SpawnPoints;
-	UPROPERTY()
-	TArray< class ACharacterParent *> CharactersParents;
 	float Dist = 0;
 	FVector FinalSpawnPoint;
+	UPROPERTY()
+		TArray< class ACharacterParent *> CharactersParents;
 };

@@ -28,9 +28,13 @@ UPROPERTY(EditAnywhere, Category = Camera, meta = (AllowPrivateAccess = "true"))
 class UCameraComponent* Camera;
 UPROPERTY(EditAnywhere, Category = Camera, meta = (AllowPrivateAccess = "true"))
 class USpringArmComponent* SpringArm;
+UPROPERTY(EditAnywhere)
+float Max = 500;
 void SetUp();
 UPROPERTY()
 TArray<class APawn*> PlayersRef;
+UPROPERTY()
+class ATBDGameModeBase * GameMode;
 void UpdateCameraDist();
 
 };

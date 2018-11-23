@@ -18,8 +18,17 @@ private:
 	class UProgressBar * HealthBar;
 	UPROPERTY(meta = (BindWidget))
 	class UProgressBar * FuelBar;
+	UPROPERTY(meta = (BindWidget))
+		class UImage * Ximage;
+	UPROPERTY(meta = (BindWidget))
+		class UImage * Ximage1;
+	UPROPERTY(meta = (BindWidget))
+		class UImage * Ximage2;
+	int I = 0;
+
 public:
 	void SetHealthBarColor(FLinearColor Color);
 	void  SetHealthBarPercent(float Percent);
 	void  SetFuelBarPercent(float Percent);
+	void SetXimage();
 };

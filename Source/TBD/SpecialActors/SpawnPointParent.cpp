@@ -18,7 +18,6 @@ ASpawnPointParent::ASpawnPointParent()
 void ASpawnPointParent::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 // Called every frame
@@ -28,8 +27,9 @@ void ASpawnPointParent::Tick(float DeltaTime)
 
 }
 
-FVector ASpawnPointParent::FindPointToSpawn()
+void ASpawnPointParent::SetUp()
 {
+	CharactersParents.Empty();
 	TArray<AActor *> Actors;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ACharacterParent::StaticClass(), Actors);
 	for (AActor * Actor : Actors)
@@ -43,6 +43,11 @@ FVector ASpawnPointParent::FindPointToSpawn()
 			}
 		}
 	}
+}
+
+FVector ASpawnPointParent::FindPointToSpawn()
+{
+	SetUp();
 	switch (CharactersParents.Num())
 	{
 	case 1: {
@@ -56,8 +61,10 @@ FVector ASpawnPointParent::FindPointToSpawn()
 				Dist = CurrntDist;
 				FinalSpawnPoint = SpawnPoint;
 			}
-			return FinalSpawnPoint;
+			
 		}
+		Dist = 0;
+		return FinalSpawnPoint;
 		break;
 	}
 	case 2: {
@@ -73,9 +80,11 @@ FVector ASpawnPointParent::FindPointToSpawn()
 			{
 				Dist = CurrntDist;
 				FinalSpawnPoint = SpawnPoint;
-			}
-			return FinalSpawnPoint;
+			}	
 		}
+		UE_LOG(LogTemp, Warning, TEXT(" 2 "));
+		Dist = 0;
+		return FinalSpawnPoint;
 		break;
 	}
 	case 3: {
@@ -90,15 +99,19 @@ FVector ASpawnPointParent::FindPointToSpawn()
 			UKismetMathLibrary::MinOfFloatArray(Dists, Index, CurrntDist);
 			if (Dist < CurrntDist)
 			{
+				UE_LOG(LogTemp, Warning, TEXT(" %f "), Dist);
 				Dist = CurrntDist;
 				FinalSpawnPoint = SpawnPoint;
 			}
-			return FinalSpawnPoint;
-			break;
 		}
+		UE_LOG(LogTemp, Warning, TEXT(" 3 "));
+		Dist = 0;
+		return FinalSpawnPoint;
+		break;
 	}
-
-			return FVector();
+			UE_LOG(LogTemp, Warning, TEXT(" %d char num "), CharactersParents.Num());
+			return FVector(0,0,0);
 	}
-	return FVector();
+	UE_LOG(LogTemp, Warning, TEXT(" %d char num "), CharactersParents.Num());
+	return  FVector(0, 0, 0);
 }

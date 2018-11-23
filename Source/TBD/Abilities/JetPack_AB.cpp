@@ -36,7 +36,6 @@ void UJetPack_AB::TickComponent(float DeltaTime, ELevelTick TickType, FActorComp
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 	OwnerController = Cast<APlayerController>(Owner->GetController()); //TODO remove 
-	UE_LOG(LogTemp, Warning, TEXT(" Fuel %f"), Fuel);
 	if (OwnerController)
 	{
 		FHitResult Hit;

@@ -47,6 +47,8 @@ public:
 		float Health = 100;
 		float CurrentHealth;
 		bool bIsDead = false;
+		UPROPERTY()
+			class ATBDGameModeBase * Gamemode;
 	protected:
 	/** Called for forwards/backward input */
 	void MoveForward(float Value);
