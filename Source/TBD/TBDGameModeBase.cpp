@@ -6,6 +6,8 @@
 #include "GameFramework/PlayerStart.h"
 #include "Parents/CharacterParent.h"
 #include "Widgets/HealthWidget.h"
+#include "Engine/World.h"
+#include "Public/TimerManager.h"
 void ATBDGameModeBase::BeginPlay()
 {
 	Super::BeginPlay();
@@ -34,7 +36,17 @@ void ATBDGameModeBase::BeginPlay()
 			}
 		}
 	}
+	FTimerHandle TimerHandle;
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ATBDGameModeBase::OnGameStart, TimeUntilGameStart);
 }
 
-
-
+void ATBDGameModeBase::OnGameStart()
+{
+	for (APawn *Pawn : Players)
+	{
+		ACharacterParent * chart = Cast<ACharacterParent>(Pawn);
+		if (chart != nullptr) {
+			chart->BisGameStarted = true;
+		}
+	}
+}

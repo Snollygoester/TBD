@@ -49,6 +49,11 @@ public:
 		bool bIsDead = false;
 		UPROPERTY()
 			class ATBDGameModeBase * Gamemode;
+		bool BisGameStarted = false;
+		bool bIsImmortal = false;
+		UPROPERTY(EditAnywhere)
+			float ImmortalityTime =2;
+		void StopImmortality();
 	protected:
 	/** Called for forwards/backward input */
 	void MoveForward(float Value);
@@ -84,4 +89,10 @@ private:
 		float ThorwSpeed = 1500;
 	UPROPERTY(EditAnywhere)
 		float RespawnTime = 5;
+	UPROPERTY(VisibleAnywhere)
+		class UStaticMeshComponent * StaticMeshComponent;
+	UPROPERTY(EditAnywhere)
+	class UMaterialInterface * SpawnMaterial;
+	UPROPERTY(EditAnywhere)
+	class UMaterialInterface * NonSpawnMaterial;
 };

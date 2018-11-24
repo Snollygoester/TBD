@@ -30,4 +30,7 @@ int PlayerToSpawn = 4;
 int Index = 0;
 UPROPERTY(EditAnywhere)
 TSubclassOf<class APawn> PawnToSpawn;
+UPROPERTY(EditAnywhere)
+float TimeUntilGameStart = 3;
+void OnGameStart();
 };

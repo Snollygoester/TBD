@@ -35,6 +35,10 @@ void UJetPack_AB::BeginPlay()
 void UJetPack_AB::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+	if (Owner->BisGameStarted)
+	{
+
+	
 	OwnerController = Cast<APlayerController>(Owner->GetController()); //TODO remove 
 	if (OwnerController)
 	{
@@ -65,6 +69,7 @@ void UJetPack_AB::TickComponent(float DeltaTime, ELevelTick TickType, FActorComp
 		
 
 	}
+}
 }
 
 void UJetPack_AB::StartRechargeing()
