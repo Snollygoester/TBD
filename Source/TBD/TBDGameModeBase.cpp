@@ -8,6 +8,8 @@
 #include "Widgets/HealthWidget.h"
 #include "Engine/World.h"
 #include "Public/TimerManager.h"
+#include "Components/ArrowComponent.h"
+#include "Components/WidgetComponent.h"
 void ATBDGameModeBase::BeginPlay()
 {
 	Super::BeginPlay();
@@ -24,6 +26,8 @@ void ATBDGameModeBase::BeginPlay()
 					if (chart != nullptr) {
 						chart->PlayerUniqueTag = FString::FromInt(i);
 						chart->Tags.Add(FName(*chart->PlayerUniqueTag));
+						chart->ArrowComponent1->SetArrowColor(Colors[i]);
+						chart->WidgetComponent->GetUserWidgetObject()->SetColorAndOpacity(Colors[i]);
 						UHealthWidget * HealthWidget = CreateWidget< UHealthWidget>(GetWorld(), HealthWidgetSubClass);
 						HealthWidget->AddToViewport();
 						HealthWidget->SetPositionInViewport(Positions[i]);

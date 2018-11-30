@@ -54,6 +54,10 @@ public:
 		UPROPERTY(EditAnywhere)
 			float ImmortalityTime =2;
 		void StopImmortality();
+		UPROPERTY(VisibleAnywhere)
+			class UWidgetComponent * WidgetComponent;
+		UPROPERTY(VisibleAnywhere)
+			class UArrowComponent * ArrowComponent1;
 	protected:
 	/** Called for forwards/backward input */
 	void MoveForward(float Value);
@@ -79,10 +83,7 @@ public:
 	void Death();
 
 	void FullDeath();
-	UPROPERTY(VisibleAnywhere)
-	class UWidgetComponent * WidgetComponent;
-	UPROPERTY(VisibleAnywhere)
-	class UArrowComponent * ArrowComponent1;
+	virtual void BlockDoYourThing();
 private:
 	class	UCliffHangAB * CliffHangABCpp;
 	class UPickUpDataParent * PickUpData;

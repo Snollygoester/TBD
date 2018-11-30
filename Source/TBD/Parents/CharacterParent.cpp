@@ -109,6 +109,7 @@ void ACharacterParent::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 			PlayerInputComponent->BindAction("Cliff", IE_Pressed, this, &ACharacterParent::GrabWall);
 			PlayerInputComponent->BindAction("Cliff", IE_Released, this, &ACharacterParent::letGoOffWall);
 		}
+		PlayerInputComponent->BindAction("Block", IE_Pressed, this, &ACharacterParent::BlockDoYourThing);
 		PlayerInputComponent->BindAxis("MoveForward", this, &ACharacterParent::MoveForward);
 		PlayerInputComponent->BindAxis("MoveRight", this, &ACharacterParent::MoveRight);
 
@@ -212,6 +213,8 @@ void ACharacterParent::FullDeath()
 		Gamemode->Players.Add(CharacterParent);
 		UE_LOG(LogTemp, Warning, TEXT(" Spawn "));
 		CharacterParent->SetHealthWidget(HealthWidget);
+		CharacterParent->ArrowComponent1->SetArrowColor(ArrowComponent1->ArrowColor);
+		CharacterParent->WidgetComponent->GetUserWidgetObject()->SetColorAndOpacity(WidgetComponent->GetUserWidgetObject()->ColorAndOpacity);
 		CharacterParent->BisGameStarted = true;
 		HealthWidget->SetXimage();
 		CharacterParent->bIsImmortal = true;
@@ -219,6 +222,10 @@ void ACharacterParent::FullDeath()
 	}
 	
 	Destroy();
+}
+
+void ACharacterParent::BlockDoYourThing()
+{
 }
 
 void ACharacterParent::GrabWall()
@@ -261,7 +268,7 @@ void ACharacterParent::UsePickUp()
 void ACharacterParent::ThrowGrenade()
 {
 	if (BisGameStarted && !bIsDead && !bIsImmortal) {
-	AGrenadeParent * Grenade=  GetWorld()->SpawnActor<AGrenadeParent>(GrenadeParentTSubClass, FTransform(FRotator(0, 0, 0), GetActorLocation() + GetActorForwardVector() * 100, FVector(1)));
+	AGrenadeParent * Grenade=  GetWorld()->SpawnActor<AGrenadeParent>(GrenadeParentTSubClass, FTransform(FRotator(0, 0, 0), GetActorLocation() + GetActorForwardVector() * 120, FVector(1)));
 	if (Grenade != nullptr)
 	{
 		Grenade->Thorw(ThorwSpeed, GetActorForwardVector());

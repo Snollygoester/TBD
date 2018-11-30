@@ -24,6 +24,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	void Thorw(float Speed, FVector Direction);
 private:
+	bool bHitShiled = false;
 	UPROPERTY(VisibleAnywhere)
 	class UProjectileMovementComponent * ProjectileMovementComponent;
 	void Exploded();

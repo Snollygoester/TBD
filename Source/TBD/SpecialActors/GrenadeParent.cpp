@@ -7,6 +7,7 @@
 #include "Particles/ParticleSystemComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "ShiledParent.h"
 // Sets default values
 AGrenadeParent::AGrenadeParent()
 {
@@ -47,7 +48,11 @@ void AGrenadeParent::Thorw(float Speed , FVector Direction)
 void AGrenadeParent::Exploded()
 {
 	TArray<AActor*> Actors;
-	UGameplayStatics::ApplyRadialDamageWithFalloff(GetWorld(), MaxExplosionDamage, MinExplosionDamage, GetActorLocation(), ExplosionRadius, ExplosionRadius * 1.5, MinExplosionDamage * 0.5, UDamageType::StaticClass(), Actors, this, GetInstigatorController());
+	if (!bHitShiled)
+	{
+		UGameplayStatics::ApplyRadialDamageWithFalloff(GetWorld(), MaxExplosionDamage, MinExplosionDamage, GetActorLocation(), ExplosionRadius, ExplosionRadius * 1.5, MinExplosionDamage * 0.5, UDamageType::StaticClass(), Actors, this, GetInstigatorController());
+	}
+	bHitShiled = false;
 	ParticleSystemComponent->SetWorldLocation(StaticMeshComponent->GetComponentLocation());
 	SetRootComponent(ParticleSystemComponent);
 	ParticleSystemComponent->Activate();
@@ -63,6 +68,14 @@ void AGrenadeParent::TimerEndDestroy()
 
 void AGrenadeParent::OnCompHit(UPrimitiveComponent * HitComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, FVector NormalImpulse, const FHitResult & Hit)
 { 
+	AShiledParent * Shiled = Cast<AShiledParent>(OtherActor);
+	if (Shiled != nullptr)
+	{
+		Shiled->CurrentHealth = Shiled->CurrentHealth - (HitDamage + MaxExplosionDamage);
+		bHitShiled = true;
+		Exploded();
+		return;
+	}
 	UGameplayStatics::ApplyDamage(OtherActor, HitDamage, GetInstigatorController(), this, UDamageType::StaticClass());
 }
 
