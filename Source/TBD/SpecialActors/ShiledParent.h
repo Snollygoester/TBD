@@ -36,4 +36,7 @@ private:
 	bool bCanShiledRegn = true;
 	float RegnAmount = 10;
 	void CanRgen();
+	UPROPERTY(VisibleAnywhere)
+		class UWidgetComponent * WidgetComponent;
+	class UProgressBar * ProgressBar;
 };
