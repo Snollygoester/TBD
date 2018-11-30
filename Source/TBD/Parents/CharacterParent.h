@@ -79,6 +79,10 @@ public:
 	void Death();
 
 	void FullDeath();
+	UPROPERTY(VisibleAnywhere)
+	class UWidgetComponent * WidgetComponent;
+	UPROPERTY(VisibleAnywhere)
+	class UArrowComponent * ArrowComponent1;
 private:
 	class	UCliffHangAB * CliffHangABCpp;
 	class UPickUpDataParent * PickUpData;
@@ -89,10 +93,8 @@ private:
 		float ThorwSpeed = 1500;
 	UPROPERTY(EditAnywhere)
 		float RespawnTime = 5;
-	UPROPERTY(VisibleAnywhere)
-		class UStaticMeshComponent * StaticMeshComponent;
 	UPROPERTY(EditAnywhere)
 	class UMaterialInterface * SpawnMaterial;
-	UPROPERTY(EditAnywhere)
-	class UMaterialInterface * NonSpawnMaterial;
+	UPROPERTY()
+	TArray <class UMaterialInterface *> NonSpawnMaterials;
 };

@@ -19,6 +19,7 @@ AGrenadeParent::AGrenadeParent()
 	StaticMeshComponent->SetNotifyRigidBodyCollision(true);
 	ParticleSystemComponent->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 	ParticleSystemComponent->bAutoActivate = false;
+	
 }
 
 // Called when the game starts or when spawned

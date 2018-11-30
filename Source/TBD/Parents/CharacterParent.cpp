@@ -14,7 +14,9 @@
 #include "Public/TimerManager.h"
 #include "SpecialActors/SpawnPointParent.h"
 #include "Kismet/GameplayStatics.h"
-#include "Components/StaticMeshComponent.h"
+#include "Components/SkeletalMeshComponent.h"
+#include "Components/ArrowComponent.h"
+#include "Components/WidgetComponent.h"
 #include "TBDGameModeBase.h"
 // Sets default values
 ACharacterParent::ACharacterParent()
@@ -22,14 +24,15 @@ ACharacterParent::ACharacterParent()
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 
+	WidgetComponent = CreateDefaultSubobject<UWidgetComponent>(FName("WidgetComponent"));
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
-	StaticMeshComponent = CreateDefaultSubobject< UStaticMeshComponent>(FName("StaticMeshComponent"));
-	StaticMeshComponent->AttachToComponent(GetCapsuleComponent(), FAttachmentTransformRules::SnapToTargetIncludingScale);
 		// set our turn rates for input
+	ArrowComponent1 = CreateDefaultSubobject<UArrowComponent>(FName("ArrowComponent1"));
+	WidgetComponent->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+	ArrowComponent1->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 	BaseTurnRate = 45.f;
 	BaseLookUpRate = 45.f;
-
 	// Don't rotate when the controller rotates. Let that just affect the camera.
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
@@ -52,6 +55,7 @@ void ACharacterParent::BeginPlay()
 	PickUpWidget = CreateWidget<UPickUpItemWidget>(GetWorld(), UserWidget);
 	PickUpWidget->AddToViewport();
 	CurrentHealth = Health;
+	NonSpawnMaterials = GetMesh()->GetMaterials();
 	UCharacterMovementComponent * CharacterMovementComponent = Cast<UCharacterMovementComponent>(GetCharacterMovement());
 	FTimerHandle TimerHandle;
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ACharacterParent::StopImmortality, ImmortalityTime);
@@ -127,7 +131,14 @@ void ACharacterParent::SetHealthWidget(UHealthWidget * HealthWidgetToSet)
 void ACharacterParent::StopImmortality()
 {
 	bIsImmortal = false;
-	StaticMeshComponent->SetMaterial(0, NonSpawnMaterial);
+	int i = 0;
+	for (UMaterialInterface* m : NonSpawnMaterials )
+	{
+		GetMesh()->SetMaterial(i, m);
+		i++;
+	}
+	GetMesh()->CustomDepthStencilValue = FCString::Atoi(*PlayerUniqueTag);
+	GetMesh()->MarkRenderStateDirty();
 }
 
 void ACharacterParent::MoveForward(float Value)
@@ -204,7 +215,7 @@ void ACharacterParent::FullDeath()
 		CharacterParent->BisGameStarted = true;
 		HealthWidget->SetXimage();
 		CharacterParent->bIsImmortal = true;
-		CharacterParent->StaticMeshComponent->SetMaterial(0, SpawnMaterial);
+		CharacterParent->GetMesh()->SetMaterial(0, SpawnMaterial);
 	}
 	
 	Destroy();
