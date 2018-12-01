@@ -211,7 +211,6 @@ void ACharacterParent::FullDeath()
 		Controller->Possess(CharacterParent);
 		Gamemode->Players.Remove(this);
 		Gamemode->Players.Add(CharacterParent);
-		UE_LOG(LogTemp, Warning, TEXT(" Spawn "));
 		CharacterParent->SetHealthWidget(HealthWidget);
 		CharacterParent->ArrowComponent1->SetArrowColor(ArrowComponent1->ArrowColor);
 		CharacterParent->WidgetComponent->GetUserWidgetObject()->SetColorAndOpacity(WidgetComponent->GetUserWidgetObject()->ColorAndOpacity);

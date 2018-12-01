@@ -14,7 +14,7 @@ AShiledParent::AShiledParent()
 	PrimaryActorTick.bCanEverTick = true;
 	StaticMeshComponent = CreateDefaultSubobject< UStaticMeshComponent>(FName("StaticMeshComponent"));
 	WidgetComponent = CreateDefaultSubobject<UWidgetComponent>(FName("WidgetComponent"));
-	WidgetComponent->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+	WidgetComponent->AttachToComponent(StaticMeshComponent, FAttachmentTransformRules::KeepRelativeTransform);
 	
 }
 
@@ -55,18 +55,22 @@ void AShiledParent::Tick(float DeltaTime)
 			CurrentHealth = (RegnAmount * DeltaTime) + CurrentHealth;
 		}	
 	}
+
 }
 
 void AShiledParent::Active()
 {
-	StaticMeshComponent->SetVisibility(true);
+	StaticMeshComponent->ToggleVisibility();
+	WidgetComponent->ToggleVisibility();
 	StaticMeshComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	UE_LOG(LogTemp, Warning, TEXT(" Active "));
 }
 
 void AShiledParent::Dactive()
 {
-	StaticMeshComponent->SetVisibility(false);
+	StaticMeshComponent->ToggleVisibility();
+	WidgetComponent->ToggleVisibility();
 	StaticMeshComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	StaticMeshComponent->MarkRenderStateDirty();
+	UE_LOG(LogTemp, Warning, TEXT(" Dactive "));
 }
 

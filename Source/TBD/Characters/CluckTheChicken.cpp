@@ -9,11 +9,13 @@ void ACluckTheChicken::BlockDoYourThing() {
 	{
 		bIsShiledActive = false;
 		Shiled->Dactive();
+		return;
 	}
 	if (!bIsShiledActive)
 	{
 		bIsShiledActive = true;
 		Shiled->Active();
+		return;
 	}
 }
 

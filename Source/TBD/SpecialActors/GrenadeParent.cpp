@@ -69,9 +69,11 @@ void AGrenadeParent::TimerEndDestroy()
 void AGrenadeParent::OnCompHit(UPrimitiveComponent * HitComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, FVector NormalImpulse, const FHitResult & Hit)
 { 
 	AShiledParent * Shiled = Cast<AShiledParent>(OtherActor);
+	
 	if (Shiled != nullptr)
 	{
-		Shiled->CurrentHealth = Shiled->CurrentHealth - (HitDamage + MaxExplosionDamage);
+		FDamageEvent DamageEvent;
+		Shiled->TakeDamage((HitDamage + MaxExplosionDamage), DamageEvent, GetInstigatorController(), this);
 		bHitShiled = true;
 		Exploded();
 		return;
