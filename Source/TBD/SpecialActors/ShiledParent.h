@@ -26,6 +26,7 @@ public:
 	void Dactive();
 	float CurrentHealth;
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const & DamageEvent, class AController * EventInstigator, AActor * DamageCauser) override;
+	bool bIsShiledActive = false;
 private:
 	UPROPERTY(VisibleAnywhere)
 		class UStaticMeshComponent * StaticMeshComponent;
