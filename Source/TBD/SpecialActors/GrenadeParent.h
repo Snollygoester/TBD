@@ -3,11 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
+#include "Parents/ProjectileParent.h"
 #include "GrenadeParent.generated.h"
 
 UCLASS()
-class TBD_API AGrenadeParent : public AActor
+class TBD_API AGrenadeParent : public AProjectileParent
 {
 	GENERATED_BODY()
 	
@@ -18,15 +18,15 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
+	void OnHitDoYourThing(UPrimitiveComponent * HitComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, FVector NormalImpulse, const FHitResult & Hit) override;
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	void Thorw(float Speed, FVector Direction);
+
 private:
 	bool bHitShiled = false;
 	UPROPERTY(VisibleAnywhere)
-	class UProjectileMovementComponent * ProjectileMovementComponent;
+		class UParticleSystemComponent * ParticleSystemComponent;
 	void Exploded();
 	UPROPERTY(EditAnywhere)
 	float TimeEntilExplosion = 3;
@@ -38,11 +38,6 @@ private:
 		float MinExplosionDamage = 5;
 	UPROPERTY(EditAnywhere)
 		float ExplosionRadius  = 200;
-	UPROPERTY(VisibleAnywhere)
-	class UParticleSystemComponent * ParticleSystemComponent;
-	UPROPERTY(VisibleAnywhere)
-	class UStaticMeshComponent * StaticMeshComponent;
 	void TimerEndDestroy();
-	UFUNCTION()
-	void OnCompHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+	
 };

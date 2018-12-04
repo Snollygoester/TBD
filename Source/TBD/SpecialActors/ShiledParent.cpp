@@ -63,6 +63,7 @@ void AShiledParent::Active()
 	StaticMeshComponent->ToggleVisibility();
 	WidgetComponent->ToggleVisibility();
 	StaticMeshComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	bIsShiledActive = true;
 	UE_LOG(LogTemp, Warning, TEXT(" Active "));
 }
 
@@ -71,6 +72,7 @@ void AShiledParent::Dactive()
 	StaticMeshComponent->ToggleVisibility();
 	WidgetComponent->ToggleVisibility();
 	StaticMeshComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	bIsShiledActive = false;
 	UE_LOG(LogTemp, Warning, TEXT(" Dactive "));
 }
 

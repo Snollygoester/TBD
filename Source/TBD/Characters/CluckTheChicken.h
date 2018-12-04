@@ -24,7 +24,7 @@ private:
 	void BeginPlay() override;
 	UPROPERTY(EditAnywhere)
 		TSubclassOf< class AShiledParent > ShiledParentTsubClass;
-	bool bIsShiledActive = false;
+	bool bIsShiledActive;
 	UPROPERTY()
 		class AShiledParent * Shiled;
 	UPROPERTY(VisibleAnywhere)
@@ -33,23 +33,14 @@ private:
 		class UStaticMeshComponent * EggL;
 	UPROPERTY(VisibleAnywhere)
 		class UStaticMeshComponent * EggI;
-	UPROPERTY(EditAnywhere, Category = Movement)
-		float AngleAxisF;
-	UPROPERTY(EditAnywhere, Category = Movement)
-		float AngleAxisL;
-	UPROPERTY(EditAnywhere, Category = Movement)
-		float AngleAxisI;
+	UPROPERTY(VisibleAnywhere)
+		class USpringArmComponent* SpringArmF;
+	UPROPERTY(VisibleAnywhere)
+		class USpringArmComponent* SpringArmL;
+	UPROPERTY(VisibleAnywhere)
+		class USpringArmComponent* SpringArmI;
 
 	UPROPERTY(EditAnywhere, Category = Movement)
-		FVector Dimensions = FVector(150,0,0);
-
-	UPROPERTY(EditAnywhere, Category = Movement)
-		FVector AxisVector = FVector(0,0,1) ;
-
-	UPROPERTY(EditAnywhere, Category = Movement)
-		float MultiplierF = 50;
-	UPROPERTY(EditAnywhere, Category = Movement)
-		float MultiplierL = 300;
-	UPROPERTY(EditAnywhere, Category = Movement)
-		float MultiplierI = 500;
+		float Multiplier = 100;
+	
 };

@@ -12,12 +12,8 @@
 AGrenadeParent::AGrenadeParent()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
-	StaticMeshComponent = CreateDefaultSubobject< UStaticMeshComponent>(FName("StaticMeshComponent"));
-	ProjectileMovementComponent = CreateDefaultSubobject< UProjectileMovementComponent>(FName("ProjectileMovementComponent"));
+	PrimaryActorTick.bCanEverTick = false;
 	ParticleSystemComponent = CreateDefaultSubobject< UParticleSystemComponent>(FName("ParticleSystemComponent"));
-	SetRootComponent(StaticMeshComponent);
-	StaticMeshComponent->SetNotifyRigidBodyCollision(true);
 	ParticleSystemComponent->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 	ParticleSystemComponent->bAutoActivate = false;
 	
@@ -29,19 +25,27 @@ void AGrenadeParent::BeginPlay()
 	Super::BeginPlay();
 	FTimerHandle TimerHandle;
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AGrenadeParent::Exploded, TimeEntilExplosion);
-	StaticMeshComponent->OnComponentHit.AddDynamic(this, &AGrenadeParent::OnCompHit);
+	
 }
 
+void AGrenadeParent::OnHitDoYourThing(UPrimitiveComponent * HitComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, FVector NormalImpulse, const FHitResult & Hit)
+{
+	AShiledParent * Shiled = Cast<AShiledParent>(OtherActor);
+
+	if (Shiled != nullptr)
+	{
+		FDamageEvent DamageEvent;
+		Shiled->TakeDamage((HitDamage + MaxExplosionDamage), DamageEvent, GetInstigatorController(), this);
+		bHitShiled = true;
+		Exploded();
+		return;
+	}
+	UGameplayStatics::ApplyDamage(OtherActor, HitDamage, GetInstigatorController(), this, UDamageType::StaticClass());
+}
 // Called every frame
 void AGrenadeParent::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-}
-
-void AGrenadeParent::Thorw(float Speed , FVector Direction)
-{
-	ProjectileMovementComponent->SetVelocityInLocalSpace(Direction * Speed);
 
 }
 
@@ -65,20 +69,4 @@ void AGrenadeParent::TimerEndDestroy()
 {
 	Destroy();
 }
-
-void AGrenadeParent::OnCompHit(UPrimitiveComponent * HitComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, FVector NormalImpulse, const FHitResult & Hit)
-{ 
-	AShiledParent * Shiled = Cast<AShiledParent>(OtherActor);
-	
-	if (Shiled != nullptr)
-	{
-		FDamageEvent DamageEvent;
-		Shiled->TakeDamage((HitDamage + MaxExplosionDamage), DamageEvent, GetInstigatorController(), this);
-		bHitShiled = true;
-		Exploded();
-		return;
-	}
-	UGameplayStatics::ApplyDamage(OtherActor, HitDamage, GetInstigatorController(), this, UDamageType::StaticClass());
-}
-
 
