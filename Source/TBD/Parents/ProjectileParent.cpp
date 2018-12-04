@@ -9,17 +9,17 @@ AProjectileParent::AProjectileParent()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
-	StaticMeshComponent = CreateDefaultSubobject< UStaticMeshComponent>(FName("StaticMeshComponent"));
+	ProjectileMeshComponent = CreateDefaultSubobject< UStaticMeshComponent>(FName("ProjectileMeshComponent"));
 	ProjectileMovementComponent = CreateDefaultSubobject< UProjectileMovementComponent>(FName("ProjectileMovementComponent"));
-	SetRootComponent(StaticMeshComponent);
-	StaticMeshComponent->SetNotifyRigidBodyCollision(true);
+	SetRootComponent(ProjectileMeshComponent);
+	ProjectileMeshComponent->SetNotifyRigidBodyCollision(true);
 }
 
 // Called when the game starts or when spawned
 void AProjectileParent::BeginPlay()
 {
 	Super::BeginPlay();
-	StaticMeshComponent->OnComponentHit.AddDynamic(this, &AProjectileParent::OnCompHit);
+	ProjectileMeshComponent->OnComponentHit.AddDynamic(this, &AProjectileParent::OnCompHit);
 }
 
 void AProjectileParent::OnCompHit(UPrimitiveComponent * HitComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, FVector NormalImpulse, const FHitResult & Hit)

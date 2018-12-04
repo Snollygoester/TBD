@@ -57,10 +57,10 @@ void AGrenadeParent::Exploded()
 		UGameplayStatics::ApplyRadialDamageWithFalloff(GetWorld(), MaxExplosionDamage, MinExplosionDamage, GetActorLocation(), ExplosionRadius, ExplosionRadius * 1.5, MinExplosionDamage * 0.5, UDamageType::StaticClass(), Actors, this, GetInstigatorController());
 	}
 	bHitShiled = false;
-	ParticleSystemComponent->SetWorldLocation(StaticMeshComponent->GetComponentLocation());
+	ParticleSystemComponent->SetWorldLocation(ProjectileMeshComponent->GetComponentLocation());
 	SetRootComponent(ParticleSystemComponent);
 	ParticleSystemComponent->Activate();
-	StaticMeshComponent->DestroyComponent();
+	ProjectileMeshComponent->DestroyComponent();
 	FTimerHandle TimerHandle;
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AGrenadeParent::TimerEndDestroy, 1);
 }

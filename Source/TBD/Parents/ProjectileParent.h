@@ -20,7 +20,7 @@ protected:
 	virtual void BeginPlay() override;
 
 	UPROPERTY(VisibleAnywhere)
-		class UStaticMeshComponent * StaticMeshComponent;
+		class UStaticMeshComponent * ProjectileMeshComponent;
 	UPROPERTY(VisibleAnywhere)
 		class UProjectileMovementComponent * ProjectileMovementComponent;
 	UFUNCTION()

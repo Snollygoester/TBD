@@ -3,11 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
+#include "Parents/ProjectileParent.h"
 #include "ShiledParent.generated.h"
 
 UCLASS()
-class TBD_API AShiledParent : public AActor
+class TBD_API AShiledParent : public AProjectileParent
 {
 	GENERATED_BODY()
 	
@@ -29,7 +29,7 @@ public:
 	bool bIsShiledActive = false;
 private:
 	UPROPERTY(VisibleAnywhere)
-		class UStaticMeshComponent * StaticMeshComponent;
+		class UStaticMeshComponent * ShiledMeshComponent;
 	UPROPERTY(EditAnywhere)
 		float Health = 100;
 	UPROPERTY(EditAnywhere)

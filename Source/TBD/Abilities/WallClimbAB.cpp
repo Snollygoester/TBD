@@ -37,15 +37,17 @@ void UWallClimbAB::TickComponent(float DeltaTime, ELevelTick TickType, FActorCom
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 	FHitResult Hit;
 	if (GetWorld()->LineTraceSingleByChannel(Hit, GetOwner()->GetActorLocation(), SceneComponent->GetComponentLocation(), ECollisionChannel::ECC_Visibility)) {
-		if (Hit.Actor->ActorHasTag("Wall")) {
-		ClimbTime = OwnerController->GetInputKeyTimeDown(FKey("Spacebar"));
-		if (ClimbTime >= 0.35)
-		{
-			if(ClimbTime  <= TimeYouCanClimb){
-				Owner->LaunchCharacter(FVector(0,0, 350), false, true);
+		if (Hit.Actor != nullptr){
+			if (Hit.Actor->ActorHasTag("Wall")) {
+				ClimbTime = OwnerController->GetInputKeyTimeDown(FKey("Spacebar"));
+				if (ClimbTime >= 0.35)
+				{
+					if (ClimbTime <= TimeYouCanClimb) {
+						Owner->LaunchCharacter(FVector(0, 0, 350), false, true);
+					}
+				}
 			}
-		}
-		}
+	}
 		else
 		{
 			ClimbTime = 0;

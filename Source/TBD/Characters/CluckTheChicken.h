@@ -28,11 +28,11 @@ private:
 	UPROPERTY()
 		class AShiledParent * Shiled;
 	UPROPERTY(VisibleAnywhere)
-		class UStaticMeshComponent * EggF;
+		class UChildActorComponent * EggF;
 	UPROPERTY(VisibleAnywhere)
-		class UStaticMeshComponent * EggL;
+		class UChildActorComponent * EggL;
 	UPROPERTY(VisibleAnywhere)
-		class UStaticMeshComponent * EggI;
+		class UChildActorComponent * EggI;
 	UPROPERTY(VisibleAnywhere)
 		class USpringArmComponent* SpringArmF;
 	UPROPERTY(VisibleAnywhere)

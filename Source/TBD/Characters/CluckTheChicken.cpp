@@ -1,19 +1,20 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "CluckTheChicken.h"
+#include "Parents/ProjectileParent.h"
 #include "Engine/World.h"
 #include "SpecialActors/ShiledParent.h"
-#include "Components/StaticMeshComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Components/ChildActorComponent.h"
 ACluckTheChicken::ACluckTheChicken()
 {
 	PrimaryActorTick.bCanEverTick = true;
 	SpringArmF = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArmF"));
 	SpringArmI = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArmI"));
 	SpringArmL = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArmL"));
-	EggF = CreateDefaultSubobject< UStaticMeshComponent>(FName("EggF"));
-	EggL = CreateDefaultSubobject< UStaticMeshComponent>(FName("EggL"));
-	EggI = CreateDefaultSubobject< UStaticMeshComponent>(FName("EggI"));
+	EggF = CreateDefaultSubobject< UChildActorComponent>(FName("EggF"));
+	EggL = CreateDefaultSubobject< UChildActorComponent>(FName("EggL"));
+	EggI = CreateDefaultSubobject< UChildActorComponent>(FName("EggI"));
 	SpringArmF->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepWorldTransform);
 	SpringArmL->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepWorldTransform);
 	SpringArmI->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepWorldTransform);

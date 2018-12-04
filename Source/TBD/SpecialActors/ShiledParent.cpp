@@ -12,9 +12,9 @@ AShiledParent::AShiledParent()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	StaticMeshComponent = CreateDefaultSubobject< UStaticMeshComponent>(FName("StaticMeshComponent"));
+	ShiledMeshComponent = CreateDefaultSubobject< UStaticMeshComponent>(FName("ShiledMeshComponent"));
 	WidgetComponent = CreateDefaultSubobject<UWidgetComponent>(FName("WidgetComponent"));
-	WidgetComponent->AttachToComponent(StaticMeshComponent, FAttachmentTransformRules::KeepRelativeTransform);
+	WidgetComponent->AttachToComponent(ShiledMeshComponent, FAttachmentTransformRules::KeepRelativeTransform);
 	
 }
 
@@ -60,18 +60,18 @@ void AShiledParent::Tick(float DeltaTime)
 
 void AShiledParent::Active()
 {
-	StaticMeshComponent->ToggleVisibility();
+	ShiledMeshComponent->ToggleVisibility();
 	WidgetComponent->ToggleVisibility();
-	StaticMeshComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	ShiledMeshComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 	bIsShiledActive = true;
 	UE_LOG(LogTemp, Warning, TEXT(" Active "));
 }
 
 void AShiledParent::Dactive()
 {
-	StaticMeshComponent->ToggleVisibility();
+	ShiledMeshComponent->ToggleVisibility();
 	WidgetComponent->ToggleVisibility();
-	StaticMeshComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	ShiledMeshComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	bIsShiledActive = false;
 	UE_LOG(LogTemp, Warning, TEXT(" Dactive "));
 }
