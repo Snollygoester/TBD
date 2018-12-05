@@ -17,7 +17,10 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "Components/ArrowComponent.h"
 #include "Components/WidgetComponent.h"
+#include "DamageTypeParent.h"
 #include "TBDGameModeBase.h"
+
+FTimerDelegate TimerDel;
 // Sets default values
 ACharacterParent::ACharacterParent()
 {
@@ -65,22 +68,37 @@ void ACharacterParent::BeginPlay()
 	}
 }
 
-float ACharacterParent::TakeDamage(float DamageAmount, FDamageEvent const & DamageEvent, AController * EventInstigator, AActor * DamageCauser)
+
+
+void ACharacterParent::ReceiveAnyDamage(float Damage, const UDamageType * DamageType, AController * InstigatedBy, AActor * DamageCauser)
 {
-	Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
-	if (!bIsImmortal)
-	{
-
-
-		CurrentHealth = CurrentHealth - DamageAmount;
-		HealthWidget->SetHealthBarPercent(CurrentHealth / Health);
-		if (CurrentHealth <= 0)
+		Super::ReceiveAnyDamage(Damage, DamageType, InstigatedBy, DamageCauser);
+		if (!bIsImmortal)
 		{
-			Death();
+			const UDamageTypeParent * TypeDamage = Cast<UDamageTypeParent>(DamageType);
+			if (TypeDamage == nullptr)
+			{
+				CurrentHealth = CurrentHealth - Damage;
+			}
+			else
+			{
+				CurrentHealth = CurrentHealth - TypeDamage->BaseDamage;
+				if (TypeDamage->bIsDamageOverTime)
+				{
+					for (int i = 0; i < TypeDamage->DamageUpdateNumber; i++)
+					{
+						TimerDel.BindUFunction(this, FName("TakeDOT"), TypeDamage);
+						FTimerHandle TimerHandle;
+						GetWorld()->GetTimerManager().SetTimer(TimerHandle, TimerDel, TypeDamage->DamageUpdateTime, false);
+					}
+				}
+			}
+			HealthWidget->SetHealthBarPercent(CurrentHealth / Health);
+			if (CurrentHealth <= 0)
+			{
+				Death();
+			}
 		}
-		return DamageAmount;
-	}
-	return 0.f;
 }
 
 // Called every frame
@@ -278,4 +296,9 @@ void ACharacterParent::ThrowGrenade()
 		Grenade->Thorw(ThorwSpeed, GetActorForwardVector());
 	}
 	}
+}
+
+void ACharacterParent::TakeDOT(UDamageTypeParent * TypeDamage)
+{
+	UGameplayStatics::ApplyDamage(this, TypeDamage->DamageOverTimeDamage, GetInstigatorController(), this, UDamageType::StaticClass());
 }
