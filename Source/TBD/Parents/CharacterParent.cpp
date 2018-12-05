@@ -110,6 +110,7 @@ void ACharacterParent::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 			PlayerInputComponent->BindAction("Cliff", IE_Released, this, &ACharacterParent::letGoOffWall);
 		}
 		PlayerInputComponent->BindAction("Block", IE_Pressed, this, &ACharacterParent::BlockDoYourThing);
+		PlayerInputComponent->BindAction("Skill2", IE_Pressed, this, &ACharacterParent::Skill2YourThing);
 		PlayerInputComponent->BindAxis("MoveForward", this, &ACharacterParent::MoveForward);
 		PlayerInputComponent->BindAxis("MoveRight", this, &ACharacterParent::MoveRight);
 
@@ -224,6 +225,10 @@ void ACharacterParent::FullDeath()
 }
 
 void ACharacterParent::BlockDoYourThing()
+{
+}
+
+void ACharacterParent::Skill2YourThing()
 {
 }
 

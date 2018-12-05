@@ -3,11 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
+#include "Parents/ProjectileParent.h"
 #include "SpecialEggParent.generated.h"
 
 UCLASS()
-class TBD_API ASpecialEggParent : public AActor
+class TBD_API ASpecialEggParent : public AProjectileParent
 {
 	GENERATED_BODY()
 	
@@ -18,11 +18,12 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
+	virtual void OnHitDoYourThing(UPrimitiveComponent * HitComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, FVector NormalImpulse, const FHitResult & Hit) override;
+	UPROPERTY(EditAnywhere)
+	float HitDamage = 3;
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
-	
+		
 	
 };

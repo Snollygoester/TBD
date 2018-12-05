@@ -84,6 +84,7 @@ public:
 
 	void FullDeath();
 	virtual void BlockDoYourThing();
+	virtual void Skill2YourThing();
 private:
 	class	UCliffHangAB * CliffHangABCpp;
 	class UPickUpDataParent * PickUpData;

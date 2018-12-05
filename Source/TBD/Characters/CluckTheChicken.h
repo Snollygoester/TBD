@@ -22,17 +22,20 @@ public:
 private:
 	void BlockDoYourThing() override;
 	void BeginPlay() override;
+	 void Skill2YourThing() override;
 	UPROPERTY(EditAnywhere)
 		TSubclassOf< class AShiledParent > ShiledParentTsubClass;
 	bool bIsShiledActive;
 	UPROPERTY()
 		class AShiledParent * Shiled;
+	UPROPERTY()
+	TArray< class UStaticMeshComponent * > Eggs;
 	UPROPERTY(VisibleAnywhere)
-		class UChildActorComponent * EggF;
+		class UStaticMeshComponent * EggF;
 	UPROPERTY(VisibleAnywhere)
-		class UChildActorComponent * EggL;
+		class UStaticMeshComponent * EggL;
 	UPROPERTY(VisibleAnywhere)
-		class UChildActorComponent * EggI;
+		class UStaticMeshComponent * EggI;
 	UPROPERTY(VisibleAnywhere)
 		class USpringArmComponent* SpringArmF;
 	UPROPERTY(VisibleAnywhere)
@@ -43,4 +46,5 @@ private:
 	UPROPERTY(EditAnywhere, Category = Movement)
 		float Multiplier = 100;
 	
+	UStaticMeshComponent *  PickClosestEgg();
 };

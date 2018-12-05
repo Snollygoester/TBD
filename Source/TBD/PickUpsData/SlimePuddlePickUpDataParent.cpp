@@ -12,7 +12,6 @@ void USlimePuddlePickUpDataParent::PickUpDoYourThing()
 {
 	if (!bIwasCalled)
 	{
-		
 		FHitResult Hit;
 		if (GetWorld()->LineTraceSingleByChannel(Hit, GetOwner()->GetActorLocation(), GetOwner()->GetActorLocation() + (GetOwner()->GetActorUpVector() * -10000), ECollisionChannel::ECC_Visibility)) {
 			bIwasCalled = true;
@@ -22,8 +21,6 @@ void USlimePuddlePickUpDataParent::PickUpDoYourThing()
 			FTimerHandle TimerHandle1;
 			RTime = AbilityTime;
 			GetWorld()->GetTimerManager().SetTimer(TimerHandle1, this, &USlimePuddlePickUpDataParent::UpdetaTimer, UpdateTime, true);
-			RScale = SlimePuddle->GetActorScale3D();
-			StartScale = SlimePuddle->GetActorScale3D();
 			SlimePuddle->Tags.Add(FName(*Owner->PlayerUniqueTag));
 		}
 	}
@@ -40,14 +37,11 @@ void USlimePuddlePickUpDataParent::BeginPlay()
 
 void USlimePuddlePickUpDataParent::UpdetaTimer()
 {
-	RScale = RScale - StartScale / AbilityTime * UpdateTime;
-	SlimePuddle->SetActorScale3D(RScale);
 	RTime = RTime - UpdateTime;
 	PickUpItemWidget->SetProgressBarPercent(RTime / AbilityTime);
 }
 void USlimePuddlePickUpDataParent::DestroyComp()
 {
 	PickUpItemWidget->SetProgressBarPercent(0);
-	SlimePuddle->Destroy();
 	DestroyComponent();
 }

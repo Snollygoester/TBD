@@ -3,11 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
+#include "PuddleParent.h"
 #include "SlimePuddleParent.generated.h"
 
 UCLASS()
-class TBD_API ASlimePuddleParent : public AActor
+class TBD_API ASlimePuddleParent : public APuddleParent
 {
 	GENERATED_BODY()
 	
@@ -22,8 +22,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 private:
-	UPROPERTY(VisibleAnywhere)
-		class UStaticMeshComponent * StaticMeshComponent;
+	
 	float MaxDist = 200;
 	UPROPERTY()
 	TArray<class  ACharacterParent *> Characters;

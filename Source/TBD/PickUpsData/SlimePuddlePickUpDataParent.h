@@ -33,6 +33,4 @@ private:
 	UPROPERTY(EditAnywhere)
 		float UpdateTime = 0.1;
 	float RTime;
-	FVector RScale;
-	FVector StartScale;
 };
