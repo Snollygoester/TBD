@@ -86,7 +86,6 @@ float ACharacterParent::TakeDamage(float DamageAmount,  FDamageEvent const& Dama
 				CurrentHealth = CurrentHealth - TypeDamage->BaseDamage;
 				if (TypeDamage->bIsDamageOverTime)
 				{
-					UE_LOG(LogTemp, Warning, TEXT("hi"));
 					TimerDel.BindUFunction(this, FName("TakeDOT"), TypeDamage, TypeDamage->DamageUpdateNumber);
 					FTimerHandle TimerHandle;
 					GetWorld()->GetTimerManager().SetTimer(TimerHandle, TimerDel, TypeDamage->DamageUpdateTime, false);
@@ -300,13 +299,13 @@ void ACharacterParent::ThrowGrenade()
 
 void ACharacterParent::TakeDOT(UDamageTypeParent * TypeDamage, int CallNum)
 {
-	TypeDamage->DamageUpdateNumber = TypeDamage->DamageUpdateNumber - 1;
 	if (CallNum == 0)
 	{
 		return;
 	}
 	UGameplayStatics::ApplyDamage(this, TypeDamage->DamageOverTimeDamage, GetInstigatorController(), this, UDamageType::StaticClass());
-	TimerDel.BindUFunction(this, FName("TakeDOT"), TypeDamage, (TypeDamage->DamageUpdateNumber));
+	TimerDel.BindUFunction(this, FName("TakeDOT"), TypeDamage, (CallNum - 1));
+	UE_LOG(LogTemp, Warning, TEXT("hi"));
 	FTimerHandle TimerHandle;
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle, TimerDel, TypeDamage->DamageUpdateTime, false);
 }

@@ -3,6 +3,7 @@
 #include "PuddleParent.h"
 #include "Engine/World.h"
 #include "Public/TimerManager.h"
+#include "Components/StaticMeshComponent.h"
 // Sets default values
 APuddleParent::APuddleParent()
 {
@@ -22,6 +23,11 @@ void APuddleParent::BeginPlay()
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle1, this, &APuddleParent::UpdetaTimer, UpdateTime, true);
 	RScale = GetActorScale3D();
 	StartScale = GetActorScale3D();
+	Puddle->OnComponentBeginOverlap.AddDynamic(this, &APuddleParent::OnOverlapBegin);
+}
+
+void APuddleParent::OverlapDoYourThing(UPrimitiveComponent * OverlappedComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
+{
 }
 
 // Called every frame
@@ -40,4 +46,9 @@ void APuddleParent::UpdetaTimer()
 void APuddleParent::DestroyComp()
 {
 	Destroy();
+}
+
+void APuddleParent::OnOverlapBegin(UPrimitiveComponent * OverlappedComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
+{
+	OverlapDoYourThing(OverlappedComp, OtherActor, OtherComp, OtherBodyIndex, bFromSweep, SweepResult);
 }
