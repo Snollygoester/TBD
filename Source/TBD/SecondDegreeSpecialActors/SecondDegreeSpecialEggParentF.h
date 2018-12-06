@@ -17,5 +17,5 @@ class TBD_API ASecondDegreeSpecialEggParentF : public ASpecialEggParent
 private:
 	void OnHitDoYourThing(UPrimitiveComponent * HitComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, FVector NormalImpulse, const FHitResult & Hit) override;
 	UPROPERTY(EditAnywhere)
-		TSubclassOf<class UDamageTypeParent > FireDamageType;
+	TSubclassOf<class ASecondDegreeFirePuddle > SecondDegreeFirePuddleSubClass;
 };

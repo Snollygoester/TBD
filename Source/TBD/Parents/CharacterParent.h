@@ -101,4 +101,6 @@ private:
 	TArray <class UMaterialInterface *> NonSpawnMaterials;
 	UFUNCTION()
 	void TakeDOT(class UDamageTypeParent * TypeDamage, int CallNum);
+	UPROPERTY(VisibleAnywhere)
+		class UParticleSystemComponent * FireParticles;
 };

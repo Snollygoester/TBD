@@ -18,6 +18,7 @@
 #include "Components/ArrowComponent.h"
 #include "Components/WidgetComponent.h"
 #include "DamageTypeParent.h"
+#include "Particles/ParticleSystemComponent.h"
 #include "TBDGameModeBase.h"
 
 FTimerDelegate TimerDel;
@@ -46,6 +47,9 @@ ACharacterParent::ACharacterParent()
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 540.0f, 0.0f); // ...at this rotation rate
 	GetCharacterMovement()->JumpZVelocity = 600.f;
 	GetCharacterMovement()->AirControl = 0.2f;
+	FireParticles = CreateDefaultSubobject< UParticleSystemComponent>(FName("FireParticles"));
+	FireParticles->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+	FireParticles->bAutoActivate = false;
 
 }
 
@@ -89,6 +93,10 @@ float ACharacterParent::TakeDamage(float DamageAmount,  FDamageEvent const& Dama
 					TimerDel.BindUFunction(this, FName("TakeDOT"), TypeDamage, TypeDamage->DamageUpdateNumber);
 					FTimerHandle TimerHandle;
 					GetWorld()->GetTimerManager().SetTimer(TimerHandle, TimerDel, TypeDamage->DamageUpdateTime, false);
+					if (TypeDamage->GetName() == "Default__FireDamageType_C")
+					{
+						FireParticles->Activate();
+					}
 				}
 			}
 			HealthWidget->SetHealthBarPercent(CurrentHealth / Health);
@@ -96,6 +104,7 @@ float ACharacterParent::TakeDamage(float DamageAmount,  FDamageEvent const& Dama
 			{
 				Death();
 			}
+		
 		}
 		return 0.f;
 }
@@ -301,11 +310,14 @@ void ACharacterParent::TakeDOT(UDamageTypeParent * TypeDamage, int CallNum)
 {
 	if (CallNum == 0)
 	{
+		if (TypeDamage->GetName() == "Default__FireDamageType_C")
+		{
+			FireParticles->Deactivate();
+		}
 		return;
 	}
 	UGameplayStatics::ApplyDamage(this, TypeDamage->DamageOverTimeDamage, GetInstigatorController(), this, UDamageType::StaticClass());
 	TimerDel.BindUFunction(this, FName("TakeDOT"), TypeDamage, (CallNum - 1));
-	UE_LOG(LogTemp, Warning, TEXT("hi"));
 	FTimerHandle TimerHandle;
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle, TimerDel, TypeDamage->DamageUpdateTime, false);
 }
