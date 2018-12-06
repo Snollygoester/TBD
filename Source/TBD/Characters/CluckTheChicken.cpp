@@ -7,6 +7,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Components/ArrowComponent.h"
+#include "Parents/ProjectileParent.h"
 ACluckTheChicken::ACluckTheChicken()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -50,15 +51,21 @@ void ACluckTheChicken::BeginPlay()
 
 void ACluckTheChicken::Skill2YourThing()
 {
+	AProjectileParent * ChossenEgg;
 	if (PickClosestEgg()->GetName() == EggF->GetName()) {
-
+	ChossenEgg = GetWorld()->SpawnActor<AProjectileParent>(EggFSubClass, FTransform(FRotator(0, 0, 0), ArrowComponent1->GetComponentLocation() + GetActorForwardVector() * 100, FVector(1)));
+	ChossenEgg->Thorw(EggSpeed, GetActorForwardVector());
 	}
 	else if (PickClosestEgg()->GetName() == EggL->GetName()) {
-
+		ChossenEgg = GetWorld()->SpawnActor<AProjectileParent>(EggLSubClass, FTransform(FRotator(0, 0, 0), ArrowComponent1->GetComponentLocation() + GetActorForwardVector() * 100, FVector(1)));
+		ChossenEgg->Thorw(EggSpeed, GetActorForwardVector());
 	}
 	else if (PickClosestEgg()->GetName() == EggI->GetName()) {
-
+		ChossenEgg = GetWorld()->SpawnActor<AProjectileParent>(EggISubClass, FTransform(FRotator(0, 0, 0), ArrowComponent1->GetComponentLocation() + GetActorForwardVector() * 100, FVector(1)));
+		ChossenEgg->Thorw(EggSpeed, GetActorForwardVector());
 	}
+	
+		
 }
 void ACluckTheChicken::Tick(float DeltaTime)
 {
@@ -79,6 +86,6 @@ UStaticMeshComponent * ACluckTheChicken::PickClosestEgg()
 			i++;
 		}
 	}
-	UE_LOG(LogTemp, Warning, TEXT("%s"), *Eggs[i]->GetName());
+	
 	return Eggs[i];
 }

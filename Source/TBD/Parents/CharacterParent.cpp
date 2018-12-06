@@ -70,27 +70,26 @@ void ACharacterParent::BeginPlay()
 
 
 
-void ACharacterParent::ReceiveAnyDamage(float Damage, const UDamageType * DamageType, AController * InstigatedBy, AActor * DamageCauser)
+float ACharacterParent::TakeDamage(float DamageAmount,  FDamageEvent const& DamageEvent,  AController* EventInstigator, AActor* DamageCauser)
 {
-		Super::ReceiveAnyDamage(Damage, DamageType, InstigatedBy, DamageCauser);
+		Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 		if (!bIsImmortal)
 		{
-			const UDamageTypeParent * TypeDamage = Cast<UDamageTypeParent>(DamageType);
+			const UDamageTypeParent * TypeDamage = Cast<UDamageTypeParent>(DamageEvent.DamageTypeClass.GetDefaultObject());
 			if (TypeDamage == nullptr)
 			{
-				CurrentHealth = CurrentHealth - Damage;
+				CurrentHealth = CurrentHealth - DamageAmount;
+				
 			}
 			else
 			{
 				CurrentHealth = CurrentHealth - TypeDamage->BaseDamage;
 				if (TypeDamage->bIsDamageOverTime)
 				{
-					for (int i = 0; i < TypeDamage->DamageUpdateNumber; i++)
-					{
-						TimerDel.BindUFunction(this, FName("TakeDOT"), TypeDamage);
-						FTimerHandle TimerHandle;
-						GetWorld()->GetTimerManager().SetTimer(TimerHandle, TimerDel, TypeDamage->DamageUpdateTime, false);
-					}
+					UE_LOG(LogTemp, Warning, TEXT("hi"));
+					TimerDel.BindUFunction(this, FName("TakeDOT"), TypeDamage, TypeDamage->DamageUpdateNumber);
+					FTimerHandle TimerHandle;
+					GetWorld()->GetTimerManager().SetTimer(TimerHandle, TimerDel, TypeDamage->DamageUpdateTime, false);
 				}
 			}
 			HealthWidget->SetHealthBarPercent(CurrentHealth / Health);
@@ -99,6 +98,7 @@ void ACharacterParent::ReceiveAnyDamage(float Damage, const UDamageType * Damage
 				Death();
 			}
 		}
+		return 0.f;
 }
 
 // Called every frame
@@ -298,7 +298,15 @@ void ACharacterParent::ThrowGrenade()
 	}
 }
 
-void ACharacterParent::TakeDOT(UDamageTypeParent * TypeDamage)
+void ACharacterParent::TakeDOT(UDamageTypeParent * TypeDamage, int CallNum)
 {
+	TypeDamage->DamageUpdateNumber = TypeDamage->DamageUpdateNumber - 1;
+	if (CallNum == 0)
+	{
+		return;
+	}
 	UGameplayStatics::ApplyDamage(this, TypeDamage->DamageOverTimeDamage, GetInstigatorController(), this, UDamageType::StaticClass());
+	TimerDel.BindUFunction(this, FName("TakeDOT"), TypeDamage, (TypeDamage->DamageUpdateNumber));
+	FTimerHandle TimerHandle;
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, TimerDel, TypeDamage->DamageUpdateTime, false);
 }

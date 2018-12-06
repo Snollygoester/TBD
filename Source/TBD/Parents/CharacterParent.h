@@ -20,7 +20,7 @@ protected:
 	virtual void BeginPlay() override;
 
 public:	
-	virtual void ReceiveAnyDamage(float Damage,const class UDamageType * DamageType,class AController * InstigatedBy,AActor * DamageCauser) override;
+	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -100,5 +100,5 @@ private:
 	UPROPERTY()
 	TArray <class UMaterialInterface *> NonSpawnMaterials;
 	UFUNCTION()
-	void TakeDOT(class UDamageTypeParent * TypeDamage);
+	void TakeDOT(class UDamageTypeParent * TypeDamage, int CallNum);
 };

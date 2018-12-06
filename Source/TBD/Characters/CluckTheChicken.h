@@ -45,6 +45,13 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = Movement)
 		float Multiplier = 100;
-	
+	UPROPERTY(EditAnywhere, Category = Eggs)
+		float EggSpeed = 1000;
+	UPROPERTY(EditAnywhere, Category = Eggs)
+		TSubclassOf<class AProjectileParent> EggFSubClass;
+	UPROPERTY(EditAnywhere, Category = Eggs)
+		TSubclassOf<class AProjectileParent> EggLSubClass;
+	UPROPERTY(EditAnywhere, Category = Eggs)
+		TSubclassOf<class AProjectileParent> EggISubClass;
 	UStaticMeshComponent *  PickClosestEgg();
 };

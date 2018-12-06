@@ -3,11 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Parents/ProjectileParent.h"
+#include "GameFramework/Actor.h"
 #include "ShiledParent.generated.h"
 
 UCLASS()
-class TBD_API AShiledParent : public AProjectileParent
+class TBD_API AShiledParent : public AActor
 {
 	GENERATED_BODY()
 	
