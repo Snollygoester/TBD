@@ -31,3 +31,8 @@ void ASpecialEggParent::Tick(float DeltaTime)
 
 }
 
+
+void ASpecialEggParent::GetActorToIgnre(AActor * ActorToIgnre)
+{
+	ThisActorToIgnre = ActorToIgnre;
+}

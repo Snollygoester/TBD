@@ -18,4 +18,5 @@ private:
 	void OnHitDoYourThing(UPrimitiveComponent * HitComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, FVector NormalImpulse, const FHitResult & Hit) override;
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<class ASecondDegreeFirePuddle > SecondDegreeFirePuddleSubClass;
+
 };

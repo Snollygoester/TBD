@@ -8,7 +8,5 @@ void ASecondDegreeSpecialEggParentF::OnHitDoYourThing(UPrimitiveComponent * HitC
 {
 	Super::OnHitDoYourThing(HitComp, OtherActor, OtherComp, NormalImpulse, Hit);
 	UGameplayStatics::ApplyDamage(OtherActor, HitDamage, GetInstigatorController(), this, UDamageType::StaticClass());
-	GetWorld()->SpawnActor<ASecondDegreeFirePuddle>(SecondDegreeFirePuddleSubClass, FTransform(FRotator(0, 0, 0), GetActorLocation() , FVector(1)));
+	GetWorld()->SpawnActor<ASecondDegreeFirePuddle>(SecondDegreeFirePuddleSubClass, FTransform(FRotator(0, 0, 0), GetActorLocation() , FVector(1)))->GetActorToIgnire(ThisActorToIgnre);
 }
-
-

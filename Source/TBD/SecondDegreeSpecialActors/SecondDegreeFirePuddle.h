@@ -22,4 +22,9 @@ UPROPERTY()
 AActor * Actor;
 void UpdateFire();
 bool bIsOnFire = false;
+UPROPERTY()
+AActor * ThisActorToIgnire;
+public:
+void  GetActorToIgnire(AActor * ActorToIgnire);
+
 };

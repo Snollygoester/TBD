@@ -87,7 +87,15 @@ float ACharacterParent::TakeDamage(float DamageAmount,  FDamageEvent const& Dama
 			}
 			else
 			{
-				CurrentHealth = CurrentHealth - TypeDamage->BaseDamage;
+				if (TypeDamage->ActorToIgnre == this) {
+					
+					return 0.f;
+				}
+				if (DamageAmount > KINDA_SMALL_NUMBER)
+				{
+					CurrentHealth = CurrentHealth - DamageAmount;
+				}
+				
 				if (TypeDamage->bIsDamageOverTime)
 				{
 					TimerDel.BindUFunction(this, FName("TakeDOT"), TypeDamage, TypeDamage->DamageUpdateNumber);
@@ -96,6 +104,7 @@ float ACharacterParent::TakeDamage(float DamageAmount,  FDamageEvent const& Dama
 					if (TypeDamage->GetName() == "Default__FireDamageType_C")
 					{
 						FireParticles->Activate();
+						
 					}
 				}
 			}

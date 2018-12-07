@@ -7,7 +7,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Components/ArrowComponent.h"
-#include "Parents/ProjectileParent.h"
+#include "SpecialActors/SpecialEggParent.h"
 ACluckTheChicken::ACluckTheChicken()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -51,17 +51,20 @@ void ACluckTheChicken::BeginPlay()
 
 void ACluckTheChicken::Skill2YourThing()
 {
-	AProjectileParent * ChossenEgg;
+	ASpecialEggParent * ChossenEgg;
 	if (PickClosestEgg()->GetName() == EggF->GetName()) {
-	ChossenEgg = GetWorld()->SpawnActor<AProjectileParent>(EggFSubClass, FTransform(FRotator(0, 0, 0), ArrowComponent1->GetComponentLocation() + GetActorForwardVector() * 100, FVector(1)));
+	ChossenEgg = GetWorld()->SpawnActor<ASpecialEggParent>(EggFSubClass, FTransform(FRotator(0, 0, 0), ArrowComponent1->GetComponentLocation() + GetActorForwardVector() * 100, FVector(1)));
+	ChossenEgg->GetActorToIgnre(this);
 	ChossenEgg->Thorw(EggSpeed, GetActorForwardVector());
 	}
 	else if (PickClosestEgg()->GetName() == EggL->GetName()) {
-		ChossenEgg = GetWorld()->SpawnActor<AProjectileParent>(EggLSubClass, FTransform(FRotator(0, 0, 0), ArrowComponent1->GetComponentLocation() + GetActorForwardVector() * 100, FVector(1)));
+		ChossenEgg = GetWorld()->SpawnActor<ASpecialEggParent>(EggLSubClass, FTransform(FRotator(0, 0, 0), ArrowComponent1->GetComponentLocation() + GetActorForwardVector() * 100, FVector(1)));
+		ChossenEgg->GetActorToIgnre(this);
 		ChossenEgg->Thorw(EggSpeed, GetActorForwardVector());
 	}
 	else if (PickClosestEgg()->GetName() == EggI->GetName()) {
-		ChossenEgg = GetWorld()->SpawnActor<AProjectileParent>(EggISubClass, FTransform(FRotator(0, 0, 0), ArrowComponent1->GetComponentLocation() + GetActorForwardVector() * 100, FVector(1)));
+		ChossenEgg = GetWorld()->SpawnActor<ASpecialEggParent>(EggISubClass, FTransform(FRotator(0, 0, 0), ArrowComponent1->GetComponentLocation() + GetActorForwardVector() * 100, FVector(1)));
+		ChossenEgg->GetActorToIgnre(this);
 		ChossenEgg->Thorw(EggSpeed, GetActorForwardVector());
 	}
 	

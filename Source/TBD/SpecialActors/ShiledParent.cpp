@@ -64,7 +64,6 @@ void AShiledParent::Active()
 	WidgetComponent->ToggleVisibility();
 	ShiledMeshComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 	bIsShiledActive = true;
-	UE_LOG(LogTemp, Warning, TEXT(" Active "));
 }
 
 void AShiledParent::Dactive()
@@ -73,6 +72,5 @@ void AShiledParent::Dactive()
 	WidgetComponent->ToggleVisibility();
 	ShiledMeshComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	bIsShiledActive = false;
-	UE_LOG(LogTemp, Warning, TEXT(" Dactive "));
 }
 

@@ -10,7 +10,8 @@ void ASecondDegreeFirePuddle::OverlapDoYourThing(UPrimitiveComponent * Overlappe
 {
 	if (!bIsOnFire) {
 		Actor = OtherActor;
-		UGameplayStatics::ApplyDamage(OtherActor, 1, GetInstigatorController(), this, FireDamageType);
+		FireDamageType.GetDefaultObject()->ActorToIgnre = ThisActorToIgnire;
+		UGameplayStatics::ApplyDamage(OtherActor, SMALL_NUMBER, GetInstigatorController(), this, FireDamageType);
 		FTimerHandle TimerHandle;
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ASecondDegreeFirePuddle::UpdateFire, FireDamageType.GetDefaultObject()->DamageUpdateTime * FireDamageType.GetDefaultObject()->DamageUpdateNumber, true);
 		bIsOnFire = true;
@@ -22,8 +23,13 @@ void ASecondDegreeFirePuddle::UpdateFire()
 	if (Puddle->IsOverlappingActor(Actor))
 	{
 		bIsOnFire = true;
-		UGameplayStatics::ApplyDamage(Actor, 1, GetInstigatorController(), this, FireDamageType);
+		UGameplayStatics::ApplyDamage(Actor, SMALL_NUMBER, GetInstigatorController(), this, FireDamageType);
 		return;
 	}
 	bIsOnFire = false;
+}
+
+void ASecondDegreeFirePuddle::GetActorToIgnire(AActor * ActorToIgnire)
+{
+	ThisActorToIgnire = ActorToIgnire;
 }

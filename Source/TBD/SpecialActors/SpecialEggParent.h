@@ -24,6 +24,8 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-		
+	UPROPERTY()
+	AActor * ThisActorToIgnre;
+	void GetActorToIgnre(AActor * ActorToIgnre);
 	
 };

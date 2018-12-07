@@ -20,9 +20,11 @@ float BaseDamage = 1;
 UPROPERTY(EditAnywhere)
 bool bIsDamageOverTime = false;
 UPROPERTY(EditAnywhere)
-float DamageUpdateTime = 0.1;
+float DamageUpdateTime = 1;
 UPROPERTY(EditAnywhere)
 int DamageUpdateNumber = 5;
 UPROPERTY(EditAnywhere)
-float DamageOverTimeDamage = 1;
+float DamageOverTimeDamage = 2;
+UPROPERTY()
+AActor * ActorToIgnre;
 };
