@@ -34,9 +34,4 @@ void AElectricPuddleSecondDegree::UpdateElectric()
 	}
 }
 
-void AElectricPuddleSecondDegree::GetActorToIgnire(AActor * ActorToIgnire)
-{
-	ThisActorToIgnire = ActorToIgnire;
-}
-
 

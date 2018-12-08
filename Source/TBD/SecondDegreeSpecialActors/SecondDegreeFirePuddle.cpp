@@ -28,8 +28,3 @@ void ASecondDegreeFirePuddle::UpdateFire()
 	}
 	bIsOnFire = false;
 }
-
-void ASecondDegreeFirePuddle::GetActorToIgnire(AActor * ActorToIgnire)
-{
-	ThisActorToIgnire = ActorToIgnire;
-}

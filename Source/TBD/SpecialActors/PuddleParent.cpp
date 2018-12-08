@@ -52,3 +52,8 @@ void APuddleParent::OnOverlapBegin(UPrimitiveComponent * OverlappedComp, AActor 
 {
 	OverlapDoYourThing(OverlappedComp, OtherActor, OtherComp, OtherBodyIndex, bFromSweep, SweepResult);
 }
+
+void APuddleParent::GetActorToIgnire(AActor * ActorToIgnire)
+{
+	ThisActorToIgnire = ActorToIgnire;
+}

@@ -21,6 +21,7 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 private:
 	
 	float MaxDist = 200;
@@ -28,4 +29,8 @@ private:
 	TArray<class  ACharacterParent *> Characters;
 	UPROPERTY()
 		TArray<class  UCharacterMovementComponent *> CharactersMovement;
+	UPROPERTY(EditAnywhere)
+		float Min = 40;
+	UPROPERTY(EditAnywhere)
+		float Max = 120;
 };

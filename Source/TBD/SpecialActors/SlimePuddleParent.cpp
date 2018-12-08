@@ -43,14 +43,36 @@ void ASlimePuddleParent::Tick(float DeltaTime)
 	{
 		for (ACharacterParent * Character : Characters)
 		{
+			Cast<UCharacterMovementComponent>(Character->GetMovementComponent())->MaxWalkSpeed = Character->DefaultMovementSpeed;
 			if (Character != nullptr)
 			{
-				if (Character->Tags[0] != Tags[0])
+				if (Tags.Num() != 0)
 				{
+					if (Character->Tags[0] != Tags[0])
+					{
 
+						if (IsOverlappingActor(Character))
+						{
+							Cast<UCharacterMovementComponent>(Character->GetMovementComponent())->MaxWalkSpeed = (Character->DefaultMovementSpeed / MaxDist)  * FMath::Clamp(Character->GetDistanceTo(this), Min, Max);
+						}
+						else
+						{
+							Cast<UCharacterMovementComponent>(Character->GetMovementComponent())->MaxWalkSpeed = Character->DefaultMovementSpeed;
+						}
+					}
+				}
+				else if (ThisActorToIgnire != nullptr  && ThisActorToIgnire !=  Character) {
 					if (IsOverlappingActor(Character))
 					{
-						Cast<UCharacterMovementComponent>(Character->GetMovementComponent())->MaxWalkSpeed = (Character->DefaultMovementSpeed / MaxDist)  * FMath::Clamp(Character->GetDistanceTo(this) , 40.f, 120.f);
+						if (Character->GetDistanceTo(this) <= 100)
+						{
+							Cast<UCharacterMovementComponent>(Character->GetMovementComponent())->MaxWalkSpeed = 0;
+						}
+						else
+						{
+							Cast<UCharacterMovementComponent>(Character->GetMovementComponent())->MaxWalkSpeed = (Character->DefaultMovementSpeed / MaxDist)  * FMath::Clamp(Character->GetDistanceTo(this), Min, Max);
+						}
+						
 					}
 					else
 					{
@@ -61,5 +83,21 @@ void ASlimePuddleParent::Tick(float DeltaTime)
 		}
 	}
 
+}
+
+void ASlimePuddleParent::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	Super::EndPlay(EndPlayReason);
+	if (Characters.Num() > 0)
+	{
+		for (ACharacterParent * Character : Characters)
+		{
+
+			if (Character != nullptr)
+			{
+				Cast<UCharacterMovementComponent>(Character->GetMovementComponent())->MaxWalkSpeed = Character->DefaultMovementSpeed;
+			}
+		}
+	}
 }
 

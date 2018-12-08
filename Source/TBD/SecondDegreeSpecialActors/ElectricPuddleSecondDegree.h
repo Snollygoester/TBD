@@ -20,12 +20,9 @@ private:
 	UPROPERTY()
 	class UCharacterMovementComponent * chartM;
 	void UpdateElectric();
-	UPROPERTY()
-		AActor * ThisActorToIgnire;
 	UPROPERTY(EditAnywhere)
 	float StunTime = 2;
-public:
-	void  GetActorToIgnire(AActor * ActorToIgnire);
+
 	
 	
 	
