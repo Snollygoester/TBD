@@ -146,6 +146,7 @@ void ACharacterParent::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		}
 		PlayerInputComponent->BindAction("Block", IE_Pressed, this, &ACharacterParent::BlockDoYourThing);
 		PlayerInputComponent->BindAction("Skill2", IE_Pressed, this, &ACharacterParent::Skill2YourThing);
+		PlayerInputComponent->BindAction("Skill1", IE_Pressed, this, &ACharacterParent::Skill1YourThing);
 		PlayerInputComponent->BindAxis("MoveForward", this, &ACharacterParent::MoveForward);
 		PlayerInputComponent->BindAxis("MoveRight", this, &ACharacterParent::MoveRight);
 
@@ -264,6 +265,10 @@ void ACharacterParent::BlockDoYourThing()
 }
 
 void ACharacterParent::Skill2YourThing()
+{
+}
+
+void ACharacterParent::Skill1YourThing()
 {
 }
 

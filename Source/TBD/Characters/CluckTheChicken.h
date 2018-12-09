@@ -23,6 +23,7 @@ private:
 	void BlockDoYourThing() override;
 	void BeginPlay() override;
 	 void Skill2YourThing() override;
+	 void Skill1YourThing() override;
 	UPROPERTY(EditAnywhere)
 		TSubclassOf< class AShiledParent > ShiledParentTsubClass;
 	bool bIsShiledActive;
@@ -54,4 +55,6 @@ private:
 	UPROPERTY(EditAnywhere, Category = Eggs)
 		TSubclassOf<class ASpecialEggParent> EggISubClass;
 	UStaticMeshComponent *  PickClosestEgg();
+	UPROPERTY(EditAnywhere, Category = Beams)
+		TSubclassOf<class ABeamParent> BeamFSubClass;
 };

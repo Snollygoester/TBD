@@ -7,6 +7,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "SpecialActors/SpecialEggParent.h"
+#include "SpecialActors/BeamParent.h"
 ACluckTheChicken::ACluckTheChicken()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -69,6 +70,22 @@ void ACluckTheChicken::Skill2YourThing()
 	
 		
 }
+void ACluckTheChicken::Skill1YourThing()
+{
+	ABeamParent *  ChossenBeam;
+	if (PickClosestEgg()->GetName() == EggF->GetName()) {
+		ChossenBeam =	GetWorld()->SpawnActor<ABeamParent>(BeamFSubClass, FTransform(FRotator(0, 0, 0), EggF->GetComponentLocation(), FVector(1)));
+	}
+	else if (PickClosestEgg()->GetName() == EggL->GetName()) {
+	
+	
+	}
+	else if (PickClosestEgg()->GetName() == EggI->GetName()) {
+		
+	}
+
+
+}
 void ACluckTheChicken::Tick(float DeltaTime)
 {
 	SpringArmF->AddLocalRotation(FQuat(FRotator(0, Multiplier *DeltaTime, 0)));
@@ -78,16 +95,25 @@ void ACluckTheChicken::Tick(float DeltaTime)
 }
 UStaticMeshComponent * ACluckTheChicken::PickClosestEgg()
 {
-	float EggsChossenNum = BIG_NUMBER;
-	int i = -1;
-	for (UStaticMeshComponent * Egg : Eggs)
+	TArray<float> Numbers;
+	float ChossenNum = BIG_NUMBER;
+	float i = -1;
+	Numbers.Add(SpringArmF->RelativeRotation.Yaw);
+	Numbers.Add(SpringArmL->RelativeRotation.Yaw);
+	Numbers.Add(SpringArmI->RelativeRotation.Yaw);
+	for (float NUm : Numbers)
 	{
-		if (EggsChossenNum > FVector::Distance(GetActorLocation() + GetActorForwardVector() * 50, Egg->GetComponentLocation()))
+		if (ChossenNum > (180 - FMath::Abs(NUm)))
 		{
-			EggsChossenNum = FVector::Distance(GetActorLocation() + GetActorForwardVector() * 50, Egg->GetComponentLocation());
+			ChossenNum = (180 - FMath::Abs(NUm));
 			i++;
 		}
 	}
-	
 	return Eggs[i];
+		
+
+		
+			
+	
+
 }
