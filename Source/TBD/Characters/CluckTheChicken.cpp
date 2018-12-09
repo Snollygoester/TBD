@@ -6,7 +6,6 @@
 #include "SpecialActors/ShiledParent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Components/StaticMeshComponent.h"
-#include "Components/ArrowComponent.h"
 #include "SpecialActors/SpecialEggParent.h"
 ACluckTheChicken::ACluckTheChicken()
 {
@@ -21,8 +20,8 @@ ACluckTheChicken::ACluckTheChicken()
 	SpringArmL->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepWorldTransform);
 	SpringArmI->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepWorldTransform);
 	EggF->AttachToComponent(SpringArmF, FAttachmentTransformRules::KeepWorldTransform);
-	EggL->AttachToComponent(SpringArmI, FAttachmentTransformRules::KeepWorldTransform);
-	EggI->AttachToComponent(SpringArmL, FAttachmentTransformRules::KeepWorldTransform);
+	EggL->AttachToComponent(SpringArmL, FAttachmentTransformRules::KeepWorldTransform);
+	EggI->AttachToComponent(SpringArmI, FAttachmentTransformRules::KeepWorldTransform);
 }
 void ACluckTheChicken::BlockDoYourThing() {
 	bIsShiledActive = Shiled->bIsShiledActive;
@@ -53,17 +52,17 @@ void ACluckTheChicken::Skill2YourThing()
 {
 	ASpecialEggParent * ChossenEgg;
 	if (PickClosestEgg()->GetName() == EggF->GetName()) {
-	ChossenEgg = GetWorld()->SpawnActor<ASpecialEggParent>(EggFSubClass, FTransform(FRotator(0, 0, 0), ArrowComponent1->GetComponentLocation() + GetActorForwardVector() * 100, FVector(1)));
+	ChossenEgg = GetWorld()->SpawnActor<ASpecialEggParent>(EggFSubClass, FTransform(FRotator(0, 0, 0), GetActorLocation() + GetActorForwardVector() * 150, FVector(1)));
 	ChossenEgg->GetActorToIgnre(this);
 	ChossenEgg->Thorw(EggSpeed, GetActorForwardVector());
 	}
 	else if (PickClosestEgg()->GetName() == EggL->GetName()) {
-		ChossenEgg = GetWorld()->SpawnActor<ASpecialEggParent>(EggLSubClass, FTransform(FRotator(0, 0, 0), ArrowComponent1->GetComponentLocation() + GetActorForwardVector() * 100, FVector(1)));
+		ChossenEgg = GetWorld()->SpawnActor<ASpecialEggParent>(EggLSubClass, FTransform(FRotator(0, 0, 0), GetActorLocation() + GetActorForwardVector() * 150, FVector(1)));
 		ChossenEgg->GetActorToIgnre(this);
 		ChossenEgg->Thorw(EggSpeed, GetActorForwardVector());
 	}
 	else if (PickClosestEgg()->GetName() == EggI->GetName()) {
-		ChossenEgg = GetWorld()->SpawnActor<ASpecialEggParent>(EggISubClass, FTransform(FRotator(0, 0, 0), ArrowComponent1->GetComponentLocation() + GetActorForwardVector() * 100, FVector(1)));
+		ChossenEgg = GetWorld()->SpawnActor<ASpecialEggParent>(EggISubClass, FTransform(FRotator(0, 0, 0), GetActorLocation() + GetActorForwardVector() * 150, FVector(1)));
 		ChossenEgg->GetActorToIgnre(this);
 		ChossenEgg->Thorw(EggSpeed, GetActorForwardVector());
 	}
@@ -83,9 +82,9 @@ UStaticMeshComponent * ACluckTheChicken::PickClosestEgg()
 	int i = -1;
 	for (UStaticMeshComponent * Egg : Eggs)
 	{
-		if (EggsChossenNum > (ArrowComponent1->GetComponentLocation() - Egg->GetComponentLocation()).Size())
+		if (EggsChossenNum > FVector::Distance(GetActorLocation() + GetActorForwardVector() * 50, Egg->GetComponentLocation()))
 		{
-			EggsChossenNum = (ArrowComponent1->GetComponentLocation() - Egg->GetComponentLocation()).Size();
+			EggsChossenNum = FVector::Distance(GetActorLocation() + GetActorForwardVector() * 50, Egg->GetComponentLocation());
 			i++;
 		}
 	}
