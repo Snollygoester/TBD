@@ -31,9 +31,12 @@ public:
 		class USpringArmComponent* BeamSpringArm;
 	void GetEggL(FVector EggL);
 	FVector EggLBeam;
+	virtual void OverlappDoYourThing(UPrimitiveComponent * OverlappedComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
+	AActor * ThisActorToIgnire;
+	void SetActorToIgnire(AActor * ActorToIgnire);
 private:
 	UPROPERTY(EditAnywhere)
-		float LineTrachRange = 10000;
+		float LineTrachRange = 3000;
 bool	bCanLunch = true;
  UPROPERTY(EditAnywhere)
 float BaseDamageInOuterPart = 2;
@@ -43,5 +46,8 @@ float BaseDamageInOuterPart = 2;
 	 AActor * OverlapingActor;
 UFUNCTION()
 void OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+UFUNCTION()
+void OnInnerOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 void AplayDOU();
+float UDT;
 };

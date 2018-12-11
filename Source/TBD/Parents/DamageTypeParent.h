@@ -27,4 +27,6 @@ UPROPERTY(EditAnywhere)
 float DamageOverTimeDamage = 2;
 UPROPERTY()
 AActor * ActorToIgnre;
+UPROPERTY(EditAnywhere)
+bool bIsFire = false;
 };

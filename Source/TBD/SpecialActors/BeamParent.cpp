@@ -17,6 +17,7 @@ ABeamParent::ABeamParent()
 	InnerBeamCapsuleComponent = CreateDefaultSubobject< UCapsuleComponent>(FName("InnerBeamCapsuleComponent "));
 	BeamCapsuleComponent->SetupAttachment(BeamSpringArm);
 	InnerBeamCapsuleComponent->SetupAttachment(BeamSpringArm);
+
 	
 }
 
@@ -25,6 +26,7 @@ void ABeamParent::BeginPlay()
 {
 	Super::BeginPlay();
 	BeamCapsuleComponent->OnComponentBeginOverlap.AddDynamic(this, &ABeamParent::OnOverlapBegin);
+	InnerBeamCapsuleComponent->OnComponentBeginOverlap.AddDynamic(this, &ABeamParent::OnInnerOverlapBegin);
 }
 
 // Called every frame
@@ -37,20 +39,12 @@ void ABeamParent::Tick(float DeltaTime)
 void ABeamParent::Lunch(float DT)
 {
 	if (bCanLunch && !EggLBeam.IsZero()) {
-		FHitResult Hit;
-		FVector Startl = EggLBeam;
-		FVector Endl = GetActorLocation() + GetActorForwardVector() * LineTrachRange;
-		if (GetWorld()->LineTraceSingleByObjectType(Hit, Startl, Endl, FCollisionObjectQueryParams::AllStaticObjects)) {
-			BeamCapsuleComponent->SetCapsuleHalfHeight(((FVector::Distance(Hit.Location, Startl) / 2)));
-			InnerBeamCapsuleComponent->SetCapsuleHalfHeight(((FVector::Distance(Hit.Location, Startl) / 2)));
-			BeamSpringArm->TargetArmLength = FVector::Distance( Hit.Location , Startl )  / -2;
-			
-		}
-		else
-		{
-			BeamCapsuleComponent->SetCapsuleHalfHeight(LineTrachRange /2);
-			InnerBeamCapsuleComponent->SetCapsuleHalfHeight(LineTrachRange / 2);
-			BeamSpringArm->TargetArmLength = LineTrachRange / -2;
+		UDT += DT;
+		if (UDT <= 1)
+	{
+				BeamCapsuleComponent->SetCapsuleHalfHeight(LineTrachRange * UDT / 2);
+				InnerBeamCapsuleComponent->SetCapsuleHalfHeight(LineTrachRange * UDT / 2);
+				BeamSpringArm->TargetArmLength = LineTrachRange * UDT / -2 ;
 		}
 	}
 }
@@ -60,13 +54,33 @@ void ABeamParent::GetEggL(FVector EggL)
 	EggLBeam = EggL;
 }
 
+void ABeamParent::OverlappDoYourThing(UPrimitiveComponent * OverlappedComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
+{
+}
+
+void ABeamParent::SetActorToIgnire(AActor * ActorToIgnire)
+{
+	ThisActorToIgnire = ActorToIgnire;
+}
+
 void ABeamParent::OnOverlapBegin(UPrimitiveComponent * OverlappedComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
 {
-	OverlapingActor = OtherActor;
-	UGameplayStatics::ApplyDamage(OtherActor, BaseDamageInOuterPart, GetInstigatorController(), this, UDamageType::StaticClass());
-	FTimerHandle TimerHandle;
-	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ABeamParent::AplayDOU, TimeToUpdateDamageInOuterPart);
-	UE_LOG(LogTemp, Warning, TEXT("hi"));
+	if (!Cast<APawn>(OtherActor) && !Cast<ABeamParent>(OtherActor))
+	{
+		bCanLunch = false;
+	}
+	if (OtherActor != ThisActorToIgnire)
+	{
+		OverlapingActor = OtherActor;
+		UGameplayStatics::ApplyDamage(OtherActor, BaseDamageInOuterPart, GetInstigatorController(), this, UDamageType::StaticClass());
+		FTimerHandle TimerHandle;
+		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ABeamParent::AplayDOU, TimeToUpdateDamageInOuterPart);
+	}
+}
+
+void ABeamParent::OnInnerOverlapBegin(UPrimitiveComponent * OverlappedComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
+{
+	OverlappDoYourThing(OverlappedComp, OtherActor, OtherComp, OtherBodyIndex, bFromSweep, SweepResult);
 }
 
 void ABeamParent::AplayDOU()

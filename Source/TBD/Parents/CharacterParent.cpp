@@ -79,17 +79,17 @@ float ACharacterParent::TakeDamage(float DamageAmount,  FDamageEvent const& Dama
 		Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 		if (!bIsImmortal)
 		{
-			const UDamageTypeParent * TypeDamage = Cast<UDamageTypeParent>(DamageEvent.DamageTypeClass.GetDefaultObject());
+			 UDamageTypeParent * TypeDamage = Cast<UDamageTypeParent>(DamageEvent.DamageTypeClass.GetDefaultObject());
 			if (TypeDamage == nullptr)
 			{
 				CurrentHealth = CurrentHealth - DamageAmount;
-				
 			}
 			else
 			{
 				if (TypeDamage->ActorToIgnre == this) {
 					
 					return 0.f;
+					
 				}
 				if (DamageAmount > KINDA_SMALL_NUMBER)
 				{
@@ -98,10 +98,11 @@ float ACharacterParent::TakeDamage(float DamageAmount,  FDamageEvent const& Dama
 				
 				if (TypeDamage->bIsDamageOverTime)
 				{
+					
 					TimerDel.BindUFunction(this, FName("TakeDOT"), TypeDamage, TypeDamage->DamageUpdateNumber);
 					FTimerHandle TimerHandle;
 					GetWorld()->GetTimerManager().SetTimer(TimerHandle, TimerDel, TypeDamage->DamageUpdateTime, false);
-					if (TypeDamage->GetName() == "Default__FireDamageType_C")
+					if (TypeDamage->bIsFire)
 					{
 						FireParticles->Activate();
 						
@@ -324,7 +325,7 @@ void ACharacterParent::TakeDOT(UDamageTypeParent * TypeDamage, int CallNum)
 {
 	if (CallNum == 0)
 	{
-		if (TypeDamage->GetName() == "Default__FireDamageType_C")
+		if (TypeDamage->bIsFire)
 		{
 			FireParticles->Deactivate();
 		}
