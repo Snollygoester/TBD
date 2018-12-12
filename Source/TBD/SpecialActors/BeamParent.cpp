@@ -17,7 +17,7 @@ ABeamParent::ABeamParent()
 	InnerBeamCapsuleComponent = CreateDefaultSubobject< UCapsuleComponent>(FName("InnerBeamCapsuleComponent "));
 	BeamCapsuleComponent->SetupAttachment(BeamSpringArm);
 	InnerBeamCapsuleComponent->SetupAttachment(BeamSpringArm);
-
+	
 	
 }
 
@@ -25,8 +25,9 @@ ABeamParent::ABeamParent()
 void ABeamParent::BeginPlay()
 {
 	Super::BeginPlay();
-	BeamCapsuleComponent->OnComponentBeginOverlap.AddDynamic(this, &ABeamParent::OnOverlapBegin);
 	InnerBeamCapsuleComponent->OnComponentBeginOverlap.AddDynamic(this, &ABeamParent::OnInnerOverlapBegin);
+     BeamCapsuleComponent->OnComponentBeginOverlap.AddDynamic(this, &ABeamParent::OnOverlapBegin);
+	
 }
 
 // Called every frame
@@ -71,7 +72,7 @@ void ABeamParent::OnOverlapBegin(UPrimitiveComponent * OverlappedComp, AActor * 
 	}
 	if (OtherActor != ThisActorToIgnire)
 	{
-		OverlapingActor = OtherActor;
+		ThisOverlapingActor = OtherActor;
 		UGameplayStatics::ApplyDamage(OtherActor, BaseDamageInOuterPart, GetInstigatorController(), this, UDamageType::StaticClass());
 		FTimerHandle TimerHandle;
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ABeamParent::AplayDOU, TimeToUpdateDamageInOuterPart);
@@ -85,9 +86,9 @@ void ABeamParent::OnInnerOverlapBegin(UPrimitiveComponent * OverlappedComp, AAct
 
 void ABeamParent::AplayDOU()
 {
-	if (IsOverlappingActor(OverlapingActor))
+	if (IsOverlappingActor(ThisOverlapingActor))
 	{
-		UGameplayStatics::ApplyDamage(OverlapingActor, BaseDamageInOuterPart, GetInstigatorController(), this, UDamageType::StaticClass());
+		UGameplayStatics::ApplyDamage(ThisOverlapingActor, BaseDamageInOuterPart, GetInstigatorController(), this, UDamageType::StaticClass());
 		FTimerHandle TimerHandle;
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ABeamParent::AplayDOU, TimeToUpdateDamageInOuterPart);
 	}

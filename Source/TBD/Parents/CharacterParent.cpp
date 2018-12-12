@@ -102,6 +102,7 @@ float ACharacterParent::TakeDamage(float DamageAmount,  FDamageEvent const& Dama
 					TimerDel.BindUFunction(this, FName("TakeDOT"), TypeDamage, TypeDamage->DamageUpdateNumber);
 					FTimerHandle TimerHandle;
 					GetWorld()->GetTimerManager().SetTimer(TimerHandle, TimerDel, TypeDamage->DamageUpdateTime, false);
+					UE_LOG(LogTemp, Warning, TEXT("Hi"));
 					if (TypeDamage->bIsFire)
 					{
 						FireParticles->Activate();
