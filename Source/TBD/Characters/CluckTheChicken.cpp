@@ -84,7 +84,10 @@ void ACluckTheChicken::Skill1YourThing()
 	
 	}
 	else if (PickClosestEgg()->GetName() == EggI->GetName()) {
-		
+		ChossenBeam = GetWorld()->SpawnActor<ABeamParent>(BeamISubClass, FTransform(FRotator(0, 0, 0), GetActorLocation() + EggI->RelativeLocation, FVector(1)));
+		ChossenBeam->SetActorRotation(GetActorForwardVector().Rotation());
+		ChossenBeam->GetEggL(EggI->GetComponentLocation());
+		ChossenBeam->SetActorToIgnire(this);
 	}
 
 

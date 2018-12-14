@@ -98,11 +98,9 @@ float ACharacterParent::TakeDamage(float DamageAmount,  FDamageEvent const& Dama
 				
 				if (TypeDamage->bIsDamageOverTime)
 				{
-					
 					TimerDel.BindUFunction(this, FName("TakeDOT"), TypeDamage, TypeDamage->DamageUpdateNumber);
 					FTimerHandle TimerHandle;
 					GetWorld()->GetTimerManager().SetTimer(TimerHandle, TimerDel, TypeDamage->DamageUpdateTime, false);
-					UE_LOG(LogTemp, Warning, TEXT("Hi"));
 					if (TypeDamage->bIsFire)
 					{
 						FireParticles->Activate();
@@ -274,6 +272,13 @@ void ACharacterParent::Skill1YourThing()
 {
 }
 
+void ACharacterParent::IceFromBeam(float Time)
+{
+	FTimerHandle TimerHandle;
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ACharacterParent::StopIce, Time);
+}
+
+
 void ACharacterParent::GrabWall()
 {
 	CliffHangABCpp->hang();
@@ -336,4 +341,10 @@ void ACharacterParent::TakeDOT(UDamageTypeParent * TypeDamage, int CallNum)
 	TimerDel.BindUFunction(this, FName("TakeDOT"), TypeDamage, (CallNum - 1));
 	FTimerHandle TimerHandle;
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle, TimerDel, TypeDamage->DamageUpdateTime, false);
+}
+
+void ACharacterParent::StopIce()
+{
+	UCharacterMovementComponent * CharacterMovementComponent = Cast<UCharacterMovementComponent>(GetCharacterMovement());
+	CharacterMovementComponent->MaxWalkSpeed = DefaultMovementSpeed;
 }

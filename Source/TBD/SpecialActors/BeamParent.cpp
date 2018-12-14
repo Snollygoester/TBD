@@ -6,6 +6,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Public/TimerManager.h"
+FTimerDelegate BeamTimerDel;
 // Sets default values
 ABeamParent::ABeamParent()
 {
@@ -70,27 +71,34 @@ void ABeamParent::OnOverlapBegin(UPrimitiveComponent * OverlappedComp, AActor * 
 	{
 		bCanLunch = false;
 	}
-	if (OtherActor != ThisActorToIgnire)
+	if (OtherActor != ThisActorToIgnire && Cast<APawn>(OtherActor) && ThisActorToIgnire != nullptr)
 	{
-		ThisOverlapingActor = OtherActor;
+		UE_LOG(LogTemp, Warning, TEXT("hi"));
+		
 		UGameplayStatics::ApplyDamage(OtherActor, BaseDamageInOuterPart, GetInstigatorController(), this, UDamageType::StaticClass());
-		FTimerHandle TimerHandle;
-		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ABeamParent::AplayDOU, TimeToUpdateDamageInOuterPart);
+		BeamTimerDel.BindUFunction(this, FName("AplayDOU"), OtherActor);
+		FTimerHandle BeamTimerHandle;
+		GetWorld()->GetTimerManager().SetTimer(BeamTimerHandle, BeamTimerDel, TimeToUpdateDamageInOuterPart, false);
 	}
 }
 
 void ABeamParent::OnInnerOverlapBegin(UPrimitiveComponent * OverlappedComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
 {
-	OverlappDoYourThing(OverlappedComp, OtherActor, OtherComp, OtherBodyIndex, bFromSweep, SweepResult);
+	if (ThisActorToIgnire != nullptr)
+	{
+		OverlappDoYourThing(OverlappedComp, OtherActor, OtherComp, OtherBodyIndex, bFromSweep, SweepResult);
+	}
 }
 
-void ABeamParent::AplayDOU()
+void ABeamParent::AplayDOU(AActor * OtherActor)
 {
-	if (IsOverlappingActor(ThisOverlapingActor))
-	{
-		UGameplayStatics::ApplyDamage(ThisOverlapingActor, BaseDamageInOuterPart, GetInstigatorController(), this, UDamageType::StaticClass());
-		FTimerHandle TimerHandle;
-		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ABeamParent::AplayDOU, TimeToUpdateDamageInOuterPart);
-	}
+		if (IsOverlappingActor(OtherActor))
+		{
+
+			UGameplayStatics::ApplyDamage(OtherActor, BaseDamageInOuterPart, GetInstigatorController(), this, UDamageType::StaticClass());
+			BeamTimerDel.BindUFunction(this, FName("AplayDOU"), OtherActor);
+			FTimerHandle BeamTimerHandle;
+			GetWorld()->GetTimerManager().SetTimer(BeamTimerHandle, BeamTimerDel, TimeToUpdateDamageInOuterPart, false);
+		}
 }
 

@@ -57,4 +57,6 @@ private:
 	UStaticMeshComponent *  PickClosestEgg();
 	UPROPERTY(EditAnywhere, Category = Beams)
 		TSubclassOf<class ABeamParent> BeamFSubClass;
+	UPROPERTY(EditAnywhere, Category = Beams)
+		TSubclassOf<class ABeamParent> BeamISubClass;
 };

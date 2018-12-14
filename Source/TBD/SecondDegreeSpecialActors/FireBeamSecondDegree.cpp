@@ -6,29 +6,30 @@
 #include "Engine/World.h"
 #include "Public/TimerManager.h"
 #include "Components/CapsuleComponent.h"
-
+FTimerDelegate BeamFTimerDel;
 void AFireBeamSecondDegree::OverlappDoYourThing(UPrimitiveComponent * OverlappedComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
 {
-
-		if (!bIsOnFire && Cast<APawn>(OtherActor) && ThisActorToIgnire != nullptr) {
-			Actor = OtherActor;
-			
+	if (!bIsOnFire && Cast<APawn>(OtherActor)) {
 			FireDamageType.GetDefaultObject()->ActorToIgnre = ThisActorToIgnire;
 			UGameplayStatics::ApplyDamage(OtherActor, SMALL_NUMBER, GetInstigatorController(), this, FireDamageType);
+			BeamFTimerDel.BindUFunction(this, FName("UpdateFire"), OtherActor);
 			FTimerHandle TimerHandle;
-			GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AFireBeamSecondDegree::UpdateFire, FireDamageType.GetDefaultObject()->DamageUpdateTime * FireDamageType.GetDefaultObject()->DamageUpdateNumber, true);
+			GetWorld()->GetTimerManager().SetTimer(TimerHandle, BeamFTimerDel,  FireDamageType.GetDefaultObject()->DamageUpdateTime * FireDamageType.GetDefaultObject()->DamageUpdateNumber, false);
 			bIsOnFire = true;
 		}
 }
 
 
 
-void AFireBeamSecondDegree::UpdateFire()
+void AFireBeamSecondDegree::UpdateFire(AActor * OtherActor)
 {
-	if (InnerBeamCapsuleComponent->IsOverlappingActor(Actor))
+	if (InnerBeamCapsuleComponent->IsOverlappingActor(OtherActor))
 	{
 		bIsOnFire = true;
-		UGameplayStatics::ApplyDamage(Actor, SMALL_NUMBER, GetInstigatorController(), this, FireDamageType);
+		UGameplayStatics::ApplyDamage(OtherActor, SMALL_NUMBER, GetInstigatorController(), this, FireDamageType);
+		BeamFTimerDel.BindUFunction(this, FName("UpdateFire"), OtherActor);
+		FTimerHandle TimerHandle;
+		GetWorld()->GetTimerManager().SetTimer(TimerHandle, BeamFTimerDel, FireDamageType.GetDefaultObject()->DamageUpdateTime * FireDamageType.GetDefaultObject()->DamageUpdateNumber, false);
 		return;
 	}
 	bIsOnFire = false;

@@ -58,6 +58,7 @@ public:
 			class UWidgetComponent * WidgetComponent;
 		UPROPERTY(VisibleAnywhere)
 			class UArrowComponent * ArrowComponent1;
+		void IceFromBeam(float Time);
 	protected:
 	/** Called for forwards/backward input */
 	void MoveForward(float Value);
@@ -104,4 +105,5 @@ private:
 	void TakeDOT(class UDamageTypeParent * TypeDamage, int CallNum);
 	UPROPERTY(VisibleAnywhere)
 		class UParticleSystemComponent * FireParticles;
+	void StopIce();
 };
