@@ -59,6 +59,8 @@ public:
 		UPROPERTY(VisibleAnywhere)
 			class UArrowComponent * ArrowComponent1;
 		void IceFromBeam(float Time);
+		void SilenceFromBeam(float Time);
+		bool bIsSilence = false;
 	protected:
 	/** Called for forwards/backward input */
 	void MoveForward(float Value);
@@ -106,4 +108,5 @@ private:
 	UPROPERTY(VisibleAnywhere)
 		class UParticleSystemComponent * FireParticles;
 	void StopIce();
+	void StopSilence();
 };

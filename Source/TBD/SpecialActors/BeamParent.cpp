@@ -73,7 +73,7 @@ void ABeamParent::OnOverlapBegin(UPrimitiveComponent * OverlappedComp, AActor * 
 	}
 	if (OtherActor != ThisActorToIgnire && Cast<APawn>(OtherActor) && ThisActorToIgnire != nullptr)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("hi"));
+		
 		
 		UGameplayStatics::ApplyDamage(OtherActor, BaseDamageInOuterPart, GetInstigatorController(), this, UDamageType::StaticClass());
 		BeamTimerDel.BindUFunction(this, FName("AplayDOU"), OtherActor);

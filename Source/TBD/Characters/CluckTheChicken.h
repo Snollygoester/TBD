@@ -59,4 +59,6 @@ private:
 		TSubclassOf<class ABeamParent> BeamFSubClass;
 	UPROPERTY(EditAnywhere, Category = Beams)
 		TSubclassOf<class ABeamParent> BeamISubClass;
+	UPROPERTY(EditAnywhere, Category = Beams)
+		TSubclassOf<class ABeamParent> BeamLSubClass;
 };

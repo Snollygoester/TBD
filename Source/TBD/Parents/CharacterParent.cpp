@@ -262,14 +262,21 @@ void ACharacterParent::FullDeath()
 
 void ACharacterParent::BlockDoYourThing()
 {
+	
 }
 
 void ACharacterParent::Skill2YourThing()
 {
+	if (bIsSilence) {
+		return;
+	}
 }
 
 void ACharacterParent::Skill1YourThing()
 {
+	if (bIsSilence) {
+		return;
+	}
 }
 
 void ACharacterParent::IceFromBeam(float Time)
@@ -277,7 +284,12 @@ void ACharacterParent::IceFromBeam(float Time)
 	FTimerHandle TimerHandle;
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ACharacterParent::StopIce, Time);
 }
-
+void ACharacterParent::SilenceFromBeam(float Time) {
+	UE_LOG(LogTemp, Warning, TEXT("hi"));
+	bIsSilence = true;
+	FTimerHandle TimerHandle;
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ACharacterParent::StopSilence, Time);
+}
 
 void ACharacterParent::GrabWall()
 {
@@ -290,6 +302,7 @@ void ACharacterParent::letGoOffWall()
 }
 void ACharacterParent::OnOverlapBegin(UPrimitiveComponent * OverlappedComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
 {
+	
 	APickUpParent * PickUp = Cast<APickUpParent>(OtherActor);
 
 		if (PickUp != nullptr && PickUpData == nullptr )
@@ -310,11 +323,15 @@ void ACharacterParent::OnOverlapBegin(UPrimitiveComponent * OverlappedComp, AAct
 
 void ACharacterParent::UsePickUp()
 {
+	if (bIsSilence) {
+		return;
+	}
 	if (BisGameStarted && !bIsDead) {
 		if (PickUpData != nullptr) {
 			PickUpData->PickUpDoYourThing();
 		}
 	}
+
 }
 void ACharacterParent::ThrowGrenade()
 {
@@ -347,4 +364,7 @@ void ACharacterParent::StopIce()
 {
 	UCharacterMovementComponent * CharacterMovementComponent = Cast<UCharacterMovementComponent>(GetCharacterMovement());
 	CharacterMovementComponent->MaxWalkSpeed = DefaultMovementSpeed;
+}
+void ACharacterParent::StopSilence() {
+	bIsSilence = false;
 }
