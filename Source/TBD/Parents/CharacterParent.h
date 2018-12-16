@@ -111,4 +111,6 @@ private:
 		class UParticleSystemComponent * FireParticles;
 	void StopIce();
 	void StopSilence();
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class UDamageTypeParent > NormalDamage;
 };

@@ -49,4 +49,6 @@ void OnInnerOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor
 UFUNCTION()
 void AplayDOU(class AActor * OtherActor);
 float UDT;
+UPROPERTY(EditAnywhere)
+ TSubclassOf<class UDamageTypeParent > OuterBeamDamageType;
 };

@@ -9,12 +9,19 @@
 /**
  * 
  */
+UENUM()
+enum class EDamageTyeps : uint8
+{
+	Fire,
+	No
+};
 UCLASS()
 class TBD_API UDamageTypeParent : public UDamageType
 {
 	GENERATED_BODY()
 	
 public:
+
 UPROPERTY(EditAnywhere)
 float BaseDamage = 1;
 UPROPERTY(EditAnywhere)
@@ -28,5 +35,11 @@ float DamageOverTimeDamage = 2;
 UPROPERTY()
 AActor * ActorToIgnre;
 UPROPERTY(EditAnywhere)
-bool bIsFire = false;
+EDamageTyeps DamageTyep;
+UPROPERTY(EditAnywhere)
+bool bIsSpecialSkill;
+UPROPERTY(EditAnywhere)
+bool bIsMelee;
+UPROPERTY(EditAnywhere)
+bool bIsRange;
 };

@@ -6,6 +6,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Public/TimerManager.h"
+#include "Parents/DamageTypeParent.h"
 FTimerDelegate BeamTimerDel;
 // Sets default values
 ABeamParent::ABeamParent()
@@ -75,7 +76,7 @@ void ABeamParent::OnOverlapBegin(UPrimitiveComponent * OverlappedComp, AActor * 
 	{
 		
 		
-		UGameplayStatics::ApplyDamage(OtherActor, BaseDamageInOuterPart, GetInstigatorController(), this, UDamageType::StaticClass());
+		UGameplayStatics::ApplyDamage(OtherActor, BaseDamageInOuterPart, GetInstigatorController(), this, OuterBeamDamageType);
 		BeamTimerDel.BindUFunction(this, FName("AplayDOU"), OtherActor);
 		FTimerHandle BeamTimerHandle;
 		GetWorld()->GetTimerManager().SetTimer(BeamTimerHandle, BeamTimerDel, TimeToUpdateDamageInOuterPart, false);
@@ -95,7 +96,7 @@ void ABeamParent::AplayDOU(AActor * OtherActor)
 		if (IsOverlappingActor(OtherActor))
 		{
 
-			UGameplayStatics::ApplyDamage(OtherActor, BaseDamageInOuterPart, GetInstigatorController(), this, UDamageType::StaticClass());
+			UGameplayStatics::ApplyDamage(OtherActor, BaseDamageInOuterPart, GetInstigatorController(), this, OuterBeamDamageType);
 			BeamTimerDel.BindUFunction(this, FName("AplayDOU"), OtherActor);
 			FTimerHandle BeamTimerHandle;
 			GetWorld()->GetTimerManager().SetTimer(BeamTimerHandle, BeamTimerDel, TimeToUpdateDamageInOuterPart, false);
