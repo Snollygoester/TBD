@@ -22,8 +22,8 @@ public:
 private:
 	void BlockDoYourThing() override;
 	void BeginPlay() override;
-	 void Skill2YourThing() override;
-	 void Skill1YourThing() override;
+	bool Skill2YourThing() override;
+	 bool Skill1YourThing() override;
 	UPROPERTY(EditAnywhere)
 		TSubclassOf< class AShiledParent > ShiledParentTsubClass;
 	bool bIsShiledActive;

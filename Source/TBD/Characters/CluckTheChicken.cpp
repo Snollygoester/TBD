@@ -49,53 +49,55 @@ void ACluckTheChicken::BeginPlay()
 	Eggs.Add(EggI);
 }
 
-void ACluckTheChicken::Skill2YourThing()
+bool ACluckTheChicken::Skill2YourThing()
 {
-	Super::Skill2YourThing();
-	ASpecialEggParent * ChossenEgg;
-	if (PickClosestEgg()->GetName() == EggF->GetName()) {
-	ChossenEgg = GetWorld()->SpawnActor<ASpecialEggParent>(EggFSubClass, FTransform(FRotator(0, 0, 0), GetActorLocation() + GetActorForwardVector() * 150, FVector(1)));
-	ChossenEgg->GetActorToIgnre(this);
-	ChossenEgg->Thorw(EggSpeed, GetActorForwardVector());
+	if (Super::Skill1YourThing()) {
+		ASpecialEggParent * ChossenEgg;
+		if (PickClosestEgg()->GetName() == EggF->GetName()) {
+			ChossenEgg = GetWorld()->SpawnActor<ASpecialEggParent>(EggFSubClass, FTransform(FRotator(0, 0, 0), GetActorLocation() + GetActorForwardVector() * 150, FVector(1)));
+			ChossenEgg->GetActorToIgnre(this);
+			ChossenEgg->Thorw(EggSpeed, GetActorForwardVector());
+		}
+		else if (PickClosestEgg()->GetName() == EggL->GetName()) {
+			ChossenEgg = GetWorld()->SpawnActor<ASpecialEggParent>(EggLSubClass, FTransform(FRotator(0, 0, 0), GetActorLocation() + GetActorForwardVector() * 150, FVector(1)));
+			ChossenEgg->GetActorToIgnre(this);
+			ChossenEgg->Thorw(EggSpeed, GetActorForwardVector());
+		}
+		else if (PickClosestEgg()->GetName() == EggI->GetName()) {
+			ChossenEgg = GetWorld()->SpawnActor<ASpecialEggParent>(EggISubClass, FTransform(FRotator(0, 0, 0), GetActorLocation() + GetActorForwardVector() * 150, FVector(1)));
+			ChossenEgg->GetActorToIgnre(this);
+			ChossenEgg->Thorw(EggSpeed, GetActorForwardVector());
+		}
+		return true;
 	}
-	else if (PickClosestEgg()->GetName() == EggL->GetName()) {
-		ChossenEgg = GetWorld()->SpawnActor<ASpecialEggParent>(EggLSubClass, FTransform(FRotator(0, 0, 0), GetActorLocation() + GetActorForwardVector() * 150, FVector(1)));
-		ChossenEgg->GetActorToIgnre(this);
-		ChossenEgg->Thorw(EggSpeed, GetActorForwardVector());
-	}
-	else if (PickClosestEgg()->GetName() == EggI->GetName()) {
-		ChossenEgg = GetWorld()->SpawnActor<ASpecialEggParent>(EggISubClass, FTransform(FRotator(0, 0, 0), GetActorLocation() + GetActorForwardVector() * 150, FVector(1)));
-		ChossenEgg->GetActorToIgnre(this);
-		ChossenEgg->Thorw(EggSpeed, GetActorForwardVector());
-	}
-	
-		
+	return true;
 }
-void ACluckTheChicken::Skill1YourThing()
+bool ACluckTheChicken::Skill1YourThing()
 {
-	Super::Skill1YourThing();
-	ABeamParent *  ChossenBeam;
-	if (PickClosestEgg()->GetName() == EggF->GetName()) {
-		ChossenBeam =	GetWorld()->SpawnActor<ABeamParent>(BeamFSubClass, FTransform(FRotator(0, 0, 0), GetActorLocation() + EggF->RelativeLocation, FVector(1)));
-		ChossenBeam->SetActorRotation(GetActorForwardVector().Rotation() );
-		ChossenBeam->GetEggL(EggF->GetComponentLocation());
-		ChossenBeam->SetActorToIgnire(this);
-	}
-	else if (PickClosestEgg()->GetName() == EggL->GetName()) {
-		ChossenBeam = GetWorld()->SpawnActor<ABeamParent>(BeamLSubClass, FTransform(FRotator(0, 0, 0), GetActorLocation() + EggL->RelativeLocation, FVector(1)));
-		ChossenBeam->SetActorRotation(GetActorForwardVector().Rotation());
-		ChossenBeam->GetEggL(EggL->GetComponentLocation());
-		ChossenBeam->SetActorToIgnire(this);
-	
-	}
-	else if (PickClosestEgg()->GetName() == EggI->GetName()) {
-		ChossenBeam = GetWorld()->SpawnActor<ABeamParent>(BeamISubClass, FTransform(FRotator(0, 0, 0), GetActorLocation() + EggI->RelativeLocation, FVector(1)));
-		ChossenBeam->SetActorRotation(GetActorForwardVector().Rotation());
-		ChossenBeam->GetEggL(EggI->GetComponentLocation());
-		ChossenBeam->SetActorToIgnire(this);
-	}
+	if (Super::Skill1YourThing()) {
+		ABeamParent *  ChossenBeam;
+		if (PickClosestEgg()->GetName() == EggF->GetName()) {
+			ChossenBeam = GetWorld()->SpawnActor<ABeamParent>(BeamFSubClass, FTransform(FRotator(0, 0, 0), GetActorLocation() + EggF->RelativeLocation, FVector(1)));
+			ChossenBeam->SetActorRotation(GetActorForwardVector().Rotation());
+			ChossenBeam->GetEggL(EggF->GetComponentLocation());
+			ChossenBeam->SetActorToIgnire(this);
+		}
+		else if (PickClosestEgg()->GetName() == EggL->GetName()) {
+			ChossenBeam = GetWorld()->SpawnActor<ABeamParent>(BeamLSubClass, FTransform(FRotator(0, 0, 0), GetActorLocation() + EggL->RelativeLocation, FVector(1)));
+			ChossenBeam->SetActorRotation(GetActorForwardVector().Rotation());
+			ChossenBeam->GetEggL(EggL->GetComponentLocation());
+			ChossenBeam->SetActorToIgnire(this);
 
-
+		}
+		else if (PickClosestEgg()->GetName() == EggI->GetName()) {
+			ChossenBeam = GetWorld()->SpawnActor<ABeamParent>(BeamISubClass, FTransform(FRotator(0, 0, 0), GetActorLocation() + EggI->RelativeLocation, FVector(1)));
+			ChossenBeam->SetActorRotation(GetActorForwardVector().Rotation());
+			ChossenBeam->GetEggL(EggI->GetComponentLocation());
+			ChossenBeam->SetActorToIgnire(this);
+		}
+		return true;
+	}
+	return true;
 }
 void ACluckTheChicken::Tick(float DeltaTime)
 {

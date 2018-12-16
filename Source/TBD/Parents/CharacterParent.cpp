@@ -145,8 +145,8 @@ void ACharacterParent::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 			PlayerInputComponent->BindAction("Cliff", IE_Released, this, &ACharacterParent::letGoOffWall);
 		}
 		PlayerInputComponent->BindAction("Block", IE_Pressed, this, &ACharacterParent::BlockDoYourThing);
-		PlayerInputComponent->BindAction("Skill2", IE_Pressed, this, &ACharacterParent::Skill2YourThing);
-		PlayerInputComponent->BindAction("Skill1", IE_Pressed, this, &ACharacterParent::Skill1YourThing);
+		PlayerInputComponent->BindAction("Skill2", IE_Pressed, this, &ACharacterParent::Skill2YourThingInput);
+		PlayerInputComponent->BindAction("Skill1", IE_Pressed, this, &ACharacterParent::Skill1YourThingInput);
 		PlayerInputComponent->BindAxis("MoveForward", this, &ACharacterParent::MoveForward);
 		PlayerInputComponent->BindAxis("MoveRight", this, &ACharacterParent::MoveRight);
 
@@ -265,18 +265,32 @@ void ACharacterParent::BlockDoYourThing()
 	
 }
 
-void ACharacterParent::Skill2YourThing()
+void ACharacterParent::Skill2YourThingInput()
 {
-	if (bIsSilence) {
-		return;
-	}
+	Skill2YourThing();
 }
 
-void ACharacterParent::Skill1YourThing()
+void ACharacterParent::Skill1YourThingInput()
 {
-	if (bIsSilence) {
-		return;
+	Skill1YourThing();
+}
+
+bool ACharacterParent::Skill2YourThing()
+{
+	if (bIsSilence)
+	{
+		return false;
 	}
+	return true;
+}
+
+bool ACharacterParent::Skill1YourThing()
+{
+	if (bIsSilence)
+	{
+		return false;
+	}
+	return true;
 }
 
 void ACharacterParent::IceFromBeam(float Time)
@@ -285,7 +299,6 @@ void ACharacterParent::IceFromBeam(float Time)
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ACharacterParent::StopIce, Time);
 }
 void ACharacterParent::SilenceFromBeam(float Time) {
-	UE_LOG(LogTemp, Warning, TEXT("hi"));
 	bIsSilence = true;
 	FTimerHandle TimerHandle;
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ACharacterParent::StopSilence, Time);
