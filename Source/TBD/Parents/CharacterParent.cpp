@@ -63,7 +63,7 @@ void ACharacterParent::BeginPlay()
 	PickUpWidget->AddToViewport();
 	CurrentHealth = Health;
 	NonSpawnMaterials = GetMesh()->GetMaterials();
-	UCharacterMovementComponent * CharacterMovementComponent = Cast<UCharacterMovementComponent>(GetCharacterMovement());
+	CharacterMovementComponent = Cast<UCharacterMovementComponent>(GetCharacterMovement());
 	FTimerHandle TimerHandle;
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ACharacterParent::StopImmortality, ImmortalityTime);
 	if (CharacterMovementComponent != nullptr)

@@ -7,6 +7,7 @@
 #include "TBDGameModeBase.h" 
 #include "Kismet/GameplayStatics.h"
 #include "Engine/World.h"
+// waiting for dount 
 // Sets default values
 ASlimePuddleParent::ASlimePuddleParent()
 {
@@ -35,58 +36,34 @@ void ASlimePuddleParent::BeginPlay()
 // Called every frame
 void ASlimePuddleParent::Tick(float DeltaTime)
 {
-	
-	
+
+
 	Super::Tick(DeltaTime);
-	
+
 	if (Characters.Num() > 0)
 	{
 		for (ACharacterParent * Character : Characters)
 		{
-			Cast<UCharacterMovementComponent>(Character->GetMovementComponent())->MaxWalkSpeed = Character->DefaultMovementSpeed;
-			if (Character != nullptr)
-			{
-				if (Tags.Num() != 0)
+			if (ThisActorToIgnire != nullptr  && ThisActorToIgnire != Character) {
+				if (IsOverlappingActor(Character))
 				{
-					if (Character->Tags[0] != Tags[0])
+					if (Character->GetDistanceTo(this) <= 100 && bIsIce)
 					{
-
-						if (IsOverlappingActor(Character))
-						{
-							Cast<UCharacterMovementComponent>(Character->GetMovementComponent())->MaxWalkSpeed = (Character->DefaultMovementSpeed / MaxDist)  * FMath::Clamp(Character->GetDistanceTo(this), Min, Max);
-						}
-						else
-						{
-							Cast<UCharacterMovementComponent>(Character->GetMovementComponent())->MaxWalkSpeed = Character->DefaultMovementSpeed;
-						}
-					}
-				}
-				else if (ThisActorToIgnire != nullptr  && ThisActorToIgnire !=  Character) {
-					if (IsOverlappingActor(Character))
-					{
-						if (Character->GetDistanceTo(this) <= 100)
-						{
-							Cast<UCharacterMovementComponent>(Character->GetMovementComponent())->MaxWalkSpeed = 0;
-						}
-						else
-						{
-							Cast<UCharacterMovementComponent>(Character->GetMovementComponent())->MaxWalkSpeed = (Character->DefaultMovementSpeed / MaxDist)  * FMath::Clamp(Character->GetDistanceTo(this), Min, Max);
-						}
-						
+						Character->bIsIced = true;
 					}
 					else
 					{
-						Cast<UCharacterMovementComponent>(Character->GetMovementComponent())->MaxWalkSpeed = Character->DefaultMovementSpeed;
+						Character->CharacterMovementComponent->MaxWalkSpeed = (Character->DefaultMovementSpeed / MaxDist)  * FMath::Clamp(Character->GetDistanceTo(this), Min, Max);
 					}
+
 				}
 			}
 		}
 	}
-
 }
-
 void ASlimePuddleParent::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
+	
 	Super::EndPlay(EndPlayReason);
 	if (Characters.Num() > 0)
 	{
@@ -95,9 +72,14 @@ void ASlimePuddleParent::EndPlay(const EEndPlayReason::Type EndPlayReason)
 
 			if (Character != nullptr)
 			{
-				Cast<UCharacterMovementComponent>(Character->GetMovementComponent())->MaxWalkSpeed = Character->DefaultMovementSpeed;
+				if (Character->bIsIced)
+				{
+					Character->bIsIced = false;
+				}
+			Character->CharacterMovementComponent->MaxWalkSpeed = Character->DefaultMovementSpeed;
 			}
 		}
 	}
+	
 }
 
