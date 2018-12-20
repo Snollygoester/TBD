@@ -4,15 +4,22 @@
 #include "Components/StaticMeshComponent.h"
 #include "Parents/CharacterParent.h"
 #include "GameFramework/CharacterMovementComponent.h"
-#include "TBDGameModeBase.h" 
-#include "Kismet/GameplayStatics.h"
-#include "Engine/World.h"
 // waiting for dount 
 // Sets default values
 ASlimePuddleParent::ASlimePuddleParent()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
+	Slower = CreateDefaultSubobject< UStaticMeshComponent>(FName("Slower"));
+	Slower1 = CreateDefaultSubobject< UStaticMeshComponent>(FName("Slower1"));
+	Slower2 = CreateDefaultSubobject< UStaticMeshComponent>(FName("Slower2"));
+	Slower3 = CreateDefaultSubobject< UStaticMeshComponent>(FName("Slower3"));
+	Slower4 = CreateDefaultSubobject< UStaticMeshComponent>(FName("Slower4"));
+	Slower5 = CreateDefaultSubobject< UStaticMeshComponent>(FName("Slower5"));
+	Slower6 = CreateDefaultSubobject< UStaticMeshComponent>(FName("Slower6"));
+	Slower7 = CreateDefaultSubobject< UStaticMeshComponent>(FName("Slower7"));
+	Slower8 = CreateDefaultSubobject< UStaticMeshComponent>(FName("Slower8"));
+	Slower9 = CreateDefaultSubobject< UStaticMeshComponent>(FName("Slower9"));
 	
 }
 
@@ -20,15 +27,21 @@ ASlimePuddleParent::ASlimePuddleParent()
 void ASlimePuddleParent::BeginPlay()
 {
 	Super::BeginPlay();
-	for (APawn * Pawn : Cast<ATBDGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()))->Players)
+	Slowers.Add(Slower);
+	Slowers.Add(Slower1);
+	Slowers.Add(Slower2);
+	Slowers.Add(Slower3);
+	Slowers.Add(Slower4);
+	Slowers.Add(Slower5);
+	Slowers.Add(Slower6);
+	Slowers.Add(Slower7);
+	Slowers.Add(Slower8);
+	Slowers.Add(Slower9);
+	for (UStaticMeshComponent * Slowe : Slowers)
 	{
-		ACharacterParent * Character =	Cast<ACharacterParent>(Pawn);
-		if (Character != nullptr)
-		{
-			Characters.Add(Character);
-		}
+		Slowe->OnComponentBeginOverlap.AddDynamic(this, &ASlimePuddleParent::OnOverlapBegin);
+		Slowe->OnComponentEndOverlap.AddDynamic(this, &ASlimePuddleParent::OnOverlapEnd);
 	}
-	
 }
 
 
@@ -36,50 +49,41 @@ void ASlimePuddleParent::BeginPlay()
 // Called every frame
 void ASlimePuddleParent::Tick(float DeltaTime)
 {
-
-
 	Super::Tick(DeltaTime);
 
-	if (Characters.Num() > 0)
-	{
-		for (ACharacterParent * Character : Characters)
-		{
-			if (ThisActorToIgnire != nullptr  && ThisActorToIgnire != Character) {
-				if (IsOverlappingActor(Character))
-				{
-					if (Character->GetDistanceTo(this) <= 100 && bIsIce)
-					{
-						Character->bIsIced = true;
-					}
-					else
-					{
-						Character->CharacterMovementComponent->MaxWalkSpeed = (Character->DefaultMovementSpeed / MaxDist)  * FMath::Clamp(Character->GetDistanceTo(this), Min, Max);
-					}
-
-				}
-			}
-		}
-	}
 }
+
 void ASlimePuddleParent::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
 	
 	Super::EndPlay(EndPlayReason);
-	if (Characters.Num() > 0)
-	{
-		for (ACharacterParent * Character : Characters)
-		{
 
-			if (Character != nullptr)
-			{
-				if (Character->bIsIced)
-				{
-					Character->bIsIced = false;
-				}
-			Character->CharacterMovementComponent->MaxWalkSpeed = Character->DefaultMovementSpeed;
-			}
+}
+
+void ASlimePuddleParent::OnOverlapBegin(UPrimitiveComponent * OverlappedComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
+{
+	if (OtherActor != ThisActorToIgnire)
+	{
+		ACharacterParent * Character = Cast< ACharacterParent>(OtherActor);
+		if (Character != nullptr)
+		{
+			Character->SpeedMultiplayer = Character->SpeedMultiplayer / (Slowers.Find(Cast<UStaticMeshComponent>(OverlappedComp)) + 1.25);
+			UE_LOG(LogTemp, Warning, TEXT(" %s"), *OverlappedComp->GetName());
 		}
 	}
-	
 }
+
+void ASlimePuddleParent::OnOverlapEnd(UPrimitiveComponent * OverlappedComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex)
+{
+	if (OtherActor != ThisActorToIgnire)
+	{
+		ACharacterParent * Character = Cast< ACharacterParent>(OtherActor);
+		if (Character != nullptr)
+		{
+			Character->SpeedMultiplayer = Character->SpeedMultiplayer * (Slowers.Find(Cast<UStaticMeshComponent>(OverlappedComp)) + 1.25);
+
+		}
+	}
+}
+
 

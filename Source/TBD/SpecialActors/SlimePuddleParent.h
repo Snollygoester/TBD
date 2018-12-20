@@ -21,15 +21,32 @@ public:
 		// Called every frame
 		virtual void Tick(float DeltaTime) override;
 		virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
-	private:
+private:
+		UPROPERTY()
+			TArray<class UStaticMeshComponent *> Slowers;
+		UPROPERTY(VisibleAnywhere)
+		class UStaticMeshComponent * Slower;
+		UPROPERTY(VisibleAnywhere)
+			class UStaticMeshComponent * Slower1;
+		UPROPERTY(VisibleAnywhere)
+			class UStaticMeshComponent * Slower2;
+		UPROPERTY(VisibleAnywhere)
+			class UStaticMeshComponent * Slower3;
+		UPROPERTY(VisibleAnywhere)
+			class UStaticMeshComponent * Slower4;
+		UPROPERTY(VisibleAnywhere)
+			class UStaticMeshComponent * Slower5;
+		UPROPERTY(VisibleAnywhere)
+			class UStaticMeshComponent * Slower6;
+		UPROPERTY(VisibleAnywhere)
+			class UStaticMeshComponent * Slower7;
+		UPROPERTY(VisibleAnywhere)
+			class UStaticMeshComponent * Slower8;
+		UPROPERTY(VisibleAnywhere)
+			class UStaticMeshComponent * Slower9;
+		UFUNCTION()
+			void OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+		UFUNCTION()
+			void OnOverlapEnd(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
-		float MaxDist = 200;
-		UPROPERTY()
-		TArray<class  ACharacterParent *> Characters;
-		UPROPERTY()
-			TArray<class  UCharacterMovementComponent *> CharactersMovement;
-		UPROPERTY(EditAnywhere)
-			float Min = 40;
-		UPROPERTY(EditAnywhere)
-			float Max = 120;
 	};

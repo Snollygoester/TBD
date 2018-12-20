@@ -39,7 +39,6 @@ public:
 		TSubclassOf< class ACharacterParent > CharacterParentSub;
 	UPROPERTY(EditAnywhere)
 		class UPickUpItemWidget * PickUpWidget;
-	float DefaultMovementSpeed;
 	FString PlayerUniqueTag;
 	class UHealthWidget * HealthWidget;
 	void SetHealthWidget(class UHealthWidget * HealthWidgetToSet);
@@ -61,9 +60,8 @@ public:
 		void IceFromBeam(float Time);
 		void SilenceFromBeam(float Time);
 		bool bIsSilence = false;
-		UPROPERTY()
-		UCharacterMovementComponent * CharacterMovementComponent;
 		bool bIsIced = false;
+		float SpeedMultiplayer = 1;
 	protected:
 	/** Called for forwards/backward input */
 	void MoveForward(float Value);
@@ -115,4 +113,6 @@ private:
 	void StopSilence();
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<class UDamageTypeParent > NormalDamage;
+	UPROPERTY(EditAnywhere)
+		float DefaultMovementSpeed = 600;
 };

@@ -26,7 +26,7 @@ FTimerDelegate TimerDel;
 ACharacterParent::ACharacterParent()
 {
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = false;
+	PrimaryActorTick.bCanEverTick = true;
 
 	WidgetComponent = CreateDefaultSubobject<UWidgetComponent>(FName("WidgetComponent"));
 	// Set size for collision capsule
@@ -63,13 +63,8 @@ void ACharacterParent::BeginPlay()
 	PickUpWidget->AddToViewport();
 	CurrentHealth = Health;
 	NonSpawnMaterials = GetMesh()->GetMaterials();
-	CharacterMovementComponent = Cast<UCharacterMovementComponent>(GetCharacterMovement());
 	FTimerHandle TimerHandle;
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ACharacterParent::StopImmortality, ImmortalityTime);
-	if (CharacterMovementComponent != nullptr)
-	{
-		DefaultMovementSpeed =	CharacterMovementComponent->MaxWalkSpeed;
-	}
 }
 
 
@@ -122,7 +117,7 @@ float ACharacterParent::TakeDamage(float DamageAmount,  FDamageEvent const& Dama
 void ACharacterParent::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	GetCharacterMovement()->MaxWalkSpeed = DefaultMovementSpeed * SpeedMultiplayer;
 }
 
 // Called to bind functionality to input

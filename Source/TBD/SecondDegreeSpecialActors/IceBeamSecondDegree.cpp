@@ -10,7 +10,7 @@ void AIceBeamSecondDegree::OverlappDoYourThing(UPrimitiveComponent * OverlappedC
 		ACharacterParent * Character = Cast<ACharacterParent>(OtherActor);
 		if (Character != nullptr)
 		{
-			Character->GetCharacterMovement()->MaxWalkSpeed = Character->DefaultMovementSpeed * MaxSpeedPracnet;
+			Character->GetCharacterMovement()->MaxWalkSpeed = Character->SpeedMultiplayer * MaxSpeedPracnet;
 			Character->IceFromBeam(TimeUntilSpeedReset);
 			
 		}
