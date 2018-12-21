@@ -22,11 +22,9 @@ protected:
  void UpdetaTimer();
 private:
 	class ACharacterParent * Owner;
-	float StartSpeed = 0;
 	bool bIwasCalled = false;
-	class UCharacterMovementComponent * MovementComponent;
 	UPROPERTY(EditAnywhere)
-		float Speedboost = 1260; //cm per s
+		float SpeedboostP = 1.4; //cm per s
 	UPROPERTY(EditAnywhere)
 		float AbilityTime = 2;
 	UPROPERTY(EditAnywhere)

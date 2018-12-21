@@ -101,6 +101,7 @@ bool ACluckTheChicken::Skill1YourThing()
 }
 void ACluckTheChicken::Tick(float DeltaTime)
 {
+	Super::Tick(DeltaTime);
 	SpringArmF->AddLocalRotation(FQuat(FRotator(0, Multiplier *DeltaTime, 0)));
 	SpringArmL->AddLocalRotation(FQuat(FRotator(0, Multiplier *DeltaTime, 0)));
 	SpringArmI->AddLocalRotation(FQuat(FRotator(0, Multiplier *DeltaTime, 0)));

@@ -22,11 +22,12 @@
 #include "TBDGameModeBase.h"
 
 FTimerDelegate TimerDel;
+FTimerDelegate IceBeamDel;
 // Sets default values
 ACharacterParent::ACharacterParent()
 {
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
 	WidgetComponent = CreateDefaultSubobject<UWidgetComponent>(FName("WidgetComponent"));
 	// Set size for collision capsule
@@ -117,7 +118,6 @@ float ACharacterParent::TakeDamage(float DamageAmount,  FDamageEvent const& Dama
 void ACharacterParent::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	GetCharacterMovement()->MaxWalkSpeed = DefaultMovementSpeed * SpeedMultiplayer;
 }
 
 // Called to bind functionality to input
@@ -288,16 +288,26 @@ bool ACharacterParent::Skill1YourThing()
 	return true;
 }
 
-void ACharacterParent::IceFromBeam(float Time)
+void ACharacterParent::IceFromBeam(float Time, float P)
 {
+	ChangeSpeed(P);
+	UE_LOG(LogTemp, Warning, TEXT(" hi  "));
+	IceBeamDel.BindUFunction(this, FName("StopIce"), P);
 	FTimerHandle TimerHandle;
-	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ACharacterParent::StopIce, Time);
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, IceBeamDel, Time, false);
 }
 void ACharacterParent::SilenceFromBeam(float Time) {
 	bIsSilence = true;
 	FTimerHandle TimerHandle;
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ACharacterParent::StopSilence, Time);
 }
+
+void ACharacterParent::ChangeSpeed(float SpeedMultiplayerP)
+{
+	SpeedMultiplayer = SpeedMultiplayer * SpeedMultiplayerP;
+	GetCharacterMovement()->MaxWalkSpeed = DefaultMovementSpeed * SpeedMultiplayer ;
+}
+
 
 void ACharacterParent::GrabWall()
 {
@@ -368,10 +378,9 @@ void ACharacterParent::TakeDOT(UDamageTypeParent * TypeDamage, int CallNum)
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle, TimerDel, TypeDamage->DamageUpdateTime, false);
 }
 
-void ACharacterParent::StopIce()
+void ACharacterParent::StopIce(float P)
 {
-	UCharacterMovementComponent * CharacterMovementComponent = Cast<UCharacterMovementComponent>(GetCharacterMovement());
-	CharacterMovementComponent->MaxWalkSpeed = DefaultMovementSpeed;
+	ChangeSpeed(1 / P);
 }
 void ACharacterParent::StopSilence() {
 	bIsSilence = false;

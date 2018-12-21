@@ -2,7 +2,6 @@
 
 #include "IceBeamSecondDegree.h"
 #include "Parents/CharacterParent.h"
-#include "GameFramework/CharacterMovementComponent.h"
 void AIceBeamSecondDegree::OverlappDoYourThing(UPrimitiveComponent * OverlappedComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
 {
 	if (OtherActor != ThisActorToIgnire)
@@ -10,8 +9,7 @@ void AIceBeamSecondDegree::OverlappDoYourThing(UPrimitiveComponent * OverlappedC
 		ACharacterParent * Character = Cast<ACharacterParent>(OtherActor);
 		if (Character != nullptr)
 		{
-			Character->GetCharacterMovement()->MaxWalkSpeed = Character->SpeedMultiplayer * MaxSpeedPracnet;
-			Character->IceFromBeam(TimeUntilSpeedReset);
+			Character->IceFromBeam(TimeUntilSpeedReset, MaxSpeedPracnet);
 			
 		}
 	}

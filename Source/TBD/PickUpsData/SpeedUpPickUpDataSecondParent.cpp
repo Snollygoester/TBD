@@ -2,7 +2,6 @@
 
 #include "SpeedUpPickUpDataSecondParent.h"
 #include "Parents/CharacterParent.h"
-#include "GameFramework/CharacterMovementComponent.h"
 #include "Engine/World.h"
 #include "Public/TimerManager.h"
 #include "Widgets/PickUpItemWidget.h"
@@ -11,8 +10,8 @@ void USpeedUpPickUpDataSecondParent::PickUpDoYourThing() {
 		
 	if (!bIwasCalled)
 	{
+		Owner->ChangeSpeed(SpeedboostP);
 		bIwasCalled = true;
-		MovementComponent->MaxWalkSpeed = (StartSpeed + Speedboost);
 		FTimerHandle TimerHandle;
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &USpeedUpPickUpDataSecondParent::DestroyComp, AbilityTime);
 		FTimerHandle TimerHandle1;
@@ -25,17 +24,15 @@ void USpeedUpPickUpDataSecondParent::BeginPlay()
 {
 	Super::BeginPlay();
 	Owner = Cast<ACharacterParent>(GetOwner());
-	MovementComponent = Cast< UCharacterMovementComponent>(Owner->GetMovementComponent());
 	PickUpItemWidget = Owner->PickUpWidget;
 	PickUpItemWidget->SetProgressBarImage(Image);
-	StartSpeed = MovementComponent->MaxWalkSpeed;
 	PickUpItemWidget->SetProgressBarPercent(1);
 	
 }
 
 void USpeedUpPickUpDataSecondParent::DestroyComp()
 {
-	MovementComponent->MaxWalkSpeed = StartSpeed;
+	Owner->ChangeSpeed( 1 / SpeedboostP);
 	PickUpItemWidget->SetProgressBarPercent(0);
 	DestroyComponent();
 }

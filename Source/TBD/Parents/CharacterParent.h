@@ -57,11 +57,11 @@ public:
 			class UWidgetComponent * WidgetComponent;
 		UPROPERTY(VisibleAnywhere)
 			class UArrowComponent * ArrowComponent1;
-		void IceFromBeam(float Time);
+		void IceFromBeam(float Time, float P);
 		void SilenceFromBeam(float Time);
 		bool bIsSilence = false;
-		bool bIsIced = false;
 		float SpeedMultiplayer = 1;
+		void ChangeSpeed(float SpeedMultiplayerP);
 	protected:
 	/** Called for forwards/backward input */
 	void MoveForward(float Value);
@@ -109,7 +109,8 @@ private:
 	void TakeDOT(class UDamageTypeParent * TypeDamage, int CallNum);
 	UPROPERTY(VisibleAnywhere)
 		class UParticleSystemComponent * FireParticles;
-	void StopIce();
+	UFUNCTION()
+	void StopIce(float P);
 	void StopSilence();
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<class UDamageTypeParent > NormalDamage;

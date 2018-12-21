@@ -20,6 +20,17 @@ ASlimePuddleParent::ASlimePuddleParent()
 	Slower7 = CreateDefaultSubobject< UStaticMeshComponent>(FName("Slower7"));
 	Slower8 = CreateDefaultSubobject< UStaticMeshComponent>(FName("Slower8"));
 	Slower9 = CreateDefaultSubobject< UStaticMeshComponent>(FName("Slower9"));
+	Slower->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepWorldTransform);
+	Slower1->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepWorldTransform);
+	Slower2->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepWorldTransform);
+	Slower3->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepWorldTransform);
+	Slower4->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepWorldTransform);
+	Slower5->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepWorldTransform);
+	Slower6->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepWorldTransform);
+	Slower7->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepWorldTransform);
+	Slower8->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepWorldTransform);
+	Slower9->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepWorldTransform);
+
 	
 }
 
@@ -57,7 +68,7 @@ void ASlimePuddleParent::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
 	
 	Super::EndPlay(EndPlayReason);
-
+	
 }
 
 void ASlimePuddleParent::OnOverlapBegin(UPrimitiveComponent * OverlappedComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
@@ -65,11 +76,15 @@ void ASlimePuddleParent::OnOverlapBegin(UPrimitiveComponent * OverlappedComp, AA
 	if (OtherActor != ThisActorToIgnire)
 	{
 		ACharacterParent * Character = Cast< ACharacterParent>(OtherActor);
+		if (Character != nullptr && bIsIce && Slowers.Find(Cast<UStaticMeshComponent>(OverlappedComp)) >= 7) {
+			Character->GetCharacterMovement()->DisableMovement();
+			return;
+		}
 		if (Character != nullptr)
 		{
-			Character->SpeedMultiplayer = Character->SpeedMultiplayer / (Slowers.Find(Cast<UStaticMeshComponent>(OverlappedComp)) + 1.25);
-			UE_LOG(LogTemp, Warning, TEXT(" %s"), *OverlappedComp->GetName());
+			Character->ChangeSpeed( 1 / (Slowers.Find(Cast<UStaticMeshComponent>(OverlappedComp)) + 1.25));
 		}
+		
 	}
 }
 
@@ -78,11 +93,16 @@ void ASlimePuddleParent::OnOverlapEnd(UPrimitiveComponent * OverlappedComp, AAct
 	if (OtherActor != ThisActorToIgnire)
 	{
 		ACharacterParent * Character = Cast< ACharacterParent>(OtherActor);
+		if (Character != nullptr && bIsIce && Slowers.Find(Cast<UStaticMeshComponent>(OverlappedComp)) >= 7) {
+			Character->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
+			return;
+		}
 		if (Character != nullptr)
 		{
-			Character->SpeedMultiplayer = Character->SpeedMultiplayer * (Slowers.Find(Cast<UStaticMeshComponent>(OverlappedComp)) + 1.25);
+			Character->ChangeSpeed((Slowers.Find(Cast<UStaticMeshComponent>(OverlappedComp)) + 1.25));
 
 		}
+		
 	}
 }
 
