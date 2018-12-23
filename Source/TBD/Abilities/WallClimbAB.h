@@ -27,8 +27,10 @@ private:
 	float ClimbTime = 0;
 	UPROPERTY(EditAnywhere)
 	float TimeYouCanClimb = 1.4;
-	UPROPERTY(EditAnywhere)
-	class USceneComponent * SceneComponent;
 	class ACharacter * Owner;
 	class APlayerController * OwnerController;
+	UPROPERTY(EditAnywhere)
+		float ClimbRange = 75;
+	UPROPERTY(EditAnywhere)
+		float TimeUtileYpuCanStartClimbing = 0.35;
 };

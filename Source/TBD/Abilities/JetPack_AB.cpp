@@ -37,10 +37,11 @@ void UJetPack_AB::TickComponent(float DeltaTime, ELevelTick TickType, FActorComp
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 	if (Owner->BisGameStarted)
 	{
-
-	
-	OwnerController = Cast<APlayerController>(Owner->GetController()); //TODO remove 
-	if (OwnerController)
+		if (OwnerController == nullptr)
+		{
+			OwnerController = Cast<APlayerController>(Owner->GetController()); 
+		}
+	if (OwnerController != nullptr)
 	{
 		FHitResult Hit;
 		FlyingTime = OwnerController->GetInputKeyTimeDown(FKey("Spacebar"));

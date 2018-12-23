@@ -66,6 +66,7 @@ void ACharacterParent::BeginPlay()
 	NonSpawnMaterials = GetMesh()->GetMaterials();
 	FTimerHandle TimerHandle;
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ACharacterParent::StopImmortality, ImmortalityTime);
+	CliffHangABCpp = FindComponentByClass<UCliffHangAB>();
 }
 
 
@@ -133,12 +134,8 @@ void ACharacterParent::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		PlayerInputComponent->BindAction("UsePickUp", IE_Pressed, this, &ACharacterParent::UsePickUp);
 	
 		PlayerInputComponent->BindAction("Throw", IE_Pressed, this, &ACharacterParent::ThrowGrenade);
-		CliffHangABCpp = FindComponentByClass<UCliffHangAB>();
-		if (CliffHangABCpp != nullptr)
-		{
-			PlayerInputComponent->BindAction("Cliff", IE_Pressed, this, &ACharacterParent::GrabWall);
-			PlayerInputComponent->BindAction("Cliff", IE_Released, this, &ACharacterParent::letGoOffWall);
-		}
+		PlayerInputComponent->BindAction("Cliff", IE_Pressed, this, &ACharacterParent::GrabWall);
+		PlayerInputComponent->BindAction("Cliff", IE_Released, this, &ACharacterParent::letGoOffWall);
 		PlayerInputComponent->BindAction("Block", IE_Pressed, this, &ACharacterParent::BlockDoYourThing);
 		PlayerInputComponent->BindAction("Skill2", IE_Pressed, this, &ACharacterParent::Skill2YourThingInput);
 		PlayerInputComponent->BindAction("Skill1", IE_Pressed, this, &ACharacterParent::Skill1YourThingInput);
@@ -311,12 +308,18 @@ void ACharacterParent::ChangeSpeed(float SpeedMultiplayerP)
 
 void ACharacterParent::GrabWall()
 {
-	CliffHangABCpp->hang();
+	if (CliffHangABCpp != nullptr)
+	{
+		CliffHangABCpp->hang();
+	}
 }
 
 void ACharacterParent::letGoOffWall()
 {
-	CliffHangABCpp->Release();
+	if (CliffHangABCpp != nullptr)
+	{
+		CliffHangABCpp->Release();
+	}
 }
 void ACharacterParent::OnOverlapBegin(UPrimitiveComponent * OverlappedComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
 {
