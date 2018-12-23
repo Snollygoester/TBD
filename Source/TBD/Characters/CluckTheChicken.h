@@ -24,6 +24,7 @@ private:
 	void BeginPlay() override;
 	bool Skill2YourThing() override;
 	 bool Skill1YourThing() override;
+	 bool RangedAttackdDoYourThing() override;
 	UPROPERTY(EditAnywhere)
 		TSubclassOf< class AShiledParent > ShiledParentTsubClass;
 	bool bIsShiledActive;
@@ -61,4 +62,6 @@ private:
 		TSubclassOf<class ABeamParent> BeamISubClass;
 	UPROPERTY(EditAnywhere, Category = Beams)
 		TSubclassOf<class ABeamParent> BeamLSubClass;
+	UPROPERTY(EditAnywhere, Category = Beams)
+		TSubclassOf<class AC4Parent> C4PSubClass;
 };

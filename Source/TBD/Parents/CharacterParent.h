@@ -87,14 +87,15 @@ public:
 
 	void FullDeath();
 	virtual void BlockDoYourThing();
-	void Skill2YourThingInput();
-	 void Skill1YourThingInput();
 	 virtual bool Skill2YourThing();
 	 virtual bool Skill1YourThing();
+	 virtual bool RangedAttackdDoYourThing();
 private:
 	class	UCliffHangAB * CliffHangABCpp;
 	class UPickUpDataParent * PickUpData;
-	void ThrowGrenade();
+	void RangedAttackdDoYourThingInput();
+	void Skill2YourThingInput();
+	void Skill1YourThingInput();
 	UPROPERTY(EditAnywhere)
 		TSubclassOf< class AGrenadeParent > GrenadeParentTSubClass;
 	UPROPERTY(EditAnywhere)

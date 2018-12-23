@@ -133,7 +133,7 @@ void ACharacterParent::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		//PlayerInputComponent->BindAction("PickUp", IE_Released, this, &ACharacterParent::PickUpObj);
 		PlayerInputComponent->BindAction("UsePickUp", IE_Pressed, this, &ACharacterParent::UsePickUp);
 	
-		PlayerInputComponent->BindAction("Throw", IE_Pressed, this, &ACharacterParent::ThrowGrenade);
+		PlayerInputComponent->BindAction("Throw", IE_Pressed, this, &ACharacterParent::RangedAttackdDoYourThingInput);
 		PlayerInputComponent->BindAction("Cliff", IE_Pressed, this, &ACharacterParent::GrabWall);
 		PlayerInputComponent->BindAction("Cliff", IE_Released, this, &ACharacterParent::letGoOffWall);
 		PlayerInputComponent->BindAction("Block", IE_Pressed, this, &ACharacterParent::BlockDoYourThing);
@@ -259,12 +259,16 @@ void ACharacterParent::BlockDoYourThing()
 
 void ACharacterParent::Skill2YourThingInput()
 {
-	Skill2YourThing();
+	if (BisGameStarted && !bIsImmortal) {
+		Skill2YourThing();
+	}
 }
 
 void ACharacterParent::Skill1YourThingInput()
 {
-	Skill1YourThing();
+	if (BisGameStarted && !bIsImmortal) {
+		Skill1YourThing();
+	}
 }
 
 bool ACharacterParent::Skill2YourThing()
@@ -284,6 +288,17 @@ bool ACharacterParent::Skill1YourThing()
 	}
 	return true;
 }
+bool ACharacterParent::RangedAttackdDoYourThing()
+{
+	return true;
+}
+void ACharacterParent::RangedAttackdDoYourThingInput()
+{
+	if (BisGameStarted  && !bIsImmortal) {
+		RangedAttackdDoYourThing();
+	}
+}
+
 
 void ACharacterParent::IceFromBeam(float Time, float P)
 {
@@ -354,17 +369,6 @@ void ACharacterParent::UsePickUp()
 	}
 
 }
-void ACharacterParent::ThrowGrenade()
-{
-	if (BisGameStarted && !bIsDead && !bIsImmortal) {
-	AGrenadeParent * Grenade=  GetWorld()->SpawnActor<AGrenadeParent>(GrenadeParentTSubClass, FTransform(FRotator(0, 0, 0), GetActorLocation() + GetActorForwardVector() * 120, FVector(1)));
-	if (Grenade != nullptr)
-	{
-		Grenade->Thorw(ThorwSpeed, GetActorForwardVector());
-	}
-	}
-}
-
 void ACharacterParent::TakeDOT(UDamageTypeParent * TypeDamage, int CallNum)
 {
 	if (CallNum == 0)

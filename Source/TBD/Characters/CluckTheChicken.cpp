@@ -8,6 +8,7 @@
 #include "Components/StaticMeshComponent.h"
 #include "SpecialActors/SpecialEggParent.h"
 #include "SpecialActors/BeamParent.h"
+#include "RangedWeapons/C4Parent.h"
 ACluckTheChicken::ACluckTheChicken()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -51,7 +52,7 @@ void ACluckTheChicken::BeginPlay()
 
 bool ACluckTheChicken::Skill2YourThing()
 {
-	if (Super::Skill1YourThing()) {
+	if (Super::Skill2YourThing()) {
 		ASpecialEggParent * ChossenEgg;
 		if (PickClosestEgg()->GetName() == EggF->GetName()) {
 			ChossenEgg = GetWorld()->SpawnActor<ASpecialEggParent>(EggFSubClass, FTransform(FRotator(0, 0, 0), GetActorLocation() + GetActorForwardVector() * 150, FVector(1)));
@@ -95,6 +96,14 @@ bool ACluckTheChicken::Skill1YourThing()
 			ChossenBeam->GetEggL(EggI->GetComponentLocation());
 			ChossenBeam->SetActorToIgnire(this);
 		}
+		return true;
+	}
+	return true;
+}
+bool ACluckTheChicken::RangedAttackdDoYourThing()
+{
+	if (Super::RangedAttackdDoYourThing()) {
+		AC4Parent * C4 = GetWorld()->SpawnActor<AC4Parent>(C4PSubClass, FTransform(FRotator(0, 0, 0), GetActorLocation() + GetActorForwardVector() * 150, FVector(1)));
 		return true;
 	}
 	return true;
