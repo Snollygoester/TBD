@@ -9,7 +9,6 @@
 #include "PickUpParent.h"
 #include "PickUpDataParent.h"
 #include "Widgets/PickUpItemWidget.h"
-#include "SpecialActors/GrenadeParent.h"
 #include "Widgets/HealthWidget.h"
 #include "Public/TimerManager.h"
 #include "SpecialActors/SpawnPointParent.h"

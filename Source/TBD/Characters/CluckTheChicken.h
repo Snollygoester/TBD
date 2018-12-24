@@ -64,4 +64,6 @@ private:
 		TSubclassOf<class ABeamParent> BeamLSubClass;
 	UPROPERTY(EditAnywhere, Category = Beams)
 		TSubclassOf<class AC4Parent> C4PSubClass;
+	UPROPERTY(EditAnywhere, Category = C4)
+		float C4Speed = 500;
 };
