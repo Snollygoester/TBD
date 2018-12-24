@@ -302,7 +302,6 @@ void ACharacterParent::RangedAttackdDoYourThingInput()
 void ACharacterParent::IceFromBeam(float Time, float P)
 {
 	ChangeSpeed(P);
-	UE_LOG(LogTemp, Warning, TEXT(" hi  "));
 	IceBeamDel.BindUFunction(this, FName("StopIce"), P);
 	FTimerHandle TimerHandle;
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle, IceBeamDel, Time, false);

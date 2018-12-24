@@ -41,6 +41,8 @@ void AC4Parent::OnHitDoYourThing(UPrimitiveComponent * HitComp, AActor * OtherAc
 		Exploded();
 		return;
 	}
+	SetActorRotation(FRotator(FVector::DotProduct(GetActorRotation().Vector(), Hit.ImpactNormal) * -90, GetActorRotation().Yaw, GetActorRotation().Roll));
+	UE_LOG(LogTemp, Warning, TEXT(" %f "), FVector::DotProduct(GetActorRotation().Vector(), Hit.ImpactNormal));
 	AttachToActor(OtherActor, FAttachmentTransformRules::KeepWorldTransform);
 }
 // Called every frame
