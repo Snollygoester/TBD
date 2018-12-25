@@ -41,9 +41,11 @@ void AC4Parent::OnHitDoYourThing(UPrimitiveComponent * HitComp, AActor * OtherAc
 		Exploded();
 		return;
 	}
-	SetActorRotation(FRotator(FVector::DotProduct(GetActorRotation().Vector(), Hit.ImpactNormal) * -90, GetActorRotation().Yaw, GetActorRotation().Roll));
-	UE_LOG(LogTemp, Warning, TEXT(" %f "), FVector::DotProduct(GetActorRotation().Vector(), Hit.ImpactNormal));
+	UE_LOG(LogTemp, Warning, TEXT(" %s "), *Hit.ImpactNormal.ToString());
+	UE_LOG(LogTemp, Warning, TEXT(" %s "), *GetActorForwardVector().ToString());
+	UE_LOG(LogTemp, Warning, TEXT(" %s "), *FVector::CrossProduct(GetActorRightVector() , Hit.ImpactNormal).Rotation().ToString());
 	AttachToActor(OtherActor, FAttachmentTransformRules::KeepWorldTransform);
+		SetActorRotation(FVector::CrossProduct(GetActorRightVector() * GetActorForwardVector() * GetActorUpVector(), OtherActor->GetActorForwardVector()).Rotation());
 }
 // Called every frame
 void AC4Parent::Tick(float DeltaTime)
