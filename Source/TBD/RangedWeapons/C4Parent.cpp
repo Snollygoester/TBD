@@ -30,7 +30,7 @@ void AC4Parent::BeginPlay()
 }
 
 void AC4Parent::OnHitDoYourThing(UPrimitiveComponent * HitComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, FVector NormalImpulse, const FHitResult & Hit)
-{
+{/*
 	AShiledParent * Shiled = Cast<AShiledParent>(OtherActor);
 
 	if (Shiled != nullptr)
@@ -41,11 +41,14 @@ void AC4Parent::OnHitDoYourThing(UPrimitiveComponent * HitComp, AActor * OtherAc
 		Exploded();
 		return;
 	}
-	UE_LOG(LogTemp, Warning, TEXT(" %s "), *Hit.ImpactNormal.ToString());
-	UE_LOG(LogTemp, Warning, TEXT(" %s "), *GetActorForwardVector().ToString());
-	UE_LOG(LogTemp, Warning, TEXT(" %s "), *FVector::CrossProduct(GetActorRightVector() , Hit.ImpactNormal).Rotation().ToString());
-	AttachToActor(OtherActor, FAttachmentTransformRules::KeepWorldTransform);
-		SetActorRotation(FVector::CrossProduct(GetActorRightVector() * GetActorForwardVector() * GetActorUpVector(), OtherActor->GetActorForwardVector()).Rotation());
+	*/
+	if (bCanAttach) {
+		bCanAttach = false;
+		UE_LOG(LogTemp, Warning, TEXT(" ImpactNormal %s "), *Hit.ImpactNormal.ToString());
+		UE_LOG(LogTemp, Warning, TEXT(" GetActorRightVector %s "), *GetActorRightVector().ToString());
+		SetActorRotation((FVector::CrossProduct(FVector(0,-1, 0), GetActorRightVector()).Rotation()));
+		AttachToActor(OtherActor, FAttachmentTransformRules::KeepWorldTransform);
+	}
 }
 // Called every frame
 void AC4Parent::Tick(float DeltaTime)

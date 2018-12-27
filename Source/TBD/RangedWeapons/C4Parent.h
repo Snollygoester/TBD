@@ -43,7 +43,7 @@ private:
 	void TimerEndDestroy();
 	UPROPERTY(EditAnywhere)
 		TSubclassOf<class UDamageTypeParent > C4DamageTyep;
-	
+	bool bCanAttach = true;
 	
 	
 };
