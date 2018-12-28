@@ -24,7 +24,9 @@ protected:
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
+	void SetActorToIgnre(class AActor * ToIgner);
+	UPROPERTY()
+		class AActor * ThisActorToIgnre;
 private:
 	bool bHitShiled = false;
 	UPROPERTY(VisibleAnywhere)

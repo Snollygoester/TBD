@@ -30,7 +30,11 @@ void AC4Parent::BeginPlay()
 }
 
 void AC4Parent::OnHitDoYourThing(UPrimitiveComponent * HitComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, FVector NormalImpulse, const FHitResult & Hit)
-{/*
+{
+	if (ThisActorToIgnre == OtherActor)
+	{
+		return;
+	}
 	AShiledParent * Shiled = Cast<AShiledParent>(OtherActor);
 
 	if (Shiled != nullptr)
@@ -41,12 +45,10 @@ void AC4Parent::OnHitDoYourThing(UPrimitiveComponent * HitComp, AActor * OtherAc
 		Exploded();
 		return;
 	}
-	*/
+
 	if (bCanAttach) {
 		bCanAttach = false;
-		UE_LOG(LogTemp, Warning, TEXT(" ImpactNormal %s "), *Hit.ImpactNormal.ToString());
-		UE_LOG(LogTemp, Warning, TEXT(" GetActorRightVector %s "), *GetActorRightVector().ToString());
-		SetActorRotation((FVector::CrossProduct(FVector(0,-1, 0), GetActorRightVector()).Rotation()));
+		SetActorRotation(Hit.Normal.Rotation());
 		AttachToActor(OtherActor, FAttachmentTransformRules::KeepWorldTransform);
 	}
 }
@@ -57,9 +59,11 @@ void AC4Parent::Tick(float DeltaTime)
 
 }
 
+
 void AC4Parent::Exploded()
 {
 	TArray<AActor*> Actors;
+	Actors.Add(ThisActorToIgnre);
 	if (!bHitShiled)
 	{
 		UGameplayStatics::ApplyRadialDamageWithFalloff(GetWorld(), ExplosionDamage, BaseDamage, GetActorLocation(), ExplosionRadius, ExplosionRadius * 1.5, MaxDamagep, C4DamageTyep, Actors, this, GetInstigatorController());
@@ -78,6 +82,10 @@ void AC4Parent::TimerEndDestroy()
 	Destroy();
 }
 
+void AC4Parent::SetActorToIgnre(AActor * ToIgner)
+{
+	ThisActorToIgnre = ToIgner;
+}
 
 
 

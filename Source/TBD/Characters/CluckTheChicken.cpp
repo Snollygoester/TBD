@@ -104,6 +104,7 @@ bool ACluckTheChicken::RangedAttackdDoYourThing()
 {
 	if (Super::RangedAttackdDoYourThing()) {
 		AC4Parent * C4 = GetWorld()->SpawnActor<AC4Parent>(C4PSubClass, FTransform(FRotator(GetActorForwardVector().Rotation()), GetActorLocation() + GetActorForwardVector() * 150, FVector(1)));
+		C4->SetActorToIgnre(this);
 		C4->Thorw(C4Speed, FVector::ForwardVector);
 		return true;
 	}
