@@ -8,6 +8,8 @@
 #include "Components/StaticMeshComponent.h"
 #include "SpecialActors/SpecialEggParent.h"
 #include "SpecialActors/BeamParent.h"
+#include "Engine/World.h"
+#include "Public/TimerManager.h"
 #include "RangedWeapons/C4Parent.h"
 ACluckTheChicken::ACluckTheChicken()
 {
@@ -106,6 +108,11 @@ bool ACluckTheChicken::RangedAttackdDoYourThing()
 		AC4Parent * C4 = GetWorld()->SpawnActor<AC4Parent>(C4PSubClass, FTransform(FRotator(GetActorForwardVector().Rotation()), GetActorLocation() + GetActorForwardVector() * 150, FVector(1)));
 		C4->SetActorToIgnre(this);
 		C4->Thorw(C4Speed, FVector::ForwardVector);
+		if (IsThere2C4()) {
+			C4->OnActorHit.AddDynamic(this, &ACluckTheChicken::OnActorHit);
+			RealOldC4 = OldC4;
+		}
+		OldC4 = C4;
 		return true;
 	}
 	return true;
@@ -141,4 +148,42 @@ UStaticMeshComponent * ACluckTheChicken::PickClosestEgg()
 			
 	
 
+}
+
+bool ACluckTheChicken::IsThere2C4()
+{
+	C4Num++;
+	if (C4Num == 2)
+	{
+		C4Num = 0;
+		return true;
+	}
+	return false;
+}
+
+void ACluckTheChicken::OnActorHit(AActor * SelfActor, AActor * OtherActor, FVector NormalImpulse, const FHitResult & Hit)
+{
+	if (RealOldC4->IsOverlappingActor(this)  && OldC4->IsOverlappingActor(this))
+	{
+		RealOldC4->Exploded();
+		OldC4->ExplodedAndStun();
+		DisableInput(Cast< APlayerController >(GetController()));
+		FTimerHandle TimerHandle;
+		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ACluckTheChicken::StopStun, StunTime, true);
+		UE_LOG(LogTemp, Warning, TEXT(" 2 "));
+		return;
+	}
+	if (RealOldC4 != nullptr)
+	{
+		RealOldC4->Exploded();
+	}
+	if (OldC4 != nullptr)
+	{
+		OldC4->Exploded();
+	}
+}
+
+void ACluckTheChicken::StopStun()
+{
+	EnableInput(Cast< APlayerController >(GetController()));
 }

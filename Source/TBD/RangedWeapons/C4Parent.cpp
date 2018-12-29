@@ -31,10 +31,11 @@ void AC4Parent::BeginPlay()
 
 void AC4Parent::OnHitDoYourThing(UPrimitiveComponent * HitComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, FVector NormalImpulse, const FHitResult & Hit)
 {
-	if (ThisActorToIgnre == OtherActor)
+	if (ThisActorToIgnre == OtherActor || Cast<AC4Parent>(OtherActor))
 	{
 		return;
 	}
+	HitActor = OtherActor;
 	AShiledParent * Shiled = Cast<AShiledParent>(OtherActor);
 
 	if (Shiled != nullptr)
@@ -77,16 +78,35 @@ void AC4Parent::Exploded()
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AC4Parent::TimerEndDestroy, 1);
 }
 
+
 void AC4Parent::TimerEndDestroy()
 {
 	Destroy();
 }
+
+
 
 void AC4Parent::SetActorToIgnre(AActor * ToIgner)
 {
 	ThisActorToIgnre = ToIgner;
 }
 
+void AC4Parent::ExplodedAndStun()
+{
+	TArray<AActor*> Actors;
+	Actors.Add(ThisActorToIgnre);
+	if (!bHitShiled)
+	{
+		UGameplayStatics::ApplyRadialDamageWithFalloff(GetWorld(), ExplosionDamage / 2, BaseDamage / 2 , GetActorLocation(), ExplosionRadius, ExplosionRadius * 1.5, MaxDamagep, C4DamageTyep, Actors, this, GetInstigatorController());
+	}
+	bHitShiled = false;
+	ParticleSystemComponent->SetWorldLocation(ProjectileMeshComponent->GetComponentLocation());
+	SetRootComponent(ParticleSystemComponent);
+	ParticleSystemComponent->Activate();
+	ProjectileMeshComponent->DestroyComponent();
+	FTimerHandle TimerHandle;
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AC4Parent::TimerEndDestroy, 1);
+}
 
 
 

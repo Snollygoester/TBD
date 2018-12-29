@@ -27,11 +27,14 @@ public:
 	void SetActorToIgnre(class AActor * ToIgner);
 	UPROPERTY()
 		class AActor * ThisActorToIgnre;
+	UPROPERTY()
+		class AActor * HitActor;
+	void Exploded();
+	void ExplodedAndStun();
 private:
 	bool bHitShiled = false;
 	UPROPERTY(VisibleAnywhere)
 		class UParticleSystemComponent * ParticleSystemComponent;
-	void Exploded();
 	UPROPERTY(EditAnywhere)
 		float TimeEntilExplosion = 2;
 	UPROPERTY(EditAnywhere)
@@ -46,6 +49,5 @@ private:
 	UPROPERTY(EditAnywhere)
 		TSubclassOf<class UDamageTypeParent > C4DamageTyep;
 	bool bCanAttach = true;
-	
 	
 };

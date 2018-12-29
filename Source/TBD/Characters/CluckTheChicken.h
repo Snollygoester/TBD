@@ -66,4 +66,14 @@ private:
 		TSubclassOf<class AC4Parent> C4PSubClass;
 	UPROPERTY(EditAnywhere, Category = C4)
 		float C4Speed = 500;
+	bool IsThere2C4();
+	int8 C4Num = 0;
+	UPROPERTY()
+	class AC4Parent * OldC4;
+	UPROPERTY()
+		class AC4Parent * RealOldC4;
+	UFUNCTION()
+	void OnActorHit(AActor* SelfActor, AActor* OtherActor, FVector NormalImpulse, const FHitResult& Hit);
+	void StopStun();
+	float StunTime = 1.5;
 };
