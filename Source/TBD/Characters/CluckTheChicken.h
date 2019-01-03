@@ -74,6 +74,5 @@ private:
 		class AC4Parent * RealOldC4;
 	UFUNCTION()
 	void OnActorHit(AActor* SelfActor, AActor* OtherActor, FVector NormalImpulse, const FHitResult& Hit);
-	void StopStun();
 	float StunTime = 1.5;
 };

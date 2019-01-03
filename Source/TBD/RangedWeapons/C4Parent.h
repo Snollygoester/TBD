@@ -29,8 +29,10 @@ public:
 		class AActor * ThisActorToIgnre;
 	UPROPERTY()
 		class AActor * HitActor;
-	void Exploded();
-	void ExplodedAndStun();
+	UFUNCTION()
+	void Exploded(class AActor * Other);
+	UFUNCTION()
+	void ExplodedAndStun(class AActor * Other);
 private:
 	bool bHitShiled = false;
 	UPROPERTY(VisibleAnywhere)

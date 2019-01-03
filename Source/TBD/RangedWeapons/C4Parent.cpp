@@ -9,6 +9,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "SpecialActors/ShiledParent.h"
 #include "Parents/DamageTypeParent.h"
+FTimerDelegate C4TimerDelegate;
 // Sets default values
 AC4Parent::AC4Parent()
 {
@@ -24,13 +25,13 @@ AC4Parent::AC4Parent()
 void AC4Parent::BeginPlay()
 {
 	Super::BeginPlay();
-	FTimerHandle TimerHandle;
-	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AC4Parent::Exploded, TimeEntilExplosion);
-
 }
 
 void AC4Parent::OnHitDoYourThing(UPrimitiveComponent * HitComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, FVector NormalImpulse, const FHitResult & Hit)
 {
+	C4TimerDelegate.BindUFunction(this, FName("Exploded"), OtherActor);
+	FTimerHandle TimerHandle;
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, C4TimerDelegate, TimeEntilExplosion, false);
 	if (ThisActorToIgnre == OtherActor || Cast<AC4Parent>(OtherActor))
 	{
 		return;
@@ -43,7 +44,7 @@ void AC4Parent::OnHitDoYourThing(UPrimitiveComponent * HitComp, AActor * OtherAc
 		FDamageEvent DamageEvent;
 		Shiled->TakeDamage((ExplosionDamage * MaxDamagep), DamageEvent, GetInstigatorController(), this);
 		bHitShiled = true;
-		Exploded();
+		Exploded(OtherActor);
 		return;
 	}
 
@@ -61,12 +62,13 @@ void AC4Parent::Tick(float DeltaTime)
 }
 
 
-void AC4Parent::Exploded()
+void AC4Parent::Exploded(AActor * Other)
 {
 	TArray<AActor*> Actors;
 	Actors.Add(ThisActorToIgnre);
 	if (!bHitShiled)
 	{
+		AttachToActor(Other, FAttachmentTransformRules::KeepWorldTransform);
 		UGameplayStatics::ApplyRadialDamageWithFalloff(GetWorld(), ExplosionDamage, BaseDamage, GetActorLocation(), ExplosionRadius, ExplosionRadius * 1.5, MaxDamagep, C4DamageTyep, Actors, this, GetInstigatorController());
 	}
 	bHitShiled = false;
@@ -91,12 +93,13 @@ void AC4Parent::SetActorToIgnre(AActor * ToIgner)
 	ThisActorToIgnre = ToIgner;
 }
 
-void AC4Parent::ExplodedAndStun()
+void AC4Parent::ExplodedAndStun(AActor * Other)
 {
 	TArray<AActor*> Actors;
 	Actors.Add(ThisActorToIgnre);
 	if (!bHitShiled)
 	{
+		AttachToActor(Other, FAttachmentTransformRules::KeepWorldTransform);
 		UGameplayStatics::ApplyRadialDamageWithFalloff(GetWorld(), ExplosionDamage / 2, BaseDamage / 2 , GetActorLocation(), ExplosionRadius, ExplosionRadius * 1.5, MaxDamagep, C4DamageTyep, Actors, this, GetInstigatorController());
 	}
 	bHitShiled = false;

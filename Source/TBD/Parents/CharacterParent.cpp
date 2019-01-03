@@ -18,6 +18,7 @@
 #include "Components/WidgetComponent.h"
 #include "DamageTypeParent.h"
 #include "Particles/ParticleSystemComponent.h"
+#include "RangedWeapons/C4Parent.h"
 #include "TBDGameModeBase.h"
 
 FTimerDelegate TimerDel;
@@ -76,6 +77,21 @@ float ACharacterParent::TakeDamage(float DamageAmount,  FDamageEvent const& Dama
 		if (!bIsImmortal)
 		{
 			 UDamageTypeParent * TypeDamage = Cast<UDamageTypeParent>(DamageEvent.DamageTypeClass.GetDefaultObject());
+			 if (OC4 != nullptr && NC4 != nullptr)
+			 {
+				 TArray<AActor *>  AActors;
+				 GetAttachedActors(AActors);
+				 UE_LOG(LogTemp, Warning, TEXT(" 1 "));
+				 if (AActors.Find(OC4 ) && AActors.Find(NC4))
+				 {
+					 OC4->Exploded(this);
+					 NC4->ExplodedAndStun(this);
+					 DisableInput(Cast< APlayerController >(GetController()));
+					 FTimerHandle TimerHandle;
+					 GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ACharacterParent::StopStunC4, C4StunTime);
+					 UE_LOG(LogTemp, Warning, TEXT(" 2 "));
+				 }
+			 }
 			if (TypeDamage == nullptr)
 			{
 				CurrentHealth = CurrentHealth - DamageAmount;
@@ -353,6 +369,14 @@ void ACharacterParent::OnOverlapBegin(UPrimitiveComponent * OverlappedComp, AAct
 			PickUpData->RegisterComponent();
 			PickUp->Destroy();
 		}
+		AC4Parent * C4 = Cast<AC4Parent>(OtherActor);
+		if (C4 != nullptr)
+		{
+			OC4 = NC4;
+			NC4 = C4;
+
+		}
+	
 }
 
 void ACharacterParent::UsePickUp()
@@ -389,4 +413,9 @@ void ACharacterParent::StopIce(float P)
 }
 void ACharacterParent::StopSilence() {
 	bIsSilence = false;
+}
+
+void ACharacterParent::StopStunC4()
+{
+	EnableInput(Cast< APlayerController >(GetController()));
 }

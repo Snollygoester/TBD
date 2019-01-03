@@ -117,4 +117,12 @@ private:
 	TSubclassOf<class UDamageTypeParent > NormalDamage;
 	UPROPERTY(EditAnywhere)
 		float DefaultMovementSpeed = 600;
+	UPROPERTY()
+	class AC4Parent * OC4;
+	UPROPERTY()
+		class AC4Parent * NC4;
+	UFUNCTION()
+	void StopStunC4();
+	UPROPERTY(EditAnywhere)
+		float C4StunTime = 1;
 };

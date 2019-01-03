@@ -9,7 +9,6 @@
 #include "SpecialActors/SpecialEggParent.h"
 #include "SpecialActors/BeamParent.h"
 #include "Engine/World.h"
-#include "Public/TimerManager.h"
 #include "RangedWeapons/C4Parent.h"
 ACluckTheChicken::ACluckTheChicken()
 {
@@ -163,27 +162,12 @@ bool ACluckTheChicken::IsThere2C4()
 
 void ACluckTheChicken::OnActorHit(AActor * SelfActor, AActor * OtherActor, FVector NormalImpulse, const FHitResult & Hit)
 {
-	if (RealOldC4->IsOverlappingActor(this)  && OldC4->IsOverlappingActor(this))
-	{
-		RealOldC4->Exploded();
-		OldC4->ExplodedAndStun();
-		DisableInput(Cast< APlayerController >(GetController()));
-		FTimerHandle TimerHandle;
-		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ACluckTheChicken::StopStun, StunTime, true);
-		UE_LOG(LogTemp, Warning, TEXT(" 2 "));
-		return;
-	}
 	if (RealOldC4 != nullptr)
 	{
-		RealOldC4->Exploded();
+		RealOldC4->Exploded(OtherActor);
 	}
 	if (OldC4 != nullptr)
 	{
-		OldC4->Exploded();
+		OldC4->Exploded(OtherActor);
 	}
-}
-
-void ACluckTheChicken::StopStun()
-{
-	EnableInput(Cast< APlayerController >(GetController()));
 }
