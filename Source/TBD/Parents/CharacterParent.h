@@ -125,4 +125,6 @@ private:
 	void StopStunC4();
 	UPROPERTY(EditAnywhere)
 		float C4StunTime = 1;
+	UFUNCTION()
+		void OnHitActor(AActor* SelfActor, AActor* OtherActor, FVector NormalImpulse, const FHitResult& Hit);
 };

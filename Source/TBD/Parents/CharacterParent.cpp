@@ -60,6 +60,7 @@ void ACharacterParent::BeginPlay()
 	Super::BeginPlay();
 	Gamemode = Cast< ATBDGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
 	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &ACharacterParent::OnOverlapBegin);
+	OnActorHit.AddDynamic(this, &ACharacterParent::OnHitActor);
 	PickUpWidget = CreateWidget<UPickUpItemWidget>(GetWorld(), UserWidget);
 	PickUpWidget->AddToViewport();
 	CurrentHealth = Health;
@@ -81,8 +82,8 @@ float ACharacterParent::TakeDamage(float DamageAmount,  FDamageEvent const& Dama
 			 {
 				 TArray<AActor *>  AActors;
 				 GetAttachedActors(AActors);
-				 UE_LOG(LogTemp, Warning, TEXT(" 1 "));
-				 if (AActors.Find(OC4 ) && AActors.Find(NC4))
+				 UE_LOG(LogTemp, Warning, TEXT(" Yay "));
+				 if (AActors.Num() != 0 &&  AActors.Find(OC4 ) && AActors.Find(NC4))
 				 {
 					 OC4->Exploded(this);
 					 NC4->ExplodedAndStun(this);
@@ -369,14 +370,18 @@ void ACharacterParent::OnOverlapBegin(UPrimitiveComponent * OverlappedComp, AAct
 			PickUpData->RegisterComponent();
 			PickUp->Destroy();
 		}
-		AC4Parent * C4 = Cast<AC4Parent>(OtherActor);
-		if (C4 != nullptr)
-		{
-			OC4 = NC4;
-			NC4 = C4;
+}
+void ACharacterParent::OnHitActor(AActor* SelfActor, AActor* OtherActor, FVector NormalImpulse, const FHitResult& Hit)
+{
+	UE_LOG(LogTemp, Warning, TEXT(" %s "), *OtherActor->GetName());
+	AC4Parent * C4 = Cast<AC4Parent>(OtherActor);
+	if (C4 != nullptr)
+	{
+		UE_LOG(LogTemp, Warning, TEXT(" 1 "));
+		OC4 = NC4;
+		NC4 = C4;
 
-		}
-	
+	}
 }
 
 void ACharacterParent::UsePickUp()
@@ -419,3 +424,5 @@ void ACharacterParent::StopStunC4()
 {
 	EnableInput(Cast< APlayerController >(GetController()));
 }
+
+

@@ -51,6 +51,7 @@ void AC4Parent::OnHitDoYourThing(UPrimitiveComponent * HitComp, AActor * OtherAc
 	if (bCanAttach) {
 		bCanAttach = false;
 		SetActorRotation(Hit.Normal.Rotation());
+		UE_LOG(LogTemp, Warning, TEXT(" %s "), *OtherActor->GetName());
 		AttachToActor(OtherActor, FAttachmentTransformRules::KeepWorldTransform);
 	}
 }
@@ -68,7 +69,6 @@ void AC4Parent::Exploded(AActor * Other)
 	Actors.Add(ThisActorToIgnre);
 	if (!bHitShiled)
 	{
-		AttachToActor(Other, FAttachmentTransformRules::KeepWorldTransform);
 		UGameplayStatics::ApplyRadialDamageWithFalloff(GetWorld(), ExplosionDamage, BaseDamage, GetActorLocation(), ExplosionRadius, ExplosionRadius * 1.5, MaxDamagep, C4DamageTyep, Actors, this, GetInstigatorController());
 	}
 	bHitShiled = false;
@@ -99,7 +99,6 @@ void AC4Parent::ExplodedAndStun(AActor * Other)
 	Actors.Add(ThisActorToIgnre);
 	if (!bHitShiled)
 	{
-		AttachToActor(Other, FAttachmentTransformRules::KeepWorldTransform);
 		UGameplayStatics::ApplyRadialDamageWithFalloff(GetWorld(), ExplosionDamage / 2, BaseDamage / 2 , GetActorLocation(), ExplosionRadius, ExplosionRadius * 1.5, MaxDamagep, C4DamageTyep, Actors, this, GetInstigatorController());
 	}
 	bHitShiled = false;

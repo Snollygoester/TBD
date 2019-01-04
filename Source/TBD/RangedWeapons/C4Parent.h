@@ -20,7 +20,6 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-	void OnHitDoYourThing(UPrimitiveComponent * HitComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, FVector NormalImpulse, const FHitResult & Hit) override;
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -33,6 +32,7 @@ public:
 	void Exploded(class AActor * Other);
 	UFUNCTION()
 	void ExplodedAndStun(class AActor * Other);
+	void OnHitDoYourThing(UPrimitiveComponent * HitComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, FVector NormalImpulse, const FHitResult & Hit) override;
 private:
 	bool bHitShiled = false;
 	UPROPERTY(VisibleAnywhere)
