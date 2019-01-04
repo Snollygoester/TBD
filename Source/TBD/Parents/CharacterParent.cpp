@@ -85,14 +85,14 @@ float ACharacterParent::TakeDamage(float DamageAmount,  FDamageEvent const& Dama
 				 UE_LOG(LogTemp, Warning, TEXT(" Yay "));
 				 if (AActors.Num() != 0 &&  AActors.Find(OC4 ) && AActors.Find(NC4))
 				 {
-					 OC4->Exploded(this);
-					 NC4->ExplodedAndStun(this);
 					 DisableInput(Cast< APlayerController >(GetController()));
 					 FTimerHandle TimerHandle;
 					 GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ACharacterParent::StopStunC4, C4StunTime);
+					 DamageAmount = DamageAmount / 2;
 					 UE_LOG(LogTemp, Warning, TEXT(" 2 "));
 				 }
-			 }
+				 
+			 } 
 			if (TypeDamage == nullptr)
 			{
 				CurrentHealth = CurrentHealth - DamageAmount;

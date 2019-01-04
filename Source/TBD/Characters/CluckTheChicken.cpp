@@ -164,11 +164,11 @@ void ACluckTheChicken::OnActorHit(AActor * SelfActor, AActor * OtherActor, FVect
 {
 	if (RealOldC4 != nullptr)
 	{
-		RealOldC4->Exploded(OtherActor);
+		RealOldC4->Exploded();
 	}
 	if (OldC4 != nullptr)
 	{
 		OldC4->OnHitDoYourThing(Cast<UPrimitiveComponent>(SelfActor->GetRootComponent()), OtherActor, Cast<UPrimitiveComponent>(OtherActor->GetRootComponent()), NormalImpulse, Hit);
-		OldC4->Exploded(OtherActor);
+		OldC4->Exploded();
 	}
 }

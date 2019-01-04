@@ -29,9 +29,8 @@ public:
 	UPROPERTY()
 		class AActor * HitActor;
 	UFUNCTION()
-	void Exploded(class AActor * Other);
-	UFUNCTION()
-	void ExplodedAndStun(class AActor * Other);
+	void Exploded();
+	void ExplodedAndStun();
 	void OnHitDoYourThing(UPrimitiveComponent * HitComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, FVector NormalImpulse, const FHitResult & Hit) override;
 private:
 	bool bHitShiled = false;

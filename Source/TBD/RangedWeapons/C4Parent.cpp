@@ -9,7 +9,6 @@
 #include "Kismet/GameplayStatics.h"
 #include "SpecialActors/ShiledParent.h"
 #include "Parents/DamageTypeParent.h"
-FTimerDelegate C4TimerDelegate;
 // Sets default values
 AC4Parent::AC4Parent()
 {
@@ -25,13 +24,13 @@ AC4Parent::AC4Parent()
 void AC4Parent::BeginPlay()
 {
 	Super::BeginPlay();
+	FTimerHandle TimerHandle;
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AC4Parent::Exploded, TimeEntilExplosion);
 }
 
 void AC4Parent::OnHitDoYourThing(UPrimitiveComponent * HitComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, FVector NormalImpulse, const FHitResult & Hit)
 {
-	C4TimerDelegate.BindUFunction(this, FName("Exploded"), OtherActor);
-	FTimerHandle TimerHandle;
-	GetWorld()->GetTimerManager().SetTimer(TimerHandle, C4TimerDelegate, TimeEntilExplosion, false);
+
 	if (ThisActorToIgnre == OtherActor || Cast<AC4Parent>(OtherActor))
 	{
 		return;
@@ -44,7 +43,7 @@ void AC4Parent::OnHitDoYourThing(UPrimitiveComponent * HitComp, AActor * OtherAc
 		FDamageEvent DamageEvent;
 		Shiled->TakeDamage((ExplosionDamage * MaxDamagep), DamageEvent, GetInstigatorController(), this);
 		bHitShiled = true;
-		Exploded(OtherActor);
+		Exploded();
 		return;
 	}
 
@@ -63,7 +62,7 @@ void AC4Parent::Tick(float DeltaTime)
 }
 
 
-void AC4Parent::Exploded(AActor * Other)
+void AC4Parent::Exploded()
 {
 	TArray<AActor*> Actors;
 	Actors.Add(ThisActorToIgnre);
@@ -93,7 +92,7 @@ void AC4Parent::SetActorToIgnre(AActor * ToIgner)
 	ThisActorToIgnre = ToIgner;
 }
 
-void AC4Parent::ExplodedAndStun(AActor * Other)
+void AC4Parent::ExplodedAndStun()
 {
 	TArray<AActor*> Actors;
 	Actors.Add(ThisActorToIgnre);
