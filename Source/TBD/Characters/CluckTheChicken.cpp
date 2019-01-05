@@ -108,10 +108,8 @@ bool ACluckTheChicken::RangedAttackdDoYourThing()
 		C4->SetActorToIgnre(this);
 		C4->Thorw(C4Speed, FVector::ForwardVector);
 		if (IsThere2C4()) {
-			C4->OnActorHit.AddDynamic(this, &ACluckTheChicken::OnActorHit);
-			RealOldC4 = OldC4;
+	
 		}
-		OldC4 = C4;
 		return true;
 	}
 	return true;
@@ -162,13 +160,5 @@ bool ACluckTheChicken::IsThere2C4()
 
 void ACluckTheChicken::OnActorHit(AActor * SelfActor, AActor * OtherActor, FVector NormalImpulse, const FHitResult & Hit)
 {
-	if (RealOldC4 != nullptr)
-	{
-		RealOldC4->Exploded();
-	}
-	if (OldC4 != nullptr)
-	{
-		OldC4->OnHitDoYourThing(Cast<UPrimitiveComponent>(SelfActor->GetRootComponent()), OtherActor, Cast<UPrimitiveComponent>(OtherActor->GetRootComponent()), NormalImpulse, Hit);
-		OldC4->Exploded();
-	}
+
 }

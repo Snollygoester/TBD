@@ -78,21 +78,6 @@ float ACharacterParent::TakeDamage(float DamageAmount,  FDamageEvent const& Dama
 		if (!bIsImmortal)
 		{
 			 UDamageTypeParent * TypeDamage = Cast<UDamageTypeParent>(DamageEvent.DamageTypeClass.GetDefaultObject());
-			 if (OC4 != nullptr && NC4 != nullptr)
-			 {
-				 TArray<AActor *>  AActors;
-				 GetAttachedActors(AActors);
-				 UE_LOG(LogTemp, Warning, TEXT(" Yay "));
-				 if (AActors.Num() != 0 &&  AActors.Find(OC4 ) && AActors.Find(NC4))
-				 {
-					 DisableInput(Cast< APlayerController >(GetController()));
-					 FTimerHandle TimerHandle;
-					 GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ACharacterParent::StopStunC4, C4StunTime);
-					 DamageAmount = DamageAmount / 2;
-					 UE_LOG(LogTemp, Warning, TEXT(" 2 "));
-				 }
-				 
-			 } 
 			if (TypeDamage == nullptr)
 			{
 				CurrentHealth = CurrentHealth - DamageAmount;
@@ -380,7 +365,27 @@ void ACharacterParent::OnHitActor(AActor* SelfActor, AActor* OtherActor, FVector
 		UE_LOG(LogTemp, Warning, TEXT(" 1 "));
 		OC4 = NC4;
 		NC4 = C4;
+		if (OC4 != nullptr && NC4 != nullptr)
+		{
+			TArray<AActor *>  AActors;
+			GetAttachedActors(AActors);
+			UE_LOG(LogTemp, Warning, TEXT(" yay "));
+			int i;
+			if (AActors.Num() != 0 && AActors.Find(OC4, i) && AActors.Find(NC4, i))
+			{
+				OC4->Exploded();
+				NC4->ExplodedAndStun();
+				DisableInput(Cast< APlayerController >(GetController()));
+				FTimerHandle TimerHandle;
+				GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ACharacterParent::StopStunC4, C4StunTime);
+				UE_LOG(LogTemp, Warning, TEXT(" 2 "));
+			}
+			else
+			{
+				UE_LOG(LogTemp, Warning, TEXT(" nop "));
+			}
 
+		}
 	}
 }
 
