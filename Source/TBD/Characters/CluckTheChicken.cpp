@@ -10,6 +10,7 @@
 #include "SpecialActors/BeamParent.h"
 #include "Engine/World.h"
 #include "RangedWeapons/C4Parent.h"
+#include "Parents/DamageTypeParent.h"
 ACluckTheChicken::ACluckTheChicken()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -26,24 +27,41 @@ ACluckTheChicken::ACluckTheChicken()
 	EggL->AttachToComponent(SpringArmL, FAttachmentTransformRules::KeepWorldTransform);
 	EggI->AttachToComponent(SpringArmI, FAttachmentTransformRules::KeepWorldTransform);
 }
-void ACluckTheChicken::BlockDoYourThing() {
-	bIsShiledActive = Shiled->bIsShiledActive;
-	if (bIsShiledActive)
+float ACluckTheChicken::CalculateBlock(UDamageTypeParent * TypeDamage, float DamageAmount)
+{
+	if (TypeDamage->bIsSpecialSkill)
 	{
-		Shiled->Dactive();
-		return;
+		return DamageAmount / 4;
 	}
-	if (!bIsShiledActive)
+	else
 	{
-		Shiled->Active();
-		return;
+		return 0.f;
 	}
+	
+}
+bool ACluckTheChicken::BlockDoYourThing() {
+	if (Super::Skill2YourThing())
+	{
+		bIsShiledActive = Shiled->bIsShiledActive;
+		if (bIsShiledActive)
+		{
+			Shiled->Dactive();
+			return true;
+		}
+		if (!bIsShiledActive)
+		{
+			Shiled->Active();
+			return true;
+		}
+	}
+	return true;
 }
 
 void ACluckTheChicken::BeginPlay()
 {
 	Super::BeginPlay();
 	 Shiled = GetWorld()->SpawnActor<AShiledParent>(ShiledParentTsubClass, FTransform(FRotator(0, 0, 0), GetActorLocation() + (GetActorForwardVector() * 100), FVector(1)));
+	 Shiled->Owner = this;
 	Shiled->AttachToActor(this, FAttachmentTransformRules::KeepWorldTransform);
 	Shiled->Dactive();
 	Eggs.Add(EggF);

@@ -7,7 +7,6 @@
 #include "Particles/ParticleSystemComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Kismet/GameplayStatics.h"
-#include "SpecialActors/ShiledParent.h"
 #include "Parents/DamageTypeParent.h"
 // Sets default values
 AC4Parent::AC4Parent()
@@ -36,16 +35,6 @@ void AC4Parent::OnHitDoYourThing(UPrimitiveComponent * HitComp, AActor * OtherAc
 		return;
 	}
 	HitActor = OtherActor;
-	AShiledParent * Shiled = Cast<AShiledParent>(OtherActor);
-
-	if (Shiled != nullptr)
-	{
-		FDamageEvent DamageEvent;
-		Shiled->TakeDamage((ExplosionDamage * MaxDamagep), DamageEvent, GetInstigatorController(), this);
-		bHitShiled = true;
-		Exploded();
-		return;
-	}
 
 	if (bCanAttach) {
 		bCanAttach = false;

@@ -7,6 +7,8 @@
 #include "Public/TimerManager.h"
 #include "Components/WidgetComponent.h"
 #include "Components/ProgressBar.h"
+#include "Parents/CharacterParent.h"
+
 // Sets default values
 AShiledParent::AShiledParent()
 {
@@ -28,11 +30,11 @@ void AShiledParent::BeginPlay()
 float AShiledParent::TakeDamage(float DamageAmount, FDamageEvent const & DamageEvent, AController * EventInstigator, AActor * DamageCauser)
 {
 	Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+	  Owner->bIsBlocking = true;
 		CurrentHealth = CurrentHealth - DamageAmount;
 		bCanShiledRegn = false;
 		FTimerHandle TimerHandle;
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AShiledParent::CanRgen, RgenDealy);
-		//HealthWidget->SetHealthBarPercent(CurrentHealth / Health);
 		if (CurrentHealth <= 0)
 		{
 			Dactive();
@@ -72,5 +74,6 @@ void AShiledParent::Dactive()
 	WidgetComponent->ToggleVisibility();
 	ShiledMeshComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	bIsShiledActive = false;
+	Owner->bIsBlocking = false;
 }
 

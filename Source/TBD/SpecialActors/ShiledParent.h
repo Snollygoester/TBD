@@ -18,7 +18,6 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -27,6 +26,7 @@ public:
 	float CurrentHealth;
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const & DamageEvent, class AController * EventInstigator, AActor * DamageCauser) override;
 	bool bIsShiledActive = false;
+	class ACharacterParent * Owner;
 private:
 	UPROPERTY(VisibleAnywhere)
 		class UStaticMeshComponent * ShiledMeshComponent;

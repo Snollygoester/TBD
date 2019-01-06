@@ -20,7 +20,8 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 private:
-	void BlockDoYourThing() override;
+	 float CalculateBlock(UDamageTypeParent * TypeDamage, float DamageAmount) override;
+	bool BlockDoYourThing() override;
 	void BeginPlay() override;
 	bool Skill2YourThing() override;
 	 bool Skill1YourThing() override;

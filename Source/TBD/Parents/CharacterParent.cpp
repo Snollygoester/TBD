@@ -75,6 +75,13 @@ void ACharacterParent::BeginPlay()
 float ACharacterParent::TakeDamage(float DamageAmount,  FDamageEvent const& DamageEvent,  AController* EventInstigator, AActor* DamageCauser)
 {
 		Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+		if (bIsBlocking)
+		{
+			bIsBlocking = false;
+			UDamageTypeParent * TypeDamage = Cast<UDamageTypeParent>(DamageEvent.DamageTypeClass.GetDefaultObject());
+			CurrentHealth = CurrentHealth - CalculateBlock(TypeDamage, DamageAmount);
+			return 0.f;
+		}
 		if (!bIsImmortal)
 		{
 			 UDamageTypeParent * TypeDamage = Cast<UDamageTypeParent>(DamageEvent.DamageTypeClass.GetDefaultObject());
@@ -137,7 +144,7 @@ void ACharacterParent::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		PlayerInputComponent->BindAction("Throw", IE_Pressed, this, &ACharacterParent::RangedAttackdDoYourThingInput);
 		PlayerInputComponent->BindAction("Cliff", IE_Pressed, this, &ACharacterParent::GrabWall);
 		PlayerInputComponent->BindAction("Cliff", IE_Released, this, &ACharacterParent::letGoOffWall);
-		PlayerInputComponent->BindAction("Block", IE_Pressed, this, &ACharacterParent::BlockDoYourThing);
+		PlayerInputComponent->BindAction("Block", IE_Pressed, this, &ACharacterParent::BlockDoYourThingInput);
 		PlayerInputComponent->BindAction("Skill2", IE_Pressed, this, &ACharacterParent::Skill2YourThingInput);
 		PlayerInputComponent->BindAction("Skill1", IE_Pressed, this, &ACharacterParent::Skill1YourThingInput);
 		PlayerInputComponent->BindAxis("MoveForward", this, &ACharacterParent::MoveForward);
@@ -253,10 +260,6 @@ void ACharacterParent::FullDeath()
 	Destroy();
 }
 
-void ACharacterParent::BlockDoYourThing()
-{
-	
-}
 
 void ACharacterParent::Skill2YourThingInput()
 {
@@ -270,6 +273,11 @@ void ACharacterParent::Skill1YourThingInput()
 	if (BisGameStarted && !bIsImmortal) {
 		Skill1YourThing();
 	}
+}
+
+void ACharacterParent::BlockDoYourThingInput()
+{
+	BlockDoYourThing();
 }
 
 bool ACharacterParent::Skill2YourThing()
@@ -289,9 +297,23 @@ bool ACharacterParent::Skill1YourThing()
 	}
 	return true;
 }
+bool ACharacterParent::BlockDoYourThing()
+{
+	if (bIsBlocking)
+	{
+		bIsBlocking = false;
+		return true;
+	}
+	return true;
+}
+
 bool ACharacterParent::RangedAttackdDoYourThing()
 {
 	return true;
+}
+float ACharacterParent::CalculateBlock(UDamageTypeParent * TypeDamage, float DamageAmount)
+{
+	return 0.0f;
 }
 void ACharacterParent::RangedAttackdDoYourThingInput()
 {

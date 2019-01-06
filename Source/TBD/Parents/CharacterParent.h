@@ -23,7 +23,7 @@ public:
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
+	bool bIsBlocking;
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
@@ -86,16 +86,19 @@ public:
 	void Death();
 
 	void FullDeath();
-	virtual void BlockDoYourThing();
+	virtual bool BlockDoYourThing();
 	 virtual bool Skill2YourThing();
 	 virtual bool Skill1YourThing();
 	 virtual bool RangedAttackdDoYourThing();
+
+	 virtual float CalculateBlock(UDamageTypeParent * TypeDamage, float DamageAmount);
 private:
 	class	UCliffHangAB * CliffHangABCpp;
 	class UPickUpDataParent * PickUpData;
 	void RangedAttackdDoYourThingInput();
 	void Skill2YourThingInput();
 	void Skill1YourThingInput();
+	void BlockDoYourThingInput();
 	UPROPERTY(EditAnywhere)
 		TSubclassOf< class AGrenadeParent > GrenadeParentTSubClass;
 	UPROPERTY(EditAnywhere)
