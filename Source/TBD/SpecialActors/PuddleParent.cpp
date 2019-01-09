@@ -10,6 +10,7 @@ APuddleParent::APuddleParent()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 	Puddle = CreateDefaultSubobject< UStaticMeshComponent>(FName("Puddle"));
+	SetRootComponent(Puddle);
 }
 
 // Called when the game starts or when spawned

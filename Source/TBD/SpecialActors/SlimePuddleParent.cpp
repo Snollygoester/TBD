@@ -20,16 +20,16 @@ ASlimePuddleParent::ASlimePuddleParent()
 	Slower7 = CreateDefaultSubobject< UStaticMeshComponent>(FName("Slower7"));
 	Slower8 = CreateDefaultSubobject< UStaticMeshComponent>(FName("Slower8"));
 	Slower9 = CreateDefaultSubobject< UStaticMeshComponent>(FName("Slower9"));
-	Slower->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepWorldTransform);
-	Slower1->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepWorldTransform);
-	Slower2->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepWorldTransform);
-	Slower3->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepWorldTransform);
-	Slower4->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepWorldTransform);
-	Slower5->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepWorldTransform);
-	Slower6->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepWorldTransform);
-	Slower7->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepWorldTransform);
-	Slower8->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepWorldTransform);
-	Slower9->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepWorldTransform);
+	Slower->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+	Slower1->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+	Slower2->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+	Slower3->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+	Slower4->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+	Slower5->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+	Slower6->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+	Slower7->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+	Slower8->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+	Slower9->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 
 	
 }
@@ -82,7 +82,7 @@ void ASlimePuddleParent::OnOverlapBegin(UPrimitiveComponent * OverlappedComp, AA
 		}
 		if (Character != nullptr)
 		{
-			Character->ChangeSpeed( 1 / (Slowers.Find(Cast<UStaticMeshComponent>(OverlappedComp)) + 1.25));
+			Character->ChangeSpeed( 1 / (Slowers.Find(Cast<UStaticMeshComponent>(OverlappedComp)) * 0.3 + 1.1));
 		}
 		
 	}
@@ -99,7 +99,7 @@ void ASlimePuddleParent::OnOverlapEnd(UPrimitiveComponent * OverlappedComp, AAct
 		}
 		if (Character != nullptr)
 		{
-			Character->ChangeSpeed((Slowers.Find(Cast<UStaticMeshComponent>(OverlappedComp)) + 1.25));
+			Character->ChangeSpeed((Slowers.Find(Cast<UStaticMeshComponent>(OverlappedComp)) * 0.3 + 1.1));
 
 		}
 		
